@@ -1,0 +1,36 @@
+@startuml
+class vehicule{
+position
+batterie
+etat_vehicule
+deplacer()
+}
+class rover{
+meteo_update()
+}
+vehicule <|-- rover
+class helico{
+hauteur
+}
+vehicule <|-- helico
+class serveur{
+}
+class user{
+carte_exploree
+carte_percue
+helico
+rover
+}
+class GUI{
+}
+class Aplli_user{
+
+piloter_rover
+}
+class camera{
+}
+class environnement{
+carte
+carteMeteo
+}
+@enduml
