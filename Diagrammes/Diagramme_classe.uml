@@ -1,0 +1,60 @@
+@startuml
+class vehicule{
+position
+batterie
+etat_vehicule
+deplacer(x,y)
+Autopilote(x,y)
+Decharger()
+Endommager()
+}
+class camera{
+bool allume
+Decharger()
+prendre_photo()
+prendre_video()
+}
+vehicule "1"*--"1" camera
+class rover{
+meteo_update()
+creuser()
+analyser()
+}
+vehicule "1"<|--"1" rover
+class helico{
+hauteur
+camera
+decoler()
+atterir()
+}
+vehicule "1"<|--"1" helico
+class serveur{
+Liste_user
+update_Meteo()
+}
+class user{
+carte_exploree
+carte_percue
+helico
+rover
+Alertes
+Pseudo
+password
+}
+serveur "1..*"*--"1" user
+user "1"*--"1" vehicule
+class Appli_user{
+//voir diagramme Appli_user
+}
+class Appli_Admin{
+//voir diagramme Appli_Admin
+}
+serveur o-- Appli_user
+serveur o-- Appli_Admin
+class environnement{
+carte
+carteMeteo
+update_Meteo()
+}
+serveur "1"*--"1" environnement
+@enduml
