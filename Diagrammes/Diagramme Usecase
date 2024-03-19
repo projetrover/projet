@@ -1,6 +1,7 @@
 @startuml
 left to right direction
 actor Utilisateur as u
+actor Serveur as s <<Application>>
 
 usecase "Piloter" as UC1 
 
@@ -29,5 +30,8 @@ UC4 .> UC3 : <<extends>>
 UC6 --|> UC5
 UC7 --|> UC5
 
+UC1 -- s
+UC8 -- s
+UC5 -- s
 
 @enduml
