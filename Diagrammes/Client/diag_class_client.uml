@@ -1,66 +1,37 @@
 @startuml
-class vehicule{
-camera_rover
-camera_helico
-position
-batterie
-etat_vehicule
-deplacer(x,y)
-Autopilote(x,y)
-Decharger()
-Endommager()
-}
-class camera{
-bool allume
-CameraFeed
-StockagePhoto
-StockageVideo
-Decharger()
-prendre_photo()
-prendre_video()
-}
-vehicule "1"*--"1" camera
-class rover{
-creuser()
-analyser()
-}
-vehicule "1"<|--"1" rover
-class helico{
-hauteur
-decoler()
-atterir()
-}
-vehicule "1"<|--"1" helico
-class serveur{
-Liste_user
-Environnement
-update()
-GetUser()
-}
-class user{
-carte_exploree
-carte_percue
-helico
-rover
-Alertes
-Pseudo
-password
-get/set_cartes/Pseudo/password()
-AddAlerte()
-DelAlerte()
-}
-serveur "1..*"*--"1" user
-user "1"*--"1" vehicule
-class Appli_User{
-Connexion()
-Deconnection()
-IHM_user&vehicule()
-}
-serveur o-- Appli_User
-class environnement{
-carte
-carteMeteo
-update_Meteo()
-}
-serveur "1"*--"1" environnement
+class Serveur{}
+class AppliUser{}
+class DataUser{}
+class MiniCarteGUI{}
+class CarteGUI{}
+class ControlesRover{}
+class ControleHelico{}
+class ControlesRoverGUI{}
+class ControleHelicoGUI{}
+class AlerteGUI{}
+class Authentification{}
+class RequeteControle{}
+
+Serveur --o DataUser
+DataUser --* AlerteGUI
+DataUser --* MiniCarteGUI
+DataUser --* CarteGUI
+DataUser --* ControleHelicoGUI
+DataUser --* ControlesRoverGUI
+Authentification --* AuthentificationGUI
+
+ControlesRoverGUI --o ControlesRover
+ControleHelicoGUI --o ControleHelico
+ControleHelico --o RequeteControle
+ControlesRover --o RequeteControle
+Authentification o--o Serveur
+RequeteControle --o Serveur
+
+AppliUser o-- AlerteGUI 
+AppliUser o-- MiniCarteGUI
+AppliUser o-- CarteGUI
+AppliUser o-- ControleHelicoGUI
+AppliUser o-- ControlesRoverGUI
+AppliUser o-- AuthentificationGUI
+
 @enduml
