@@ -36,6 +36,13 @@ Liste_user
 Environnement
 update()
 }
+class carte{
+matrice_meteo
+matrice_cases
+Creer_Meteo()
+Suprimer_Meteo()
+}
+environnement <|-- carte
 class user{
 carte_exploree
 carte_percue
