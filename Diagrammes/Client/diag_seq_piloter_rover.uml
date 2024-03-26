@@ -1,69 +1,112 @@
 @startuml
 
-alt Avancer
+ alt déplacement
+ alt Avant
 
-    User -> SI : Touche «avancer» pressée
+        User -> SI : Touche «avant» pressée
 
-loop Tant que touche "avancer" pressée
+        loop Tant que touche «avant» pressée
 
-    SI -> User : Déplacement du rover vers l’avant
+            SI -> User : Déplacement du rover vers l’avant
 
-end 
+        end 
 
-    User -> SI : Touche "avancer" relachée
-    SI -> User : Arrêt du rover
+        User -> SI : Touche «avant» relachée
+        SI -> User : Arrêt du rover
+    
+    else Arrière
 
-else Reculer
+        User -> SI : Touche «arrière» pressée
 
-    User -> SI : Touche "reculer" pressée
+        loop Tant que touche «arrière» pressée
 
-    loop Tant que touche "reculer" pressée
+            SI -> User : Déplacement du rover vers l’arrière
 
-    SI -> User : Déplacement du rover vers l’arrière
+        end 
 
-end 
+        User -> SI : Touche «arrière» relâchée
+        SI -> User : Arrêt du rover
 
-    User -> SI : Touche "reculer" relâchée
-    SI -> User : Arrêt du rover
 
-else Pivoter
+    else Gauche 
 
-    User -> SI : Touche "pivoter" pressée
+        User -> SI : Touche «gauche» pressée
 
-   loop Tant que touche "pivoter" pressée
+        loop Tant que touche «gauche» pressée
 
-    SI -> User : Rotation du rover
+            SI -> User : Déplacement du rover vers la gauche
 
-end 
+        end 
 
-    User -> SI : Touche "pivoter" relâchée
-    SI -> User : Arrêt du rover
+        User -> SI : Touche «gauche» relâchée
+        SI -> User : Arrêt du rover
+    
+    else Droite
+
+        User -> SI : Touche «droite» pressée
+
+        loop Tant que touche «droite» pressée
+
+            SI -> User : Déplacement du rover vers la droite
+
+        end 
+
+        User -> SI : Touche «droite» relâchée
+        SI -> User : Arrêt du rover
+end
+
+else Obstacle
+
+    User -> SI : Collision avec un obstacle
+    SI -> User : Perte de durabilité 
+
+else Chûte
+  
+    User -> SI : Chûte
+    SI -> User : Perte de durabilité 
+  
+
+ 
+end
+alt Pivoter
+
+        User -> SI : Touche «pivoter» pressée
+
+        loop Tant que touche «pivoter» pressée
+
+            SI -> User : Rotation du rover
+
+        end 
+
+        User -> SI : Touche «pivoter» relâchée
+        SI -> User : Arrêt du rover
+        
 
 else Creuser/Analyser
 
-    User -> SI : Touche "creuser" pressée
+    User -> SI : Touche «creuser» pressée
     SI -> User : Utilisation de la foreuse
-    User -> SI : Touché "analyser" pressée
+    User -> SI : Touché «analyser» pressée
     SI -> User : Affichage du résultat de l’analyse
 
 else Augmenter Vitesse
 
-    User -> SI : Touche "augmenter la vitesse" pressée
+    User -> SI : Touche «augmenter la vitesse» pressée
 
-   loop Tant que touche "augmenter la vitesse" pressée
+   loop Tant que touche «augmenter la vitesse» pressée
 
     SI -> User : Augmentation de la vitesse
 
 end 
 
-    User -> SI : Touche "augmenter la vitesse" relâchée
+    User -> SI : Touche «augmenter la vitesse» relâchée
     SI -> User : Fixation de la vitesse
 
 else Réduire Vitesse
 
-    User -> SI : Touche "réduire la vitesse" pressée
+    User -> SI : Touche «réduire la vitesse» pressée
 
-    loop Tant que touche "réduire la vitesse" pressée
+    loop Tant que touche «réduire la vitesse» pressée
 
     SI -> User : Réduction de la vitesse
 
