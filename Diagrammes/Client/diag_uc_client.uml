@@ -8,12 +8,13 @@ usecase "Piloter" as UC1
 
 package Rover{
 usecase "Piloter Rover" as UC3
-usecase "Analyser" as UC4
+usecase "Activer Pilote Automatique" as UC4
 
 }
 
 package Hélicoptère {
 usecase "Piloter Hélicoptère" as UC0
+usecase "Activer Pilote Automatique" as UC9
 }
 
 usecase "Prendre Images" as UC5
@@ -33,5 +34,6 @@ UC7 --|> UC5
 UC1 -- s
 UC8 -- s
 UC5 -- s
+UC9 .> UC0 : <<extends>>
 
 @enduml
