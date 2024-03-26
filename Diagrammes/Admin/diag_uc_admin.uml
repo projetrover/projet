@@ -2,6 +2,8 @@
 left to right direction
 skinparam packageStyle rectangle
 actor "admin" as a
+actor "SI BD" as b
+actor "SI Client" as c
 
 usecase "Consulter Données Utilisateurs" as UC0
 usecase "Déconnecter Utilisateurs" as UC1
@@ -16,5 +18,9 @@ a --> UC2
 a --> UC3
 a --> UC4
 a --> UC5
+
+UC0 --> b
+UC1 --> c
+
 
 @enduml
