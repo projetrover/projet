@@ -1,77 +1,35 @@
 @startuml
-class vehicule{
-camera_rover
-camera_helico
-position
-batterie
-etat_vehicule
-deplacer(x,y)
-Autopilote(x,y)
-Decharger()
-Endommager()
-}
-class camera{
-bool allume
-CameraFeed
-StockagePhoto
-StockageVideo
-Decharger()
-prendre_photo()
-prendre_video()
-}
-vehicule "1"*--"1" camera
-class rover{
-creuser()
-analyser()
-}
-vehicule "1"<|--"1" rover
-class helico{
-hauteur
-decoler()
-atterir()
-}
-vehicule "1"<|--"1" helico
-class serveur{
-Liste_user
-Environnement
-update()
-}
-class carte{
-matrice_meteo
-matrice_cases
-Creer_Meteo()
-Suprimer_Meteo()
-}
-environnement <|-- carte
-class user{
-carte_exploree
-carte_percue
-helico
-rover
-Alertes
-Pseudo
-password
-get/set_cartes/Pseudo/password()
-AddAlerte()
-DelAlerte()
-}
-serveur "1..*"*--"1" user
-user "1"*--"1" vehicule
-class Appli_Admin{
-pseudo
-password
-Eteindre_Serveur()
-Allumer_serveur()
-Modifier_Carte()
-Modifier_Meteo()
-Deconnecter_utilisateur()
-Superviser_utilisateur()
-}
-serveur o-- Appli_Admin
-class environnement{
-carte
-carteMeteo
-update_Meteo()
-}
-serveur "1"*--"1" environnement
+class Vehicule{}
+class Camera{}
+class Rover{}
+class Helico{}
+class Serveur{}
+class VehiculeFactory{}
+class Carte{}
+class User{}
+class AppliAdmin{}
+class Environnement{}
+class AffichageCarte{}
+class UserFactory{}
+class DonneesServeur{}
+class AffichageUtilisateurs{}
+Vehicule *-- Camera
+Rover <|-- Vehicule
+Helico <|-- Vehicule
+VehiculeFactory -- Rover
+VehiculeFactory -- Helico
+Serveur o-- UserFactory
+User o-- VehiculeFactory
+User o-- VehiculeFactory
+Environnement <|-- Carte
+Serveur <|-- ServeurInstructions
+UserFactory -- User
+AppliAdmin <|-- AffichageCarte
+AppliAdmin --o AppliAdminCTRL
+ServeurInstructions *-- AppliAdminCTRL
+Serveur *-- Environnement
+Serveur --o DonneesServeur
+DonneesServeur --* AffichageCarte
+DonneesServeur --* AffichageUtilisateurs
+AffichageUtilisateurs --|> AppliAdmin
 @enduml
