@@ -1,5 +1,7 @@
 @startuml
 class vehicule{
+camera_rover
+camera_helico
 position
 batterie
 etat_vehicule
@@ -10,27 +12,30 @@ Endommager()
 }
 class camera{
 bool allume
+CameraFeed
+StockagePhoto
+StockageVideo
 Decharger()
 prendre_photo()
 prendre_video()
 }
 vehicule "1"*--"1" camera
 class rover{
-meteo_update()
 creuser()
 analyser()
 }
 vehicule "1"<|--"1" rover
 class helico{
 hauteur
-camera
 decoler()
 atterir()
 }
 vehicule "1"<|--"1" helico
 class serveur{
 Liste_user
-update_Meteo()
+Environnement
+update()
+GetUser()
 }
 class user{
 carte_exploree
@@ -40,17 +45,18 @@ rover
 Alertes
 Pseudo
 password
+get/set_cartes/Pseudo/password()
+AddAlerte()
+DelAlerte()
 }
 serveur "1..*"*--"1" user
 user "1"*--"1" vehicule
-class Appli_user{
-//voir diagramme Appli_user
+class Appli_User{
+Connexion()
+Deconnection()
+IHM_user&vehicule()
 }
-class Appli_Admin{
-//voir diagramme Appli_Admin
-}
-serveur o-- Appli_user
-serveur o-- Appli_Admin
+serveur o-- Appli_User
 class environnement{
 carte
 carteMeteo
