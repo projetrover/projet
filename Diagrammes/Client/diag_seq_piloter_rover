@@ -1,0 +1,77 @@
+@startuml
+
+alt Avancer
+
+    User -> SI : Touche «avancer» pressée
+
+loop Tant que touche "avancer" pressée
+
+    SI -> User : Déplacement du rover vers l’avant
+
+end 
+
+    User -> SI : Touche "avancer" relachée
+    SI -> User : Arrêt du rover
+
+else Reculer
+
+    User -> SI : Touche "reculer" pressée
+
+    loop Tant que touche "reculer" pressée
+
+    SI -> User : Déplacement du rover vers l’arrière
+
+end 
+
+    User -> SI : Touche "reculer" relâchée
+    SI -> User : Arrêt du rover
+
+else Pivoter
+
+    User -> SI : Touche "pivoter" pressée
+
+   loop Tant que touche "pivoter" pressée
+
+    SI -> User : Rotation du rover
+
+end 
+
+    User -> SI : Touche "pivoter" relâchée
+    SI -> User : Arrêt du rover
+
+else Creuser/Analyser
+
+    User -> SI : Touche "creuser" pressée
+    SI -> User : Utilisation de la foreuse
+    User -> SI : Touché "analyser" pressée
+    SI -> User : Affichage du résultat de l’analyse
+
+else Augmenter Vitesse
+
+    User -> SI : Touche "augmenter la vitesse" pressée
+
+   loop Tant que touche "augmenter la vitesse" pressée
+
+    SI -> User : Augmentation de la vitesse
+
+end 
+
+    User -> SI : Touche "augmenter la vitesse" relâchée
+    SI -> User : Fixation de la vitesse
+
+else Réduire Vitesse
+
+    User -> SI : Touche "réduire la vitesse" pressée
+
+    loop Tant que touche "réduire la vitesse" pressée
+
+    SI -> User : Réduction de la vitesse
+
+end 
+
+    User -> SI : Touche «réduire la vitesse» relâchée
+    SI -> User : Fixation de la vitesse
+
+end
+
+@enduml
