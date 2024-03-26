@@ -1,0 +1,17 @@
+@startuml
+user_Alice *-- helicoA
+user_Alice *-- roverA
+helicoA *-- cameraRA
+roverA *-- cameraHA
+user_Bob *-- helicoB
+user_Bob *-- roverB
+helicoB *-- cameraRB
+roverB *-- cameraHB
+serveur *-- user_Alice
+serveur *-- user_Bob
+serveur *-- environnement
+serveur o-- Appli_user_Bob
+serveur o-- Appli_user_Alice
+serveur o-- Appli_user_Admin1
+serveur o-- Appli_user_Admin2
+@enduml
