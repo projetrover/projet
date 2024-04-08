@@ -1,0 +1,19 @@
+Scénarios UC "Modifier l'Environement"
+
+Scénario nominal :
+1. L'administrateur clique sur le bouton "Modifier Environement"
+2. Le système affiche l'interface de modification de l'environement
+3. L'administrateur clique sur l'icône du rocher
+4. Le système demande les coordonnées et le type du rocher à ajouter
+5. L'administrateur renseigne les coordonnées auxquelles le rocher sera ajouté ainsi que le type
+6. Le système confirme l'ajout du rocher sur la carte
+
+Scénario alternatif : 
+3. L'administrateur clique sur l'icône tempête de poussière
+4. Le système demande dans quelle zone sera la tempête de poussière ainsi que sa date et sa durée
+5. L'administrateur renseigne les informations
+6. Le système confirme l'ajout de la tempête de poussière
+
+Scénario exception :
+5. L'administrateur renseigne les coordonnées auxquelles le rocher sera ajouté ainsi que le type
+6. Le système indique qu'un rocher est déjà présent à ces coordonnées, echec de l'ajout

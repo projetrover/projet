@@ -1,0 +1,35 @@
+@startuml
+class Vehicule{}
+class Camera{}
+class Rover{}
+class Helico{}
+class Serveur{}
+class VehiculeFactory{}
+class Carte{}
+class User{}
+class AppliAdmin{}
+class Environnement{}
+class AffichageCarte{}
+class UserFactory{}
+class DonneesServeur{}
+class AffichageUtilisateurs{}
+Vehicule *-- Camera
+Rover <|-- Vehicule
+Helico <|-- Vehicule
+VehiculeFactory -- Rover
+VehiculeFactory -- Helico
+Serveur o-- UserFactory
+User o-- VehiculeFactory
+User o-- VehiculeFactory
+Environnement <|-- Carte
+Serveur <|-- ServeurInstructions
+UserFactory -- User
+AppliAdmin <|-- AffichageCarte
+AppliAdmin --o AppliAdminCTRL
+ServeurInstructions *-- AppliAdminCTRL
+Serveur *-- Environnement
+Serveur --o DonneesServeur
+DonneesServeur --* AffichageCarte
+DonneesServeur --* AffichageUtilisateurs
+AffichageUtilisateurs --|> AppliAdmin
+@enduml

@@ -1,0 +1,75 @@
+@startuml
+object Serveur{
+}
+object Authentification {
+User : UserA
+Valide : True
+Password : "1234"
+Username : "Bob"
+}
+object AuthentificationGUI{
+Password : "1234"
+Username : "Bob"
+MessageAuthentification : "Connexion en cours..."
+}
+
+object DataUser{
+name: Bob
+password: 1234
+rover: RoverB
+helico: HelicoB
+DiscoveredMap: []
+DisplayedMap: []
+}
+object AppliUser{
+
+}
+
+object AlerteGUI{
+}
+object MiniCarteGUI{
+Zoom: 1
+Position: (0;0)
+}
+object CarteGUI{
+}
+
+object ControleHelicoGUI{
+Position: (0;0)
+}
+object ControleRoverGUI{
+Position: (0;0)
+}
+object ControleRover{
+}
+object ControleHelico{
+}
+object RequeteControle {
+}
+
+
+Authentification o--o Serveur
+Authentification --o DataUser
+
+DataUser --* AlerteGUI
+DataUser --* MiniCarteGUI
+DataUser --* CarteGUI
+DataUser --* ControleHelicoGUI
+DataUser --* ControleRoverGUI
+Authentification --* AuthentificationGUI
+
+ControleRoverGUI --o ControleRover
+ControleHelicoGUI --o ControleHelico
+ControleHelico --o RequeteControle
+ControleRover --o RequeteControle
+RequeteControle --o Serveur
+
+AppliUser o-- AlerteGUI 
+AppliUser o-- MiniCarteGUI
+AppliUser o-- CarteGUI
+AppliUser o-- ControleHelicoGUI
+AppliUser o-- ControleRoverGUI
+AppliUser o-- AuthentificationGUI
+
+
+@enduml

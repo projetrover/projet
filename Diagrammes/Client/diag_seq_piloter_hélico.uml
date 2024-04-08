@@ -1,0 +1,99 @@
+@startuml
+
+actor User
+
+    User -> SI : Touche «déployer hélico» pressée
+    SI -> User : Déploiement de l'hélicoptère
+
+    alt action
+    alt Déplacement
+    alt Avant
+
+        User -> SI : Touche «avant» pressée
+
+        loop Tant que touche «avant» pressée
+
+            SI -> User : Déplacement de l’hélicoptère vers l’avant
+
+        end 
+
+        User -> SI : Touche «avant» relachée
+        SI -> User : Arrêt de l’hélicoptère
+    
+    else Arrière
+
+        User -> SI : Touche «arrière» pressée
+
+        loop Tant que touche «arrière» pressée
+
+            SI -> User : Déplacement de l’hélicoptère vers l’arrière
+
+        end 
+
+        User -> SI : Touche «arrière» relâchée
+        SI -> User : Arrêt de l’hélicoptère
+
+
+    else Gauche 
+
+        User -> SI : Touche «gauche» pressée
+
+        loop Tant que touche «gauche» pressée
+
+            SI -> User : Déplacement de l’hélicoptère vers la gauche
+
+        end 
+
+        User -> SI : Touche «gauche» relâchée
+        SI -> User : Arrêt de l’hélicoptère
+    
+    else Droite
+
+        User -> SI : Touche «droite» pressée
+
+        loop Tant que touche «droite» pressée
+
+            SI -> User : Déplacement de l’hélicoptère vers la droite
+
+        end 
+
+        User -> SI : Touche «droite» relâchée
+        SI -> User : Arrêt de l’hélicoptère
+
+end
+
+    else obstacle
+
+        User -> SI : Collision avec un obstacle
+        SI -> User : Perte de durabilité
+
+end  
+alt Pivoter
+
+        User -> SI : Touche «pivoter» pressée
+
+        loop Tant que touche «pivoter» pressée
+
+            SI -> User : Rotation de l’hélicoptère
+
+        end 
+
+        User -> SI : Touche «pivoter» relâchée
+        SI -> User : Arrêt de l’hélicoptère
+        
+    else Monter
+
+        User -> SI :  Touche «monter» pressée
+        SI -> User :  Elévation de l’hélicoptère
+    
+    else Descendre
+    
+        User -> SI : Touche "descendre" pressée
+        SI -> User : Descente de l'hélicoptère
+
+    end
+    end
+    User -> SI : Touche «ranger hélico» pressée
+    SI -> User : Rangement de l’hélicoptère
+    
+@enduml

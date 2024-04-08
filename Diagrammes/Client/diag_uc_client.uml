@@ -1,0 +1,39 @@
+@startuml
+left to right direction
+actor Utilisateur as u
+actor Serveur as s <<Application>>
+
+usecase "Piloter" as UC1 
+
+
+package Rover{
+usecase "Piloter Rover" as UC3
+usecase "Activer Pilote Automatique" as UC4
+
+}
+
+package Hélicoptère {
+usecase "Piloter Hélicoptère" as UC0
+usecase "Activer Pilote Automatique" as UC9
+}
+
+usecase "Prendre Images" as UC5
+usecase "Prendre une Photo" as UC6
+usecase "Prendre une Vidéo" as UC7
+usecase "Afficher les alertes" as UC8
+
+u --> UC1
+u --> UC5
+u --> UC8
+UC1 --|>UC3
+UC1 --|>UC0
+UC4 .> UC3 : <<extends>>
+UC6 --|> UC5
+UC7 --|> UC5
+
+UC1 -- s
+UC8 -- s
+UC5 -- s
+UC9 .> UC0 : <<extends>>
+
+@enduml
