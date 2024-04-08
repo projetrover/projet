@@ -4,14 +4,14 @@ MAX_Y = 384 #(6912//18)
 MAX_X = 668 #(12032//18)
 
 class Vehicle:
-    def __init__(self, cam, pos=(0,0), Height=0):
+    def __init__(self, pos=(0,0), Height=0):
         self.Durability = 100
         self.Battery = 100
         self.Height = Height
         self.pos = pos
         self.storedImgList = []
         self.storedVidList = []
-        self.Camera = cam
+        self.Camera = Camera()
         self.directions {"up":0, "right":1, "down":2, "left":3}
 
     def move(self, direction, distance):
