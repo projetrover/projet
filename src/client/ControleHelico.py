@@ -1,0 +1,3 @@
+import ControleHelicoGUI
+
+class ControleHelico:

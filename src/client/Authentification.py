@@ -1,0 +1,3 @@
+import AuthentificationGUI
+
+class Authentification:
