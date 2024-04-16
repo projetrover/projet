@@ -37,14 +37,23 @@ sel.register(lsock, selectors.EVENT_READ, data=None)
 
 try:
     while True:
+        print("Boucle")
         events = sel.select(timeout=None)
+        print("events = ", events)
         for key, mask in events:
+            #print("key.data = ", key.data)
             if key.data is None:
                 accept_wrapper(key.fileobj)
             else:
                 message = key.data
+                print("message = ", message)
+                #print("rcv_buffer = ", message._recv_buffer)
                 try:
+                    print("mask =", mask)
                     message.process_events(mask)
+                    print("message processed")
+                    #if message._send_buffer == b'' and message.response_created :
+                     #   message.responde_created = False
                 except Exception:
                     print(
                         f"Main: Error: Exception for {message.addr}:\n"
