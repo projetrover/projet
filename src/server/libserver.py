@@ -94,7 +94,7 @@ class Message:
 
             #Verifications a faire ici
 
-            answer = "Rover moved up"
+            answer = "Rover moved " + query
             content = {"result": answer}
         else:
             content = {"result": f"Error: invalid action '{action}'."}
@@ -117,30 +117,46 @@ class Message:
 
     def process_events(self, mask):
         if mask & selectors.EVENT_READ:
+            print("read")
             self.read()
         if mask & selectors.EVENT_WRITE:
+            print("write")
             self.write()
 
     def read(self):
         self._read()
 
         if self._jsonheader_len is None:
+            print("R1")
             self.process_protoheader()
 
         if self._jsonheader_len is not None:
+            print("R2")
             if self.jsonheader is None:
+                print("R3")
                 self.process_jsonheader()
 
         if self.jsonheader:
+            print("R4")
             if self.request is None:
+                print("R5")
                 self.process_request()
+                self.response_created = False   #On remet response created à False
 
     def write(self):
         if self.request:
+            print("W1")
             if not self.response_created:
+                print("W2")
                 self.create_response()
 
+
         self._write()
+        self._set_selector_events_mask("r")  # Reset event mask after creating response
+        print("Mode : read")
+        self._jsonheader_len = None   #Reset des informations du message pour recevoir le suivant
+        self.jsonheader = None
+        self.request = None
 
     def close(self):
         print(f"Closing connection to {self.addr}")
