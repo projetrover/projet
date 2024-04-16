@@ -11,28 +11,32 @@ import traceback
 import libclient
 
 sock = None
-events = None
+events = selectors.EVENT_READ | selectors.EVENT_WRITE
+message = None
 sel = selectors.DefaultSelector()
 
 
 def create_request(action, value):      #ici que c'est interessant
-    global events
+    global message, events
     req =  dict(
         type="text/json",
         encoding="utf-8",
         content=dict(action=action, value=value),
         )
-    message = libclient.Message(sel, sock, addr, req)
-    sel.register(sock, events, data=message)
-
-    state = False
+    message.request = req
+    message.state = False
+    message.queue_request()
+    #print("SEND = ", message._send_buffer)  #ON est bon
+    
+    message.state = False
     try:
-        while not state:                                    #PROBLEME ICI j'arrive pas a sortir de la boucle
-            print("Boucle", state)
+        while not message.state:                                    #PROBLEME ICI j'arrive pas a sortir de la boucle
+            print("Boucle")
             events = sel.select(timeout=1)
+            print("events = ",events)
             for key, mask in events:
                 message = key.data
-                state = message.state
+                #print("Send buffer = ", message._send_buffer)
                 try:
                     message.process_events(mask)
                 except Exception:
@@ -46,6 +50,8 @@ def create_request(action, value):      #ici que c'est interessant
                 break
     except KeyboardInterrupt:
         print("Caught keyboard interrupt, exiting")
+    
+    print("sorti")
 
 
 def start_connection(host, port):
@@ -55,7 +61,7 @@ def start_connection(host, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setblocking(False)
     sock.connect_ex(addr)
-    events = selectors.EVENT_READ | selectors.EVENT_WRITE
+
 
 
 
@@ -68,9 +74,14 @@ if len(sys.argv) != 3:
 host, port = sys.argv[1], int(sys.argv[2])
 addr = (host, port)
 start_connection(host, port)
+
+message = libclient.Message(sel, sock, addr, None)
+sel.register(sock, events, data=message)                #On register qu'une fois le socket, on va le reutiliser apres
+
 create_request("move_rover", "up")
+print("2e req")
 create_request("move_rover", "down")
-#sel.close()
+sel.close()
 
 
 #finally:
