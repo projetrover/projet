@@ -112,6 +112,12 @@ class Message:
         if self.jsonheader:
             if self.response is None:
                 self.process_response()
+                
+                
+                self._request_queued = False  #Reset message pour pouvoir reécrire
+                self._jsonheader_len = None
+                self.jsonheader = None
+                self.response = None
 
     def write(self):
         if not self._request_queued:
@@ -207,3 +213,4 @@ class Message:
             self._process_response_binary_content()
         # Close when response has been processed
         #self.close()
+        self._set_selector_events_mask('w')
