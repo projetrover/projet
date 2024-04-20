@@ -1,7 +1,7 @@
-import ServerInstructions
-import UserFactory
-import Environnement
-import VehiculeFactory
+import serverInstructions
+import userFactory
+import environment
+import vehicleFactory
 
 '''
 TODO: BDD

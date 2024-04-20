@@ -9,8 +9,8 @@ import selectors
 import traceback
 
 import libserver
-import Server
-import VehicleFactory
+import server
+import vehicleFactory
 
 sel = selectors.DefaultSelector()
 
@@ -30,12 +30,12 @@ if len(sys.argv) != 3:
 
 ###TESTS###
 serv = server.Server()
-vehi = VehicleFactory.VehicleFactory()
-vehi.NewVehicles(1, (0,0))
+vehi = vehicleFactory.VehicleFactory()
+vehi.newVehicles(1, (0,0))
 serv.vehicules = vehi
 #############
 
-
+print("oui")
 host, port = sys.argv[1], int(sys.argv[2])
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Avoid bind() exception: OSError: [Errno 48] Address already in use

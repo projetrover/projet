@@ -1,4 +1,4 @@
-import Data
+import data
 
 class CarteGUI:
 	def __init__(self):

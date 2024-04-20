@@ -1,6 +1,6 @@
-import UsersGUI
-import CarteGUI
-import Data
+import usersGUI
+import carteGUI
+import data
 import tkinter as tk
 from PIL import Image, ImageTk
 

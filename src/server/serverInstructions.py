@@ -1,4 +1,4 @@
-import AppliAdminCTRL
+import appliAdminCTRL
 
 class ServerInstructions:
     pass

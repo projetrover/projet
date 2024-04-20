@@ -1,3 +1,4 @@
-import AppliAdmin
+import appliAdmin
 
 class AppliAdminCTRL:
+    pass

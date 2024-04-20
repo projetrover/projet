@@ -5,4 +5,5 @@ class Carte:
     TODO: conversion depuis une BDD
     '''
     def __init__(self, colonnes, lignes):
-        #TODO: oui
+        #TODo: oui
+        pass

@@ -1,3 +1,4 @@
-import Serveur.py
+import serveur
 
 class DataUser:
+    pass

@@ -1,7 +1,7 @@
-import Map as m
+import map as m
 
 MAP_SIZE = (500, 700)
-MATERIALS = {diamond=50, iron=200, rock=600, }
+MATERIALS = {"diamond":50, "iron":200, "rock":600}
 
 class Environment:
     def __init__(self):
