@@ -1,3 +1,0 @@
-import AuthentificationGUI
-
-class Authentification:
