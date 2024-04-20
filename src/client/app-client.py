@@ -7,6 +7,7 @@ import sys
 import socket
 import selectors
 import traceback
+from time import sleep
 
 import libclient
 
@@ -16,24 +17,26 @@ message = None
 sel = selectors.DefaultSelector()
 
 
-def create_request(action, value):      #ici que c'est interessant
+def create_request(idjoueur, action, value):      #ici que c'est interessant
     global message, events
     req =  dict(
         type="text/json",
         encoding="utf-8",
-        content=dict(action=action, value=value),
+        content=dict(idjoueur = idjoueur,
+                     action = action,
+                     value = value),
         )
     message.request = req
     message.state = False
     message.queue_request()
     #print("SEND = ", message._send_buffer)  #ON est bon
-    
+
     message.state = False
     try:
         while not message.state:                                    #PROBLEME ICI j'arrive pas a sortir de la boucle
-            print("Boucle")
+            #print("Boucle")
             events = sel.select(timeout=1)
-            print("events = ",events)
+            #print("events = ",events)
             for key, mask in events:
                 message = key.data
                 #print("Send buffer = ", message._send_buffer)
@@ -50,8 +53,8 @@ def create_request(action, value):      #ici que c'est interessant
                 break
     except KeyboardInterrupt:
         print("Caught keyboard interrupt, exiting")
-    
-    print("sorti")
+
+    #print("sorti")
 
 
 def start_connection(host, port):
@@ -78,9 +81,10 @@ start_connection(host, port)
 message = libclient.Message(sel, sock, addr, None)
 sel.register(sock, events, data=message)                #On register qu'une fois le socket, on va le reutiliser apres
 
-create_request("move_rover", "up")
-print("2e req")
-create_request("move_rover", "down")
+for i in range(10):
+    create_request("move_rover", "up")
+    create_request("move_rover", "down")
+    sleep(0.2)
 sel.close()
 
 

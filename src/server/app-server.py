@@ -29,7 +29,6 @@ if len(sys.argv) != 3:
     sys.exit(1)
 
 ###TESTS###
-JEN ETAIS, A TESTER
 serv = server.Server()
 vehi = VehicleFactory.VehicleFactory()
 vehi.NewVehicles(1, (0,0))
