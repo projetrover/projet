@@ -39,10 +39,10 @@ class Vehicle:
         self.pos = (x,y)
 
     def ChangeHealth(self, ammount):
-    	self.durability += ammount
-
+        self.durability += ammount
+    
     def ChangeBattery(self, ammount):
-    	self.durability += ammount
+        self.durability += ammount
 
 
     def __str__(self):

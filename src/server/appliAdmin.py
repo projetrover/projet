@@ -15,9 +15,9 @@ class AppliAdmin:
 		self.canva.pack()
 		
 
-
-root = tk.Tk()
-root.geometry("1920x1080")
-A = AppliAdmin(root)
-root.mainloop()
+if __name__ == "__main__":
+	root = tk.Tk()
+	root.geometry("1920x1080")
+	A = AppliAdmin(root)
+	root.mainloop()
 

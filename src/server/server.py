@@ -10,5 +10,5 @@ TODO: BDD
 class Server:
     def __init__(self):
         self.users = None
-        self.vehicules = None
+        self.vehicles = None
         self.environnement = None

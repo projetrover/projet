@@ -32,10 +32,9 @@ if len(sys.argv) != 3:
 serv = server.Server()
 vehi = vehicleFactory.VehicleFactory()
 vehi.newVehicles(1, (0,0))
-serv.vehicules = vehi
+serv.vehicles = vehi
 #############
 
-print("oui")
 host, port = sys.argv[1], int(sys.argv[2])
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Avoid bind() exception: OSError: [Errno 48] Address already in use

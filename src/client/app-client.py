@@ -81,10 +81,8 @@ start_connection(host, port)
 message = libclient.Message(sel, sock, addr, None)
 sel.register(sock, events, data=message)                #On register qu'une fois le socket, on va le reutiliser apres
 
-for i in range(10):
-    create_request("move_rover", "up")
-    create_request("move_rover", "down")
-    sleep(0.2)
+create_request(0,"move_rover", "up")
+
 sel.close()
 
 
