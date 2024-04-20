@@ -1,5 +1,6 @@
 import vehicleFactory
-
+import userFactory
+import environment
 
 UP=0
 RIGHT=1
@@ -18,3 +19,19 @@ v.helicoList[1].move('down', 10)
 print(v.helicoList[1])
 
 print(v)
+
+uf = userFactory.UserFactory()
+uf.addUser(1,'bob','1234')
+print(uf.UserDict[1])
+uf.UserDict[1].discover(150, 150, 50)
+uf.UserDict[1].discover(151, 151, 51)
+print(uf.UserDict[1].discoveredMap[150,150])
+print(uf.UserDict[1].discoveredMap[151,151])
+print('oui')
+uf.UserDict[1].discover(151, 152, 56)
+print(uf.UserDict[1].discoveredMap[151, 152])
+
+
+e = environment.Environment()
+e.generate_topography()
+e.topography.print()

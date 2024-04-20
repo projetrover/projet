@@ -9,7 +9,6 @@ class UserFactory:
         self.UserDict = {}
 
 
-    def newUser(self, name, password):
-        user.User( name, password)
-
-    
+    def addUser(self, Id, name, password):
+        #TODO pour acceder le bon user avec son nom en + de l'ID
+        self.UserDict[Id] = user.User( name, password)

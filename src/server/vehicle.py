@@ -1,7 +1,8 @@
 import camera
+import map
 
-MAX_Y = 384 #(6912//18)
-MAX_X = 668 #(12032//18)
+MAX_Y = map.MAX_Y
+MAX_X = map.MAX_X
 DIRECTIONS={'up':0, 'right':1, 'down':2, 'left':3}
 UP=0
 RIGHT=1
@@ -40,7 +41,7 @@ class Vehicle:
 
     def ChangeHealth(self, ammount):
         self.durability += ammount
-    
+
     def ChangeBattery(self, ammount):
         self.durability += ammount
 

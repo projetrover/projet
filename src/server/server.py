@@ -9,6 +9,6 @@ TODO: BDD
 '''
 class Server:
     def __init__(self):
-        self.users = None
-        self.vehicles = None
-        self.environnement = None
+        self.userF = userFactory.UserFactory()
+        self.vehicleF = vehicleFactory.VehicleFactory()
+        self.environment = environment.Environment()
