@@ -1,3 +1,4 @@
+import authentification as aut
 import tkinter as tk
 
 
@@ -5,7 +6,7 @@ import tkinter as tk
 IMAGE_MARS = "Mars-header-blog.png"
 
 
-class AuthentificationGUI:
+class AuthentificationGUI(aut.Authentification):
 	
 	
 	def __init__(self,window,Img):

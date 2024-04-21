@@ -3,9 +3,16 @@ import selectors
 import json
 import io
 import struct
+import traceback
+import socket
 
 # Toute la partie du code concernant les interactions client / serveur proviennent de ce site https://realpython.com/python-sockets/#application-client-and-server
 # Elle a seulement ete legerement adaptee pour ce projet
+
+sock = None
+message = None
+sel = None
+req_res = None
 
 class Message:
     def __init__(self, selector, sock, addr, request):
@@ -84,19 +91,24 @@ class Message:
         return message
 
     def _process_response_json_content(self):
+        global req_res
         content = self.response
         self.state = True
         result = content.get("result")
         print(f"Got result: {result}")
+        req_res = result
+
 
     def _process_response_binary_content(self):
         content = self.response
         print(f"Got response: {content!r}")
 
     def process_events(self, mask):
+        global req_res
         if mask & selectors.EVENT_READ:
             self.read()
         if mask & selectors.EVENT_WRITE:
+            req_res = None
             self.write()
 
     def read(self):
@@ -214,3 +226,61 @@ class Message:
         # Close when response has been processed
         #self.close()
         self._set_selector_events_mask('w')
+
+def create_request(idjoueur, action, value):      #Pour l'instant le resultat est seulement affiche dans la console
+    """Cree une requete avec un idjoueur, une action, et une valeur, l'envoie au serveur """
+    global message, events, sel
+
+    req =  dict(
+        type="text/json",
+        encoding="utf-8",
+        content=dict(idjoueur = idjoueur,
+                     action = action,
+                     value = value),
+        )
+    message.request = req
+    message.state = False
+    message.queue_request()
+    #print("SEND = ", message._send_buffer)  #ON est bon
+
+    message.state = False
+    try:
+        while not message.state:                                    #PROBLEME ICI j'arrive pas a sortir de la boucle
+            #print("Boucle")
+            events = sel.select(timeout=1)
+            #print("events = ",events)
+            for key, mask in events:
+                message = key.data
+                #print("Send buffer = ", message._send_buffer)
+                try:
+                    message.process_events(mask)
+
+                except Exception:
+                    print(
+                        f"Main: Error: Exception for {message.addr}:\n"
+                        f"{traceback.format_exc()}"
+                    )
+                    message.close()
+            # Check for a socket being monitored to continue.
+            if not sel.get_map():
+                break
+    except KeyboardInterrupt:
+        print("Caught keyboard interrupt, exiting")
+
+    return req_res
+    #print("sorti")
+
+
+def start_connection(host, port, events):
+    """Initialise la connexion au serveur d'ip host sur le port port avec les events events, renvoie un socket et un objet message"""
+    global sock, message, sel
+    sel = selectors.DefaultSelector()
+    addr = (host, port)
+    print(f"Starting connection to {addr}")
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setblocking(False)
+    sock.connect_ex(addr)
+    
+    message = Message(sel, sock, addr, None)
+    sel.register(sock, events, data=message)                #On register qu'une fois le socket, on va le reutiliser apres
+    return sock, message
