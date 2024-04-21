@@ -1,2 +1,3 @@
 class Authentification:
-    pass
+    def __init__(self):
+        
