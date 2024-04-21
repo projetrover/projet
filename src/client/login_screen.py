@@ -1,7 +1,6 @@
 import tkinter as tk
 
 
-
 IMAGE_MARS = "Mars-blog-header.png"
 
 

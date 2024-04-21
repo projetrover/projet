@@ -7,8 +7,6 @@ import sys
 import socket
 import selectors
 import traceback
-from time import sleep
-
 import libclient
 
 sock = None
@@ -81,7 +79,7 @@ start_connection(host, port)
 message = libclient.Message(sel, sock, addr, None)
 sel.register(sock, events, data=message)                #On register qu'une fois le socket, on va le reutiliser apres
 
-create_request(0,"move_rover", "up")
+create_request(1,"move_rover", "up")
 
 sel.close()
 

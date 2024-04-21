@@ -3,16 +3,15 @@ import selectors
 import json
 import io
 import struct
-from request_treatment import request_treatment
+import server
 
 # Toute la partie du code concernant les interactions client / serveur proviennent de ce site https://realpython.com/python-sockets/#application-client-and-server
 # Elle a seulement ete legerement adaptee pour ce projet
 
 
 
-
 class Message:
-    def __init__(self, selector, sock, addr):
+    def __init__(self, selector, sock, addr, serv):
         self.selector = selector
         self.sock = sock
         self.addr = addr
@@ -22,6 +21,7 @@ class Message:
         self.jsonheader = None
         self.request = None
         self.response_created = False
+        self.server = serv
 
     def _set_selector_events_mask(self, mode):
         """Set selector to listen for events: mode is 'r', 'w', or 'rw'."""
@@ -89,7 +89,8 @@ class Message:
         return message
 
     def _create_response_json_content(self):   #Ici que c'est interessant pour nous, on va faire toutes nos verifs ici
-        answer = request_treatment(self.request)
+
+        answer = self.server.request_treatment(self.request)
         content = {"result": answer}
         content_encoding = "utf-8"
         response = {

@@ -21,7 +21,7 @@ class VehicleFactory:
     def createVehicle(self, Id, pos, type):
         if type == 'Helico':
             self.helicoList[Id] = helico.Helico(pos, 0)
-        elif type == 'Helico':
+        elif type == 'Rover':
             self.roverList[Id] = rover.Rover(pos, 0)
         else:
             raise TypeError("Server->VehicleFactory->createVehicle : mauvais type.")

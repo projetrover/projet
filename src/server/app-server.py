@@ -16,10 +16,12 @@ sel = selectors.DefaultSelector()
 
 
 def accept_wrapper(sock):
+    global serv
+
     conn, addr = sock.accept()  # Should be ready to read
     print(f"Accepted connection from {addr}")
     conn.setblocking(False)
-    message = libserver.Message(sel, conn, addr)
+    message = libserver.Message(sel, conn, addr, serv)
     sel.register(conn, selectors.EVENT_READ, data=message)
 
 
@@ -32,6 +34,7 @@ if len(sys.argv) != 3:
 serv = server.Server()
 vehi = vehicleFactory.VehicleFactory()
 vehi.newVehicles(1, (0,0))
+print("ROVERLIST = ",vehi.roverList)
 serv.vehicles = vehi
 #############
 

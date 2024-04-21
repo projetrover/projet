@@ -1,6 +1,6 @@
 import usersGUI
-import carteGUI
-import data
+import mapGUI
+import recieved_data
 import tkinter as tk
 from PIL import Image, ImageTk
 
