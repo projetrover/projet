@@ -33,9 +33,9 @@ class AuthentificationGUI(aut.Authentification):
 	
 			
 	
-#w=tk.Tk()
-#w.wm_attributes('-alpha', 0)	
-#w.resizable(width='false',height='false')
-#w.geometry("1920x1080")
-#A = Authentification(w,IMAGE_MARS)
-#tk.mainloop()	
+w=tk.Tk()
+w.wm_attributes('-alpha', 0)	
+w.resizable(width='false',height='false')
+w.geometry("1920x1080")
+A = Authentification(w,IMAGE_MARS)
+tk.mainloop()	
