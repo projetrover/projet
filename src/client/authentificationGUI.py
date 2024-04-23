@@ -4,7 +4,6 @@ import tkinter as tk
 
 IMAGE_MARS = "Mars-blog-header.png"
 
-
 class AuthentificationGUI(aut.Authentification):
 	
 	
@@ -21,7 +20,7 @@ class AuthentificationGUI(aut.Authentification):
 		self.Canvas.create_window(960,500,window=self.entry1)
 		self.Canvas.create_text(960, 540, text="Mot de passe: ", font="calibri 10", fill="black")
 
-		self.entry2 = tk.Entry(self.window)
+		self.entry2 = tk.Entry(self.window,show = "•")
 		self.Canvas.create_window(960,580,window=self.entry2)
 		self.button = tk.Button(self.window,text = "Connexion",command=lambda:self.setcommand(),relief="groove")
 		self.Canvas.create_window(960,620,window = self.button)
@@ -37,7 +36,7 @@ class AuthentificationGUI(aut.Authentification):
 		print("action provisoire")
 		
 		
-if __name__ == "main":
+if __name__ == "__main__":
 	
 	w=tk.Tk()
 	w.wm_attributes('-alpha', 0)	
