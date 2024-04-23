@@ -1,6 +1,7 @@
 import vehicleFactory
 import userFactory
 import environment
+import server
 
 UP=0
 RIGHT=1
@@ -22,6 +23,8 @@ print(v)
 
 uf = userFactory.UserFactory()
 uf.addUser(1,'bob','1234')
+uf.addUser(2,'alice','5678')
+'''
 print(uf.UserDict[1])
 uf.UserDict[1].discover(150, 150, 50)
 uf.UserDict[1].discover(151, 151, 51)
@@ -34,4 +37,12 @@ print(uf.UserDict[1].discoveredMap[151, 152])
 
 e = environment.Environment()
 e.generate_topography()
-e.topography.print()
+e.topography.print()'''
+
+serv = server.Server()
+serv.userF = uf
+serv.vehicleF = v
+serv.save()
+
+#print(uf.UserDict[1].__dict__)
+#print(v.__dict__)
