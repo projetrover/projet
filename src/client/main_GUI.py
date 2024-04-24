@@ -1,5 +1,5 @@
 import tkinter as tk
-import authentificationGUI
+#import authentificationGUI
 
 MAP = "mercat.png"
 
