@@ -30,13 +30,8 @@ if len(sys.argv) != 3:
     print(f"Usage: {sys.argv[0]} <host> <port>")
     sys.exit(1)
 
-###TESTS###
 serv = server.Server()
-vehi = vehicleFactory.VehicleFactory()
-vehi.newVehicles(1, (0,0))
-print("ROVERLIST = ",vehi.roverList)
-serv.vehicles = vehi
-#############
+serv.load()
 
 host, port = sys.argv[1], int(sys.argv[2])
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

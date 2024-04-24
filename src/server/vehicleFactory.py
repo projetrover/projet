@@ -13,16 +13,18 @@ class VehicleFactory:
         '''
         self.roverList = {}
         self.helicoList = {}
+    
+    
 
     def newVehicles(self, Id, pos):
         self.roverList[Id] = rover.Rover(pos, 0)
         self.helicoList[Id] = helico.Helico(pos, 0)
 
-    def createVehicle(self, Id, pos, type):
+    def createVehicle(self, Id, pos, type, durability = 100, battery = 100, ListeAnalyse = []):
         if type == 'Helico':
-            self.helicoList[Id] = helico.Helico(pos, 0)
+            self.helicoList[Id] = helico.Helico(pos, 0, durability, battery)
         elif type == 'Rover':
-            self.roverList[Id] = rover.Rover(pos, 0)
+            self.roverList[Id] = rover.Rover(pos, 0, durability, battery, ListeAnalyse)
         else:
             raise TypeError("Server->VehicleFactory->createVehicle : mauvais type.")
 

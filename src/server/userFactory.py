@@ -11,4 +11,4 @@ class UserFactory:
 
     def addUser(self, Id, name, password):
         #TODO pour acceder le bon user avec son nom en + de l'ID
-        self.UserDict[Id] = user.User( name, password)
+        self.UserDict[Id] = user.User( name, password, Id)
