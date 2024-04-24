@@ -36,7 +36,7 @@ class Server:
         dico["vehicles"] = vehicles
 
 
-
+        print("DICO = ",dico)
 
         json_object = json.dumps(dico, indent=4)
         with open("data.json", "w") as outfile:
@@ -59,7 +59,7 @@ class Server:
                 if bd.accounts[userid][0] == username :
                     if bd.accounts[userid][1] == password :
                         answer["result"] = {"userid" : userid
-                                             }  #Mettre toutes les infos du user
+                                             }  #TODO: Mettre toutes les infos du user
             else:
                 answer["result"] = "incorrect user or passwd"
 

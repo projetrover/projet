@@ -15,9 +15,9 @@ class Vehicle:
         self.battery = 100
         self.height = Height
         self.pos = pos
-        self.storedImgList = []
-        self.storedVidList = []
-        self.cam = camera.Camera()
+        #self.storedImgList = []
+        #self.storedVidList = []
+        #self.cam = camera.Camera()
 
     def move(self, direction, distance):
         dir = -1
