@@ -2,10 +2,11 @@
 import userFactory
 import environment
 import vehicleFactory
+import userFactory
 import json
 
 '''
-TODO: BDD
+TODO: TESTER LOGIN
 
 '''
 class Server:
@@ -14,6 +15,26 @@ class Server:
         self.vehicleF = vehicleFactory.VehicleFactory()
         self.environment = environment.Environment()
 
+    def load(self):  #TODO: chargement map
+        try:
+            f = open('src/server/data.json')
+        except :
+            f = open('data.json')
+        data = json.load(f)
+
+        for iduser in data['users']:
+            user = data['users'][iduser]
+            self.userF.UserDict[int(iduser)] = userFactory.user.User(user['username'], user['password'], int(user['iduser']))
+        
+        for idrover in data['vehicles']['roverList']:
+            rover = data['vehicles']['roverList'][idrover]
+            self.vehicleF.createVehicle(int(idrover), (int(rover['pos'][0]), int(rover['pos'][1])), "Rover", int(rover['durability']), int(rover['battery']), rover['ListeAnalyse'])
+
+        for idheli in data['vehicles']['helicoList']:
+            heli = data['vehicles']['helicoList'][idheli]
+            self.vehicleF.createVehicle(int(idheli), (int(heli['pos'][0]), int(heli['pos'][1])), "Helico", int(heli['durability']), int(heli['battery']))
+
+            
 
     def save(self):  #TODO: Finir save
         """Enregistre l'état du serveur"""
@@ -39,8 +60,13 @@ class Server:
         print("DICO = ",dico)
 
         json_object = json.dumps(dico, indent=4)
-        with open("data.json", "w") as outfile:
-            outfile.write(json_object)
+        
+        try :
+            with open("src/server/data.json", "w") as outfile:
+                outfile.write(json_object)
+        except :
+            with open("data.json", "w") as outfile:
+                outfile.write(json_object)
 
 
     def request_treatment(self, request):
@@ -55,11 +81,27 @@ class Server:
         if action == "login":
             username = value["username"]
             password = value["password"]
-            for userid in bd.accounts:
-                if bd.accounts[userid][0] == username :
-                    if bd.accounts[userid][1] == password :
-                        answer["result"] = {"userid" : userid
-                                             }  #TODO: Mettre toutes les infos du user
+            for userid in self.userF.UserDict:
+                user = self.userF.UserDict[userid]
+                if user.username == username :
+                    if user.password == password :
+                        rover = self.vehicleF.roverList[userid]
+                        answer["result"] = {"userid" : userid,
+                                            "rover" : {'ListeAnalyse' : rover.ListeAnalyse,
+                                                       'durability' : rover.durability,
+                                                       'battery' : rover.battery,
+                                                       'height' : rover.height,
+                                                       'pos' : rover.pos},
+                                                
+                                             }  #TODO: Mettre toutes les infos du user map discovered
+                        
+                        if userid in self.vehicleF.helicoList :
+                            helico = self.vehicleF.helicoList[userid]
+                            answer['result']['helico'] = {'durability' : helico.durability,
+                                                       'battery' : helico.battery,
+                                                       'height' : helico.height,
+                                                       'pos' : helico.pos}
+
             else:
                 answer["result"] = "incorrect user or passwd"
 

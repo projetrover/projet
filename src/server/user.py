@@ -1,9 +1,10 @@
 import map
 
 class User:
-    def __init__(self, username, password):
+    def __init__(self, username, password, id):
         self.username = username
         self.password = password
+        self.id = id
         self.discoveredMap = map.Map(map.MAX_X, map.MAX_Y)
         #tres couteux, besoin d'optimiser pour scale
 
