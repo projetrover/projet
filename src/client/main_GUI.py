@@ -1,58 +1,64 @@
 import tkinter as tk
-#import authentificationGUI
+from PIL import Image, ImageTk
 
-MAP = "mercat.png"
+MAP = "map.jpg"
+rover = "drone.png"
+im = Image.open(rover)
+print (im.mode)
 
 posx = 960
 posy = 540
-#position de l'image (globale)
+# Position of the image (global)
 
 class mainGUI():
 
-	def __init__(self,window,Img):
-	
-		self.window = window
-		self.Canvas = tk.Canvas(self.window,width=1920,height=1080,bg="white")
-		self.bg = tk.PhotoImage(file = Img)
-		self.Canvas.create_image(960,540,image = self.bg)
-		self.Canvas.pack()	
-		
-	
-	def move_left(canvas,bg):
-		print("move_left")
-		global posx
-		global posy
-		posx += 12
-		canvas.create_image(posx,posy,image = bg)
-	
-	
-	def move_right(self):
-		print("move_right")
-		global posx
-		global posy
-		posx -= 12
-		canvas.create_image(posx,posy,image = bg)
+    def __init__(self, window, Imgmap, Imgrover):
+        self.window = window
+        self.Canvas = tk.Canvas(self.window, width=1920, height=1080, bg="black")
+        self.rover = tk.PhotoImage(file = Imgrover)
+        self.bg = ImageTk.PhotoImage(Image.open(Imgmap))
+        self.bg_id = self.Canvas.create_image(posx, posy, image=self.bg)
+        self.Canvas.create_image(960,540, image = self.rover)
+        self.Canvas.pack()
 
-	def move_up(self):
-		print("move_up")
-		global posx
-		global posy
-		posy += 12
-		canvas.create_image(posx,posy,image = bg)
+    def move_left(self, event=None):
+        global posx
+        #if posx < 960:
+        posx += 6
+        self.Canvas.move(self.bg_id, 12, 0)
 
-	def move_down(self):
-		print("move_down")
-		global posx
-		global posy
-		posy -= 12
-		canvas.create_image(posx,posy,image = bg)
+    def move_right(self, event=None):
+        global posx
+        #if posx > 960 - self.bg.width() + 1920:
+        posx -= 6
+        self.Canvas.move(self.bg_id, -12, 0)
 
-if __name__ == "__main.py__":
+    def move_up(self, event=None):
+        global posy
+        #if posy < 540:
+        posy += 6
+        self.Canvas.move(self.bg_id, 0, 12)
+
+    def move_down(self, event=None):
+        global posy
+        #if posy > 540 - self.bg.height() + 1080:
+        posy -= 6
+        self.Canvas.move(self.bg_id, 0, -12)
+
+    def kbind(self):
+        self.window.bind("<Left>", self.move_left)
+        self.window.bind("<Right>", self.move_right)
+        self.window.bind("<Up>", self.move_up)
+        self.window.bind("<Down>", self.move_down)
+
+        # After bindings, the main loop needs to be started to capture the key events
+        self.window.mainloop()
 
 
-	w=tk.Tk()
-	w.wm_attributes('-alpha', 0)	
-	w.resizable(width='false',height='false')
-	w.geometry("1920x1080")
-	A = mainGUI(w,"mercat.png")
-	tk.mainloop()	
+if __name__ == "__main__":
+    w = tk.Tk()
+    w.wm_attributes('-alpha', 0)
+    w.resizable(width='false', height='false')
+    w.geometry("1920x1080")
+    A = mainGUI(w, MAP,rover)
+    A.kbind()
