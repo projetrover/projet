@@ -55,7 +55,7 @@ class MainGUI:
         self.window.bind("<Up>", self.move_up)
         self.window.bind("<Down>", self.move_down)
 
-        self.window.mainloop()
+       
 
 if __name__ == "__main__":
     w = tk.Tk()
@@ -64,3 +64,4 @@ if __name__ == "__main__":
     w.geometry("1920x1080")
     A = MainGUI(w, MAP, rover)
     A.kbind()
+    w.mainloop()
