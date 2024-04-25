@@ -1,3 +1,4 @@
-import DataUser
+import miniCarte
 
-class CarteGUI:
+class MiniCarteGUI(miniCarte.Minicarte):
+    pass

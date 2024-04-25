@@ -1,3 +1,4 @@
-import DataUser
+import carte
 
-class CarteGUI:
+class CarteGUI(carte.Carte):
+    pass

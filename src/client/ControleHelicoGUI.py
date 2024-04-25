@@ -1,3 +1,4 @@
-import DataUser
+import controleHelico
 
-class CarteGUI:
+class ControleHelicoGUI(controleHelico.ControleHelico):
+    pass

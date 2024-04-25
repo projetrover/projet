@@ -1,5 +1,9 @@
-import AlerteGUI
-import CarteGUI
-import MiniCarteGUI
-import ControleHelicoGUI
-import ControleRoverGUI
+import alerteGUI
+import carteGUI
+import miniCarteGUI
+import controleHelicoGUI
+import controleRoverGUI
+import authentificationGUI
+
+class AppliUser:
+    pass

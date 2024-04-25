@@ -1,3 +1,4 @@
-import DataUser
+import alerte
 
-class AlerteGUI:
+class AlerteGUI(alerte.Alerte):
+    pass

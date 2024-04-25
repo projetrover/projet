@@ -1,3 +1,4 @@
-import DataUser
+import controleRover
 
-class CarteGUI:
+class ControleRoverGUI(controleRover.ControleRover):
+    pass

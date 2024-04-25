@@ -1,3 +1,4 @@
-import ControleHelicoGUI
+import dataUser
 
 class ControleHelico:
+    pass
