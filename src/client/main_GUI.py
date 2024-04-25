@@ -2,47 +2,51 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 MAP = "map.jpg"
-rover = "drone.png"
-im = Image.open(rover)
-print (im.mode)
+rover = "rover.png"
 
-posx = 960
-posy = 540
-# Position of the image (global)
+left = 90
+right = -90
+up = 0
+down = 180
 
-class mainGUI():
+class MainGUI:
 
-    def __init__(self, window, Imgmap, Imgrover):
+    def __init__(self, window, imgmap, imgrover):
+        self.vehicle_dir = 0
         self.window = window
         self.Canvas = tk.Canvas(self.window, width=1920, height=1080, bg="black")
-        self.rover = tk.PhotoImage(file = Imgrover)
-        self.bg = ImageTk.PhotoImage(Image.open(Imgmap))
-        self.bg_id = self.Canvas.create_image(posx, posy, image=self.bg)
-        self.Canvas.create_image(960,540, image = self.rover)
+        self.imgrover = Image.open(imgrover).resize((80, 80), Image.ANTIALIAS)
+        self.rover = ImageTk.PhotoImage(self.imgrover)
+        self.bg = ImageTk.PhotoImage(Image.open(imgmap))
+        self.bg_id = self.Canvas.create_image(540, 960, image=self.bg)
+        self.rover_object = self.Canvas.create_image(960, 540, image=self.rover)
         self.Canvas.pack()
-
+    
+    def rotate(self, direction):
+        print("rotate", direction)
+        self.imgrover = self.imgrover.rotate(direction - self.vehicle_dir)
+        self.rover = ImageTk.PhotoImage(self.imgrover)
+        self.Canvas.itemconfig(self.rover_object, image=self.rover)
+        self.vehicle_dir = direction
+    
     def move_left(self, event=None):
-        global posx
-        #if posx < 960:
-        posx += 6
+        if self.vehicle_dir != left:
+            self.rotate(left)
         self.Canvas.move(self.bg_id, 12, 0)
 
     def move_right(self, event=None):
-        global posx
-        #if posx > 960 - self.bg.width() + 1920:
-        posx -= 6
+        if self.vehicle_dir != right:
+            self.rotate(right)
         self.Canvas.move(self.bg_id, -12, 0)
 
     def move_up(self, event=None):
-        global posy
-        #if posy < 540:
-        posy += 6
+        if self.vehicle_dir != up:
+            self.rotate(up)
         self.Canvas.move(self.bg_id, 0, 12)
 
     def move_down(self, event=None):
-        global posy
-        #if posy > 540 - self.bg.height() + 1080:
-        posy -= 6
+        if self.vehicle_dir != down:
+            self.rotate(down)
         self.Canvas.move(self.bg_id, 0, -12)
 
     def kbind(self):
@@ -51,14 +55,12 @@ class mainGUI():
         self.window.bind("<Up>", self.move_up)
         self.window.bind("<Down>", self.move_down)
 
-        # After bindings, the main loop needs to be started to capture the key events
         self.window.mainloop()
-
 
 if __name__ == "__main__":
     w = tk.Tk()
     w.wm_attributes('-alpha', 0)
     w.resizable(width='false', height='false')
     w.geometry("1920x1080")
-    A = mainGUI(w, MAP,rover)
+    A = MainGUI(w, MAP, rover)
     A.kbind()
