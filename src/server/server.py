@@ -14,6 +14,7 @@ class Server:
         self.userF = userFactory.UserFactory()
         self.vehicleF = vehicleFactory.VehicleFactory()
         self.environment = environment.Environment()
+        self.online_users = []          #Liste des id des utilisateurs connectes
 
     def load(self):  #TODO: chargement map
         try:
@@ -74,17 +75,16 @@ class Server:
         idjoueur = request.get("idjoueur")
         action = request.get("action")
         value = request.get("value")
-        answer = {'idjoueur' : idjoueur,
-                'action' : action,
-                'value' : value}
+        answer = {}
 
-        if action == "login":
+        if action == "login":               #Login
             username = value["username"]
             password = value["password"]
             for userid in self.userF.UserDict:
                 user = self.userF.UserDict[userid]
                 if user.username == username :
                     if user.password == password :
+                        self.online_users.append(userid)
                         rover = self.vehicleF.roverList[userid]
                         answer["result"] = {"userid" : userid,
                                             "rover" : {'ListeAnalyse' : rover.ListeAnalyse,
@@ -101,6 +101,9 @@ class Server:
                                                        'battery' : helico.battery,
                                                        'height' : helico.height,
                                                        'pos' : helico.pos}
+                        else: 
+                            answer["result"]['helico'] = 'None'
+                        return answer
 
             else:
                 answer["result"] = "incorrect user or passwd"
@@ -113,4 +116,6 @@ class Server:
 
             self.vehicles.roverList[idjoueur].move(value, 1)
             answer["result"] = "success"
+        
+        
         return answer
