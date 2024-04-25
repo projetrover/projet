@@ -1,3 +1,0 @@
-import DataUser
-
-class AlerteGUI:

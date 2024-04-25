@@ -1,3 +1,0 @@
-import ControleHelicoGUI
-
-class ControleHelico:

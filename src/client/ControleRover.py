@@ -1,3 +1,0 @@
-import ControleRoverGUI
-
-class ControleRover:
