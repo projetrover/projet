@@ -51,12 +51,11 @@ class AuthentificationGUI(aut.Authentification):
 		username = self.entry1.get()
 		password = self.entry2.get()
 		self.login(username, password)
-		print("STATE = ", self.state.get())
 		if not self.state.get() :
 			self.error_wrong_password()
 		else:
-			
-			self.Canvas.delete("all")
+
+			self.Canvas.pack_forget()
 		
 		
 if __name__ == "__main__":
