@@ -15,6 +15,8 @@ class AuthentificationGUI(aut.Authentification):
 		else:
 			Img = "Images/Mars-blog-header.png"
 
+		aut.Authentification.__init__(self)
+
 		self.window = window
 		self.Canvas = tk.Canvas(self.window,width=1920,height=1080,bg="white")
 		self.bg = tk.PhotoImage(file = Img)
@@ -46,12 +48,14 @@ class AuthentificationGUI(aut.Authentification):
 	def login_btn(self):
 		"""Methode appelee quand on clique sur le bouton connexion, affiche le message d'erreur si erreur, sinon clear le canvas
 			pour passer au prochain ecran"""
-		username = self.entry1
-		password = self.entry2
-		answer = self.login(username, password)
+		username = self.entry1.get()
+		password = self.entry2.get()
+		self.login(username, password)
+		print("STATE = ", self.state.get())
 		if not self.state.get() :
 			self.error_wrong_password()
 		else:
+			
 			self.Canvas.delete("all")
 		
 		

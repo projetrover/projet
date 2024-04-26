@@ -18,6 +18,7 @@ class AppliUser:
 
     def main(self):
         self.auth = authentificationGUI.AuthentificationGUI(self.window)
-        #wait variable auth.state
+        self.window.wait_variable(self.auth.state)
+        print("oui")
 
     
