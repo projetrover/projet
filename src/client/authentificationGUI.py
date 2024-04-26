@@ -1,14 +1,20 @@
 import authentification as aut
 import tkinter as tk
+from os.path import exists
 
 
-IMAGE_MARS = "Mars-blog-header.png"
+#IMAGE_MARS = "Mars-blog-header.png"
 
 class AuthentificationGUI(aut.Authentification):
 	
 	
-	def __init__(self,window,Img):
-		
+	def __init__(self,window):
+		file_exists = exists("../../Images/Mars-blog-header.png")
+		if file_exists:
+			Img = "../../Images/Mars-blog-header.png"
+		else:
+			Img = "Images/Mars-blog-header.png"
+
 		self.window = window
 		self.Canvas = tk.Canvas(self.window,width=1920,height=1080,bg="white")
 		self.bg = tk.PhotoImage(file = Img)
@@ -22,25 +28,38 @@ class AuthentificationGUI(aut.Authentification):
 
 		self.entry2 = tk.Entry(self.window,show = "•")
 		self.Canvas.create_window(960,580,window=self.entry2)
-		self.button = tk.Button(self.window,text = "Connexion",command=lambda:self.setcommand(),relief="groove")
+		self.button = tk.Button(self.window,text = "Connexion",command = self.login_btn ,relief="groove")
 		self.Canvas.create_window(960,620,window = self.button)
 		self.Canvas.pack()	
 			
 	
 		
 	def error_wrong_password(self):
+		"""Affiche message d'erreur quand mauvais login"""
 		self.Canvas.create_text(960, 660, text = "Nom d'utilisateur ou mot de passe incorrect", font = "calibri 10 bold", fill = "red")
 		self.Canvas.pack()
 		
 	def setcommand(self):
+		"""Test"""
 		print("action provisoire")
+	
+	def login_btn(self):
+		"""Methode appelee quand on clique sur le bouton connexion, affiche le message d'erreur si erreur, sinon clear le canvas
+			pour passer au prochain ecran"""
+		username = self.entry1
+		password = self.entry2
+		answer = self.login(username, password)
+		if not self.state.get() :
+			self.error_wrong_password()
+		else:
+			self.Canvas.delete("all")
 		
 		
 if __name__ == "__main__":
 	
 	w=tk.Tk()
-	w.wm_attributes('-alpha', 0)	
+	#w.wm_attributes('-alpha', 0)	
 	w.resizable(width='false',height='false')
 	w.geometry("1920x1080")
-	A = AuthentificationGUI(w,IMAGE_MARS)
+	A = AuthentificationGUI(w)
 	tk.mainloop()	

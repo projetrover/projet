@@ -1,10 +1,13 @@
 import libclient as lc
+import dataUser
+import tkinter as tk
 
 class Authentification:
     def __init__(self):
         self.username = None
         self.password = None
-        self.state = None        #Valide ou invalide en fonction de la reponse du serveur
+        self.state = tk.BooleanVar()        #Valide ou invalide en fonction de la reponse du serveur
+        self.state.set(False)
 
     def login(self, username, password):
         """Envoie une requete de connexion au serveur, met self.state à True si la connexion a reussie,
@@ -15,9 +18,9 @@ class Authentification:
         self.password = password
         answer = lc.create_request(-1, "login", {"username" : username, "password" : password})
         if 'iduser' in answer['result'] :
-            self.state = True
+            self.state.set(True)
         else:
-            self.state = False
+            self.state.set(False)
         return answer
 
 

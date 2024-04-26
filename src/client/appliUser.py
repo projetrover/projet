@@ -5,7 +5,19 @@ import controleHelicoGUI
 import controleRoverGUI
 import authentificationGUI
 import dataUser
+import tkinter as tk
+
+
 
 #TODO: TOUT
 class AppliUser:
-    pass    
+    def __init__(self, window):
+        self.auth = None
+        self.data = None
+        self.window = window
+
+    def main(self):
+        self.auth = authentificationGUI.AuthentificationGUI(self.window)
+        #wait variable auth.state
+
+    

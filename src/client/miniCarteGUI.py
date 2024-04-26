@@ -1,4 +1,4 @@
 import miniCarte
 
-class MiniCarteGUI(miniCarte.Minicarte):
+class MiniCarteGUI(miniCarte.MiniCarte):
     pass

@@ -1,4 +1,4 @@
 import dataUser
 
-class alert:
+class Alerte:
     pass
