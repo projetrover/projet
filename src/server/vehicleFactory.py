@@ -10,15 +10,19 @@ class VehicleFactory:
         '''
         dictionaires au format {Id: Objet}
         L'Id est le meme s'il correspond au meme User
+        vehiclePos sert a faciliter les calculs de colision entre vehicules
+        {Id: [(posRover),(posHelico)]}
         '''
         self.roverList = {}
         self.helicoList = {}
-    
-    
+        self.vehiclePos = {}
+
+
 
     def newVehicles(self, Id, pos):
         self.roverList[Id] = rover.Rover(pos, 0)
         self.helicoList[Id] = helico.Helico(pos, 0)
+        self.vehiclePos[iD] = [self.helicoList[Id].pos, self.roverList[Id].pos]
 
     def createVehicle(self, Id, pos, type, durability = 100, battery = 100, ListeAnalyse = []):
         if type == 'Helico':

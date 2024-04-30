@@ -3,6 +3,7 @@ import userFactory
 import environment
 import vehicleFactory
 import userFactory
+import random
 import json
 
 '''
@@ -15,7 +16,8 @@ class Server:
         self.vehicleF = vehicleFactory.VehicleFactory()
         self.environment = environment.Environment()
         self.online_users = []          #Liste des id des utilisateurs connectes
-
+        self.seed = random.randint(100000, 999999)
+        
     def load(self):  #TODO: chargement map
         try:
             f = open('src/server/data.json')
@@ -26,7 +28,7 @@ class Server:
         for iduser in data['users']:
             user = data['users'][iduser]
             self.userF.UserDict[int(iduser)] = userFactory.user.User(user['username'], user['password'], int(user['iduser']))
-        
+
         for idrover in data['vehicles']['roverList']:
             rover = data['vehicles']['roverList'][idrover]
             self.vehicleF.createVehicle(int(idrover), (int(rover['pos'][0]), int(rover['pos'][1])), "Rover", int(rover['durability']), int(rover['battery']), rover['ListeAnalyse'])
@@ -35,7 +37,7 @@ class Server:
             heli = data['vehicles']['helicoList'][idheli]
             self.vehicleF.createVehicle(int(idheli), (int(heli['pos'][0]), int(heli['pos'][1])), "Helico", int(heli['durability']), int(heli['battery']))
 
-            
+
 
     def save(self):  #TODO: Finir save
         """Enregistre l'état du serveur"""
@@ -61,7 +63,7 @@ class Server:
         print("DICO = ",dico)
 
         json_object = json.dumps(dico, indent=4)
-        
+
         try :
             with open("src/server/data.json", "w") as outfile:
                 outfile.write(json_object)
@@ -92,16 +94,16 @@ class Server:
                                                        'battery' : rover.battery,
                                                        'height' : rover.height,
                                                        'pos' : rover.pos},
-                                                
+
                                              }  #TODO: Mettre toutes les infos du user map discovered
-                        
+
                         if userid in self.vehicleF.helicoList :
                             helico = self.vehicleF.helicoList[userid]
                             answer['result']['helico'] = {'durability' : helico.durability,
                                                        'battery' : helico.battery,
                                                        'height' : helico.height,
                                                        'pos' : helico.pos}
-                        else: 
+                        else:
                             answer["result"]['helico'] = 'None'
                         return answer
 
@@ -116,6 +118,6 @@ class Server:
 
             self.vehicles.roverList[idjoueur].move(value, 1)
             answer["result"] = "success"
-        
-        
+
+
         return answer
