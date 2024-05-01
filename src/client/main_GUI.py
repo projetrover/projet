@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from PIL import Image, ImageTk
 from os.path import exists
 
@@ -31,10 +32,11 @@ class MainGUI:
 		self.bg = ImageTk.PhotoImage(Image.open(imgmap))
 		self.bg_id = self.Canvas.create_image(540, 960, image=self.bg)
 		self.rover_object = self.Canvas.create_image(960, 540, image=self.rover)
+		self.progressbar = None
 		self.Canvas.pack()
 	
 	def rotate(self, direction):
-		print("rotate", direction)
+		
 		self.imgrover = self.imgrover.rotate(direction - self.vehicle_dir)
 		self.rover = ImageTk.PhotoImage(self.imgrover)
 		self.Canvas.itemconfig(self.rover_object, image=self.rover)
@@ -65,8 +67,15 @@ class MainGUI:
 		self.window.bind("<Right>", self.move_right)
 		self.window.bind("<Up>", self.move_up)
 		self.window.bind("<Down>", self.move_down)
-
-	   
+		
+	def progress_bar(self):
+		#progress = tk.IntVar()
+		self.progressbar = ttk.Progressbar(self.window,orient = "horizontal",length = 70,mode = "determinate")
+		self.Canvas.create_window(960,480,window = self.progressbar)
+		self.progressbar.start(50)
+		self.progressbar.after(5000,self.progressbar.destroy)
+	
+	
 
 if __name__ == "__main__":
 	w = tk.Tk()
@@ -75,4 +84,5 @@ if __name__ == "__main__":
 	w.geometry("1920x1080")
 	A = MainGUI(w)
 	A.kbind()
+	A.progress_bar()
 	w.mainloop()
