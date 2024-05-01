@@ -8,7 +8,7 @@ from os.path import exists
 #TODO: Creer une SEED et methodes gerant meteo + carte
 
 def checkimg(image):
-	"""Cherche l'image image et retourne son chemin, None si introuvable"""
+	'''Cherche l"image image et retourne son chemin, None si introuvable'''
 
 	if exists("../../Images/"+image):
 		return "../../Images/"+image
@@ -19,13 +19,13 @@ def checkimg(image):
 class Environment:
     def __init__(self):
         '''
-        topography  : se recree a partir de l'image,
+        topography  : se recree a partir de l"image,
             topography[x][y] donne la hauteur du point en  pos x,y
         materials    : {material: qteDispo} qteDispo diminue une fois recolte
         lootDict     : {pos: loot} se supprime une fois le loot recupere
-        looted       : [pos] contient les pos d'endroits deja loot
+        looted       : [pos] contient les pos d"endroits deja loot
         meteoDict    : {IdMeteo : type}
-        endedMeteos  : compte le nombre de meteos finies depuis la creation d'environment
+        endedMeteos  : compte le nombre de meteos finies depuis la creation d"environment
         currentMeteos: donnees des meteos actives { spawnDate:{IdMeteo:, pos:, radius:} }
         meteoMap     : contient toutes les meteos pour la duree de service demandee
          { spawnDate:{IdMeteo:, startPos:, radius:, progressionVector:, duration:} }
@@ -52,7 +52,7 @@ class Environment:
         genere les hauteurs, TODO: rendre cela + accurate
         '''
         FILE = checkimg("map.jpg")
-        im = Image.open(FILE, mode='r')
+        im = Image.open(FILE, mode="r")
         colormap = list(im.getdata())
         (x, y) = self.mapSize
         for i in range(x):
@@ -67,8 +67,8 @@ class Environment:
 
 
     def addMeteo(self, spawnDate, pos, IdMeteo, radius, progressionVector, duration):
-        self.meteoMap[spawnDate] = {'IdMeteo':IdMeteo, 'startPos':pos,
-            'radius':radius, 'progressionVector':progressionVector, 'duration':duration}
+        self.meteoMap[spawnDate] = {"IdMeteo":IdMeteo, "startPos":pos,
+            "radius":radius, "progressionVector":progressionVector, "duration":duration}
 
     def generate_meteoMap(self, seed, serviceDuration):
         random.seed(seed)
@@ -98,34 +98,37 @@ class Environment:
     def generate_loot(self, seed):
         random.seed(seed)
 
+    def collect(self, pos):
+        self.looted.append(pos)
+        del self.lootDict[pos]
 
     def placeCurrentMeteos(self, serverTimer):
         meteos = self.meteoMap.keys()
         for i in range(serverTimer-40, serverTimer):
             if i in meteos:
-                if (i + self.meteoMap[i]['duration']) > serverTimer:
-                    (x,y) = self.meteoMap[i]['startPos']
-                    (dx, dy) = self.meteoMap[i]['progressionVector']
+                if (i + self.meteoMap[i]["duration"]) > serverTimer:
+                    (x,y) = self.meteoMap[i]["startPos"]
+                    (dx, dy) = self.meteoMap[i]["progressionVector"]
                     x,y = x + (serverTimer - i) * dx, y + (serverTimer - i) * dy
                     self.currentMeteos[i] = {
-                        'pos':(x,y),
-                        'radius':self.meteoMap[i]['radius'],
-                        'IdMeteo':self.meteoMap[i]['IdMeteo']}
+                        "pos":(x,y),
+                        "radius":self.meteoMap[i]["radius"],
+                        "IdMeteo":self.meteoMap[i]["IdMeteo"]}
 
     def updateMeteo(self, serverTimer):
         meteos = self.currentMeteos.keys()
         for k in meteos:
-            if k+self.meteoMap[k]['duration'] < serverTimer:
+            if k+self.meteoMap[k]["duration"] < serverTimer:
                 del self.currentMeteos[k]
             else:
-                (x,y)   = self.currentMeteos[k]['pos']
-                (dx,dy) = self.meteoMap[k]['progressionVector']
-                self.currentMeteos[k]['pos'] = (x+dx, y+dy)
+                (x,y)   = self.currentMeteos[k]["pos"]
+                (dx,dy) = self.meteoMap[k]["progressionVector"]
+                self.currentMeteos[k]["pos"] = (x+dx, y+dy)
         if serverTimer in self.meteoMap.keys():
             self.currentMeteos[serverTimer] = {
-                'pos':self.meteoMap[serverTimer]['startPos'],
-                'radius':self.meteoMap[serverTimer]['radius'],
-                'IdMeteo':self.meteoMap[serverTimer]['IdMeteo']
+                "pos":self.meteoMap[serverTimer]["startPos"],
+                "radius":self.meteoMap[serverTimer]["radius"],
+                "IdMeteo":self.meteoMap[serverTimer]["IdMeteo"]
             }
     def __str__(self):
         return "c'est pas encore fait"

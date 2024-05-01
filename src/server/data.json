@@ -14,7 +14,7 @@
     "vehicles": {
         "roverList": {
             "1": {
-                "ListeAnalyse": [],
+                "analysisDict": {},
                 "durability": 100,
                 "battery": 100,
                 "height": 0,
@@ -24,7 +24,7 @@
                 ]
             },
             "2": {
-                "ListeAnalyse": [],
+                "analysisDict": {},
                 "durability": 100,
                 "battery": 100,
                 "height": 0,
@@ -75,5 +75,7 @@
         "currentMeteos": {},
         "endedMeteos": 0,
         "meteoMap": {}
-    }
+    },
+    "seed": 456815,
+    "serverTimer": 0
 }
