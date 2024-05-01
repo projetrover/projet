@@ -2,14 +2,22 @@ import map as m
 import numpy as np
 import random
 from PIL import Image
-FILE = "../../Images/map.jpg"
+from os.path import exists
 
-MAP_SIZE = (m.MAX_X, m.MAX_Y)
 
 #TODO: Creer une SEED et methodes gerant meteo + carte
 
+def checkimg(image):
+	"""Cherche l'image image et retourne son chemin, None si introuvable"""
+
+	if exists("../../Images/"+image):
+		return "../../Images/"+image
+	elif exists("Images/"+image):
+		return "Images/"+image
+	return None
+
 class Environment:
-    def __init__(self, mapSize):
+    def __init__(self):
         '''
         topography  : se recree a partir de l'image,
             topography[x][y] donne la hauteur du point en  pos x,y
@@ -27,10 +35,10 @@ class Environment:
             progressionVector -> (x, y) entre -5% - 5% mapSize[]
 
         '''
-        self.mapSize = mapSize
-        size = mapSize[1] * mapSize[0]
-        self.topography  = np.array([0]*size).reshape(mapSize[0], mapSize[1])
-        self.materials = {"diamond":50, "iron":200, "rock":600}
+        self.mapSize = (m.MAX_X, m.MAX_Y)
+        #size = mapSize[1] * mapSize[0]
+        self.topography  = np.zeros((m.MAX_X, m.MAX_Y), dtype = int)
+        self.materials = {"mirabilite":50, "argile":200, "regolithe":600}
         self.lootDict = {} # repartit les loot sur la carte
         self.looted = [] # supprime les loot sur ces pos
         self.meteoDict = {0: "rien", 1: "tempete de sable", 2: "Vent violent"}
@@ -43,6 +51,7 @@ class Environment:
         '''
         genere les hauteurs, TODO: rendre cela + accurate
         '''
+        FILE = checkimg("map.jpg")
         im = Image.open(FILE, mode='r')
         colormap = list(im.getdata())
         (x, y) = self.mapSize

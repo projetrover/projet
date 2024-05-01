@@ -7,7 +7,7 @@ import random
 import json
 
 '''
-TODO: TESTER LOGIN
+TODO:
 
 '''
 class Server:
@@ -59,8 +59,21 @@ class Server:
         vehicles = {"roverList" : roverlist, "helicoList" : helicolist}
         dico["vehicles"] = vehicles
 
+        env = {}
+        env['mapSize'] = self.environment.mapSize
+        #env['topography'] = self.environment.topography.tolist()
+        env['materials'] = self.environment.materials
+        env['lootDict'] = self.environment.lootDict     #a surveiller
+        env['looted'] = self.environment.looted
+        env['meteoDict'] = self.environment.meteoDict
+        env['currentMeteos'] = self.environment.currentMeteos
+        env['endedMeteos'] = self.environment.endedMeteos
+        env['meteoMap'] = self.environment.meteoMap
 
-        print("DICO = ",dico)
+        dico['environment'] = env
+
+
+        #print("DICO = ",dico)
 
         json_object = json.dumps(dico, indent=4)
 

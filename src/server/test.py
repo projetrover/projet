@@ -2,7 +2,9 @@ import vehicleFactory
 import userFactory
 import environment
 import random
-#import server
+import numpy as np
+import json
+import server
 
 UP=0
 RIGHT=1
@@ -40,21 +42,35 @@ e.generate_topography()
 e.topography.print()
 '''
 
-#serv = server.Server()
+serv = server.Server()
 #serv.userF = uf
 #serv.vehicleF = v
-#serv.load()
+serv.load()
 #print(serv.vehicleF.roverList[1])
 
 #print(uf.UserDict[1].__dict__)
 #print(v.__dict__)
-m = environment.MAP_SIZE
 seed = 156478
-env = environment.Environment(m)
+env = environment.Environment()
+serv.environment = env
 #env.generate_topography()
-env.generate_meteoMap(seed, 5000000)
-env.placeCurrentMeteos(30)
-print(env.meteoMap,'\n\n\n')
-print(env.currentMeteos,'\n')
-env.updateMeteo(31)
-print(env.currentMeteos)
+#print(env.topography)
+#env.generate_meteoMap(seed, 5000000)
+#env.placeCurrentMeteos(30)
+serv.save()
+
+#print(env.meteoMap,'\n\n\n')
+#print(env.currentMeteos,'\n')
+#env.updateMeteo(31)
+#print(env.currentMeteos)
+
+# a = np.zeros((10,10), dtype = int)
+# a = a.tolist()
+# dic = {'a' : a}
+# json_object = json.dumps(dic, indent=4)
+# try :
+#             with open("src/server/test.json", "w") as outfile:
+#                 outfile.write(json_object)
+# except :
+#             with open("test.json", "w") as outfile:
+#                 outfile.write(json_object)

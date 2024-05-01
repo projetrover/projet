@@ -54,26 +54,5 @@
                 ]
             }
         }
-    },
-    "environment": {
-        "mapSize": [
-            1203,
-            691
-        ],
-        "materials": {
-            "mirabilite": 50,
-            "argile": 200,
-            "regolithe": 600
-        },
-        "lootDict": {},
-        "looted": [],
-        "meteoDict": {
-            "0": "rien",
-            "1": "tempete de sable",
-            "2": "Vent violent"
-        },
-        "currentMeteos": {},
-        "endedMeteos": 0,
-        "meteoMap": {}
     }
 }
