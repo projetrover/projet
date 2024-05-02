@@ -18,7 +18,7 @@ class Server:
         self.online_users = []          #Liste des id des utilisateurs connectes
         self.seed = random.randint(100000, 999999)
         self.serverTimer = 0
-    
+
     def serverTick(self, tick):
        self.serverTimer += tick
 
@@ -116,7 +116,7 @@ class Server:
         action = request.get("action")
         value = request.get("value")
 
-        if action == "login":               
+        if action == "login":
             answer = self.loginRequest(value)
 
         elif action == "move_rover":
@@ -165,16 +165,15 @@ class Server:
         if Id in self.online_users:
             rover = self.vehicleF.roverList[Id]
             (x, y) = rover.pos
-            #en supposant que value soit un vecteur x,y peut modifier pour que ca match
-            dx, dy = x + value[0], y + value[1]
+            dx, dy = x + (2+value%2), y + (value%2-value//2)
             #TODO: check hauteur mieux
             if (self.environment.topography[x, y] > self.environment.topography[dx, dy] ) or (
                 self.environment.topography[dx, dy] < self.environment.topography[x, y] +30):
-                
+
                 for k in self.vehicleF.vehiclePos.keys():           #Collision avec autre rover
                     if (dx,dy) == self.vehicleF.vehiclePos[k][0]:
                         vehicleCollision = True
-                
+
                 else:
                     if (dx,dy) in self.environment.lootDict.keys():
                         vehicleCollision = True
@@ -191,7 +190,7 @@ class Server:
                 vehicleCollision = True
 
             if vehicleCollision:
-                    rover.ChangeHealth(-dmg)     #5 de dégâts 
+                    rover.ChangeHealth(-dmg)     #5 de dégâts
                     answer["result"] = {'state' : 'not moved', 'damage' : dmg, 'battery_lost' : eng}
             else :
                 rover.move(value, 1)
