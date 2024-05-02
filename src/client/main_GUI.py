@@ -126,12 +126,17 @@ class MainGUI:
 		
 		self.HP.step(-amount)
 		
-	
 	def decrease_energy(self,amount):
 		'''Diminue la jauge d'énergie du rover'''
 		
 		self.energy.step(-amount)
 		
+	def increase_energy(self,amount):
+		'''Augmente la jauge d'énergie du rover'''
+		
+		self.energy.step(amount)
+	
+	
 
 if __name__ == "__main__":
 	w = tk.Tk()
