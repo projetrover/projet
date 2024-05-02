@@ -95,6 +95,7 @@ class MainGUI:
 		if self.vehicle_dir != up:
 			self.rotate(up)
 		self.Canvas.move(self.bg_id, 0, 12)
+		
 
 	def move_down(self, event=None):
 		'''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers le haut, donnant l'impression que le rover avance vers le bas'''
@@ -102,6 +103,7 @@ class MainGUI:
 		if self.vehicle_dir != down:
 			self.rotate(down)
 		self.Canvas.move(self.bg_id, 0, -12)
+		
 		
 
 	def kbind(self):
@@ -124,12 +126,25 @@ class MainGUI:
 	def decrease_HP(self,amount):
 		'''Diminue la jauge de points de vie du rover'''
 		
-		self.HP.step(-amount)
+		if self.HP["value"]-amount>=0:
+			self.HP.step(-amount)
+		else:
+			self.HP.step(-self.HP["value"])
+	
+	def refill_HP(self):
+		'''Réinitialise la "barre de vie" du rover'''
 		
+		self.HP.destroy()
+		self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
+		self.Canvas.create_window(1750,100,window = self.HP)
+			
 	def decrease_energy(self,amount):
 		'''Diminue la jauge d'énergie du rover'''
 		
-		self.energy.step(-amount)
+		if self.energy["value"]-amount>=0:
+			self.energy.step(-amount)
+		else: 
+			self.energy.step(-self.energy["value"])
 		
 	def increase_energy(self,amount):
 		'''Augmente la jauge d'énergie du rover'''
@@ -140,7 +155,6 @@ class MainGUI:
 
 if __name__ == "__main__":
 	w = tk.Tk()
-	#w.wm_attributes('-alpha', 0)
 	w.resizable(width='false', height='false')
 	w.geometry("1920x1080")
 	A = MainGUI(w)
