@@ -22,7 +22,7 @@ class VehicleFactory:
     def newVehicles(self, Id, pos):
         self.roverList[Id] = rover.Rover(pos, 0)
         self.helicoList[Id] = helico.Helico(pos, 0)
-        self.vehiclePos[iD] = [self.helicoList[Id].pos, self.roverList[Id].pos]
+        self.vehiclePos[Id] = [self.helicoList[Id].pos, self.roverList[Id].pos]
 
     def createVehicle(self, Id, pos, type, durability, battery, analysisDict={}):
         if type == 'Helico':

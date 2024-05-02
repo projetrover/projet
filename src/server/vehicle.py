@@ -38,6 +38,7 @@ class Vehicle:
             distance = distance * (dir-2)
             x = ( x + distance ) % MAX_X
         self.pos = (x,y)
+    
 
     def ChangeHealth(self, ammount):
         self.durability += ammount

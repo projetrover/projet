@@ -18,9 +18,16 @@ class Server:
         self.online_users = []          #Liste des id des utilisateurs connectes
         self.seed = random.randint(100000, 999999)
         self.serverTimer = 0
-    
+
+
     def serverTick(self, tick):
        self.serverTimer += tick
+       self.environment.updateMeteo()
+
+    def start(self, serviceDuration):
+        self.environment.generate_topography()
+        self.environment.generate_meteoMap(self.seed, serviceDuration)
+        self.environment.generate_loot(self.seed)
 
     def load(self):  #TODO: chargement map
         try:
@@ -36,14 +43,13 @@ class Server:
 
         for idrover in data["vehicles"]["roverList"]:
             rover = data["vehicles"]["roverList"][idrover]
-            self.vehicleF.createVehicle(int(idrover), (int(rover["pos"][0]),
-                int(rover["pos"][1])), "Rover", int(rover["durability"]),
-                int(rover["battery"]), rover["analysisDict"])
+            self.vehicleF.createVehicle(int(idrover), [int(rover["pos"][0]), int(rover["pos"][1])], "Rover", int(rover["durability"]),
+                                        int(rover["battery"]), rover["analysisDict"])
 
         for idheli in data["vehicles"]["helicoList"]:
             heli = data["vehicles"]["helicoList"][idheli]
-            self.vehicleF.createVehicle(int(idheli), (int(heli["pos"][0]),
-                int(heli["pos"][1])), "Helico", int(heli["durability"]), int(heli["battery"]))
+            self.vehicleF.createVehicle(int(idheli), [int(heli["pos"][0]),
+                int(heli["pos"][1])], "Helico", int(heli["durability"]), int(heli["battery"]))
         self.seed = data["seed"]
         self.serverTimer = data["serverTimer"]
 
@@ -116,7 +122,7 @@ class Server:
         action = request.get("action")
         value = request.get("value")
 
-        if action == "login":               
+        if action == "login":
             answer = self.loginRequest(value)
 
         elif action == "move_rover":
@@ -132,8 +138,8 @@ class Server:
             user = self.userF.UserDict[userid]
             if user.username == username :
                 if user.password == password :
-                    self.online_users.append(userid)
-                    rover = self.vehicleF.roverList[userid]
+                    self.online_users.append(int(userid))
+                    rover = self.vehicleF.roverList[int(userid)]
                     answer["result"] = {"userid" : userid,
                                         "rover" : {"analysisDict" : rover.analysisDict,
                                                     "durability" : rover.durability,
@@ -157,46 +163,66 @@ class Server:
             answer["result"] = "incorrect user or passwd"
 
     def moveRoverRequest(self, Id, value):
+        #TODO: gerer les chutes
+        value = int(value)
         answer = {}
+        dmg = 5     #degats infliges en cas de Collision
+        eng = 2     #energie perdue
+        vehicleCollision = False
         if Id in self.online_users:
-            (x, y) = self.vehicleF.roverList[Id]
+            rover = self.vehicleF.roverList[Id]
+            (x, y) = rover.pos
             #en supposant que value soit un vecteur x,y peut modifier pour que ca match
-            dx,dy = x+ value[0], y+value[1]
+            if value == 0 :       #up
+                dx, dy = 0, 1
+            elif value == 1:      #right
+                dx, dy = 1, 0
+            elif value == 2:      #down
+                dx, dy = 0, -1
+            elif value == 3:      #left
+                dx, dy = -1, 0
+            else:
+                raise Exception('Wrong direction')
             #TODO: check hauteur mieux
-            if (self.environment.topography[x, y] > self.environment.topography[dx, dy] ) or (
-                self.environment.topography[dx, dy] < self.environment.topography[x, y] +30):
-                vehicleColision = False
-                for k in self.vehicleF.vehiclePos.keys():
-                    if (dx,dy) == self.vehicleF.vehiclePos[k]:
-                        vehicleColision = True
-                if vehicleColision:
-                    #TODO: choisir les dgts sur les vehicles
-                    answer["result"] = "collision vehicle"
+            if (self.environment.topography[x][y] > self.environment.topography[dx][dy] ) or (
+                self.environment.topography[dx][dy] < self.environment.topography[x][y] +30):
+
+                for k in self.vehicleF.vehiclePos.keys():           #Collision avec autre rover
+                    if (dx,dy) == self.vehicleF.vehiclePos[k][0]:
+                        vehicleCollision = True
+
                 else:
                     if (dx,dy) in self.environment.lootDict.keys():
-                        self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
-                        self.environment.collect((dx,dy))
-                        alert = "recolte de" + self.environment.lootDict[(dx,dy)]
-                        answer["result"]["alert"] = alert
-                    rover = self.vehicles.roverList[Id]
-                    rover.move(value, 1)
-                    answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
-                                "durability" : rover.durability,
-                                "battery" : rover.battery,
-                                "height" : rover.height,
-                                "pos" : rover.pos}
+                        vehicleCollision = True
+
             else:
-                #TODO: choisir les dgts sur les vehicles
-                answer["result"] = "collision mur trop haut"
+                vehicleCollision = True
+
+            if vehicleCollision:
+                    rover.ChangeHealth(-dmg)     #5 de dégâts
+                    answer["result"] = {'state' : 'not moved', 'damage' : dmg, 'battery_lost' : eng}
+            else :
+                rover.move(value, 1)
+                rover.height = self.environment.topography[dx][dy]      #Pas vraiment utile d'envoyer la hauteur au client je pense
+                answer["result"] = {'state' : 'moved', 'battery_lost' : eng}
+            rover.ChangeBattery(-eng)
         else:
             answer["result"] = "incorrect user or offline"
         return answer
 
+    def analyserRocherRequest(self, Id, value): #TODO:Toute la methode cote server + client
 
+    # self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
+    # self.environment.collect((dx,dy))
+    # alert = "recolte de" + self.environment.lootDict[(dx,dy)]
+    # answer["result"]["alert"] = alert
+    # answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
+    #             "durability" : rover.durability,
+    #             "battery" : rover.battery,
+    #             "height" : rover.height,
+    #             "pos" : rover.pos}
 
-
-
-
+        pass
 
 
 

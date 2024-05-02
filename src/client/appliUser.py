@@ -22,5 +22,8 @@ class AppliUser:
         self.window.wait_variable(self.auth.state)
         gui = main_GUI.MainGUI(self.window)
         gui.kbind()
+        rov = controleRoverGUI.ControleRoverGUI()
+        rov.move(1)
+
 
     
