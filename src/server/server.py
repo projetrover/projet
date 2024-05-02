@@ -36,14 +36,13 @@ class Server:
 
         for idrover in data["vehicles"]["roverList"]:
             rover = data["vehicles"]["roverList"][idrover]
-            self.vehicleF.createVehicle(int(idrover), (int(rover["pos"][0]),
-                int(rover["pos"][1])), "Rover", int(rover["durability"]),
-                int(rover["battery"]), rover["analysisDict"])
+            self.vehicleF.createVehicle(int(idrover), [int(rover["pos"][0]), int(rover["pos"][1])], "Rover", int(rover["durability"]),
+                                        int(rover["battery"]), rover["analysisDict"])
 
         for idheli in data["vehicles"]["helicoList"]:
             heli = data["vehicles"]["helicoList"][idheli]
-            self.vehicleF.createVehicle(int(idheli), (int(heli["pos"][0]),
-                int(heli["pos"][1])), "Helico", int(heli["durability"]), int(heli["battery"]))
+            self.vehicleF.createVehicle(int(idheli), [int(heli["pos"][0]),
+                int(heli["pos"][1])], "Helico", int(heli["durability"]), int(heli["battery"]))
         self.seed = data["seed"]
         self.serverTimer = data["serverTimer"]
 
@@ -158,6 +157,7 @@ class Server:
 
     def moveRoverRequest(self, Id, value):
         #TODO: gerer les chutes
+        value = int(value)
         answer = {}
         dmg = 5     #degats infliges en cas de Collision
         eng = 2     #energie perdue
@@ -166,7 +166,16 @@ class Server:
             rover = self.vehicleF.roverList[Id]
             (x, y) = rover.pos
             #en supposant que value soit un vecteur x,y peut modifier pour que ca match
-            dx, dy = x + value[0], y + value[1]
+            if value == 0 :       #up
+                dx, dy = 0, 1
+            elif value == 1:      #right
+                dx, dy = 1, 0
+            elif value == 2:      #down
+                dx, dy = 0, -1
+            elif value == 3:      #left
+                dx, dy = -1, 0
+            else:
+                raise Exception('Wrong direction')
             #TODO: check hauteur mieux
             if (self.environment.topography[x, y] > self.environment.topography[dx, dy] ) or (
                 self.environment.topography[dx, dy] < self.environment.topography[x, y] +30):
@@ -178,15 +187,7 @@ class Server:
                 else:
                     if (dx,dy) in self.environment.lootDict.keys():
                         vehicleCollision = True
-                        # self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
-                        # self.environment.collect((dx,dy))
-                        # alert = "recolte de" + self.environment.lootDict[(dx,dy)]
-                        # answer["result"]["alert"] = alert
-                    # answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
-                    #             "durability" : rover.durability,
-                    #             "battery" : rover.battery,
-                    #             "height" : rover.height,
-                    #             "pos" : rover.pos}
+
             else:
                 vehicleCollision = True
 
@@ -202,11 +203,19 @@ class Server:
             answer["result"] = "incorrect user or offline"
         return answer
 
+    def analyserRocherRequest(self, Id, value): #TODO:Toute la methode cote server + client
 
+    # self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
+    # self.environment.collect((dx,dy))
+    # alert = "recolte de" + self.environment.lootDict[(dx,dy)]
+    # answer["result"]["alert"] = alert
+    # answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
+    #             "durability" : rover.durability,
+    #             "battery" : rover.battery,
+    #             "height" : rover.height,
+    #             "pos" : rover.pos}
 
-
-
-
+        pass
 
 
 
