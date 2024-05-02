@@ -1,4 +1,5 @@
 import controleRover
 
 class ControleRoverGUI(controleRover.ControleRover):
-    pass
+    def __init__(self):
+        controleRover.ControleRover.__init__(self)

@@ -132,8 +132,8 @@ class Server:
             user = self.userF.UserDict[userid]
             if user.username == username :
                 if user.password == password :
-                    self.online_users.append(userid)
-                    rover = self.vehicleF.roverList[userid]
+                    self.online_users.append(int(userid))
+                    rover = self.vehicleF.roverList[int(userid)]
                     answer["result"] = {"userid" : userid,
                                         "rover" : {"analysisDict" : rover.analysisDict,
                                                     "durability" : rover.durability,
@@ -157,37 +157,47 @@ class Server:
             answer["result"] = "incorrect user or passwd"
 
     def moveRoverRequest(self, Id, value):
+        #TODO: gerer les chutes
         answer = {}
+        dmg = 5     #degats infliges en cas de Collision
+        eng = 2     #energie perdue
+        vehicleCollision = False
         if Id in self.online_users:
-            (x, y) = self.vehicleF.roverList[Id]
+            rover = self.vehicleF.roverList[Id]
+            (x, y) = rover.pos
             #en supposant que value soit un vecteur x,y peut modifier pour que ca match
-            dx,dy = x+ value[0], y+value[1]
+            dx, dy = x + value[0], y + value[1]
             #TODO: check hauteur mieux
             if (self.environment.topography[x, y] > self.environment.topography[dx, dy] ) or (
                 self.environment.topography[dx, dy] < self.environment.topography[x, y] +30):
-                vehicleColision = False
-                for k in self.vehicleF.vehiclePos.keys():
-                    if (dx,dy) == self.vehicleF.vehiclePos[k]:
-                        vehicleColision = True
-                if vehicleColision:
-                    #TODO: choisir les dgts sur les vehicles
-                    answer["result"] = "collision vehicle"
+                
+                for k in self.vehicleF.vehiclePos.keys():           #Collision avec autre rover
+                    if (dx,dy) == self.vehicleF.vehiclePos[k][0]:
+                        vehicleCollision = True
+                
                 else:
                     if (dx,dy) in self.environment.lootDict.keys():
-                        self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
-                        self.environment.collect((dx,dy))
-                        alert = "recolte de" + self.environment.lootDict[(dx,dy)]
-                        answer["result"]["alert"] = alert
-                    rover = self.vehicles.roverList[Id]
-                    rover.move(value, 1)
-                    answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
-                                "durability" : rover.durability,
-                                "battery" : rover.battery,
-                                "height" : rover.height,
-                                "pos" : rover.pos}
+                        vehicleCollision = True
+                        # self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
+                        # self.environment.collect((dx,dy))
+                        # alert = "recolte de" + self.environment.lootDict[(dx,dy)]
+                        # answer["result"]["alert"] = alert
+                    # answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
+                    #             "durability" : rover.durability,
+                    #             "battery" : rover.battery,
+                    #             "height" : rover.height,
+                    #             "pos" : rover.pos}
             else:
-                #TODO: choisir les dgts sur les vehicles
-                answer["result"] = "collision mur trop haut"
+                vehicleCollision = True
+
+            if vehicleCollision:
+                    rover.ChangeHealth(-dmg)     #5 de dégâts 
+                    answer["result"] = {'state' : 'not moved', 'damage' : dmg, 'battery_lost' : eng}
+            else :
+                rover.move(value, 1)
+                rover.height = self.environment.topography[dx][dy]      #Pas vraiment utile d'envoyer la hauteur au client je pense
+                answer["result"] = {'state' : 'moved', 'battery_lost' : eng}
+            rover.ChangeBattery(-eng)
         else:
             answer["result"] = "incorrect user or offline"
         return answer
