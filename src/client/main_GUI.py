@@ -21,22 +21,50 @@ class MainGUI:
 	'''Classe de l'interface principale'''
 
 	def __init__(self, window):
-		'''Initialise les attributs de l'interface: la fenêtre principale, le canvas, l'image de fond (carte), le rover, la barre de progression.
+		'''Initialise les attributs de l'interface: la fenêtre principale, le canvas, l'image de fond (carte), le rover et les autres sprites, la barre de progression et les jauges de "points de vie" et d'énergie.
 		vehicle_dir est le sens vers lequel le rover est tourné, utilisé pour les rotations. Le rover est positionné au milieu de l'écran'''
 		
 
 		imgmap = checkimg("map.jpg")
 		imgrover = checkimg("rover.png")
+		imgrocher = checkimg("rock.png")
+		imgdrone = checkimg("drone.png")
+		imgwind = checkimg("Wind_Storm.png")
+		imgsand = checkimg("Sandstorm.png")
+		
+		styleHP = ttk.Style()
+		styleHP.theme_use("alt")
+		styleHP.configure("green.Horizontal.TProgressbar",background = "green2",troughcolor = "red",thickness = 40)
+		styleEnergy = ttk.Style()
+		styleEnergy.theme_use("alt")
+		styleEnergy.configure("orange.Horizontal.TProgressbar",background = "gold", troughcolor = "black",thickness = 40)
 
 		self.vehicle_dir = up
 		self.window = window
 		self.Canvas = tk.Canvas(self.window, width=1920, height=1080, bg="black")
 		self.imgrover = Image.open(imgrover).resize((80, 80), Image.LANCZOS)
+		
 		self.rover = ImageTk.PhotoImage(self.imgrover)
 		self.bg = ImageTk.PhotoImage(Image.open(imgmap))
+		self.rock = ImageTk.PhotoImage(Image.open(imgrocher).resize((80, 80), Image.LANCZOS))
+		self.drone = ImageTk.PhotoImage(Image.open(imgdrone).resize((80, 80), Image.LANCZOS))
+		self.wind = ImageTk.PhotoImage(Image.open(imgwind).resize((80, 80), Image.LANCZOS))
+		self.sand = ImageTk.PhotoImage(Image.open(imgsand).resize((80, 80), Image.LANCZOS))
 		self.bg_id = self.Canvas.create_image(540, 960, image=self.bg)
+		#self.Canvas.create_image(100, 100, image=self.rock)
+		#self.Canvas.create_image(180, 100, image=self.drone)
+		#self.Canvas.create_image(260, 100, image=self.wind)
+		#self.Canvas.create_image(340, 100, image=self.sand)
 		self.rover_id = self.Canvas.create_image(960, 540, image=self.rover)
+		
+		
 		self.progressbar = None
+		self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
+		self.Canvas.create_window(1750,100,window = self.HP)
+		self.Canvas.create_text(1750, 60, text="État du véhicule", font="bold 20", fill="black")
+		self.energy = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "orange.Horizontal.TProgressbar")
+		self.Canvas.create_window(1750,200,window = self.energy)
+		self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
 		self.Canvas.pack()
 	
 	def rotate(self, direction):
@@ -74,24 +102,36 @@ class MainGUI:
 		if self.vehicle_dir != down:
 			self.rotate(down)
 		self.Canvas.move(self.bg_id, 0, -12)
+		
 
 	def kbind(self):
-		'''associe chaque touche directionnelle du clavier à la méthode "move" correspondante'''
+		'''Associe chaque touche directionnelle du clavier à la méthode "move" correspondante'''
 	
 		self.window.bind("<Left>", self.move_left)
 		self.window.bind("<Right>", self.move_right)
 		self.window.bind("<Up>", self.move_up)
 		self.window.bind("<Down>", self.move_down)
 		
+		
 	def progress_bar(self):
-		'''créé une barre de progression au-dessus du rover et la supprime une fois remplie'''
+		'''Créé une barre de progression au-dessus du rover et la supprime une fois remplie'''
 		
 		self.progressbar = ttk.Progressbar(self.window,orient = "horizontal",length = 70,mode = "determinate")
 		self.Canvas.create_window(960,480,window = self.progressbar)
 		self.progressbar.start(50)
 		self.progressbar.after(5000,self.progressbar.destroy)
 	
+	def decrease_HP(self,amount):
+		'''Diminue la jauge de points de vie du rover'''
+		
+		self.HP.step(-amount)
+		
 	
+	def decrease_energy(self,amount):
+		'''Diminue la jauge d'énergie du rover'''
+		
+		self.energy.step(-amount)
+		
 
 if __name__ == "__main__":
 	w = tk.Tk()
