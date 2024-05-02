@@ -45,6 +45,7 @@ sel.register(lsock, selectors.EVENT_READ, data=None)
 
 try:
     while True:
+        serv.serverTick(1)
         #print("Boucle")
         events = sel.select(timeout=None)
         #print("events = ", events)

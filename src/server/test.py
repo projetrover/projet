@@ -50,14 +50,14 @@ serv.load()
 
 #print(uf.UserDict[1].__dict__)
 #print(v.__dict__)
-seed = 156478
-env = environment.Environment()
-serv.environment = env
+# seed = 156478
+# env = environment.Environment()
+# serv.environment = env
 #env.generate_topography()
 #print(env.topography)
 #env.generate_meteoMap(seed, 5000000)
 #env.placeCurrentMeteos(30)
-serv.save()
+#serv.save()
 
 #print(env.meteoMap,'\n\n\n')
 #print(env.currentMeteos,'\n')

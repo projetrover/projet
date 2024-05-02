@@ -18,6 +18,9 @@ class Server:
         self.online_users = []          #Liste des id des utilisateurs connectes
         self.seed = random.randint(100000, 999999)
         self.serverTimer = 0
+    
+    def serverTick(self, tick):
+       self.serverTimer += tick
 
     def load(self):  #TODO: chargement map
         try:
@@ -28,8 +31,8 @@ class Server:
 
         for iduser in data["users"]:
             user = data["users"][iduser]
-            self.userF.UserDict[int(iduser)] = userFactory.user.User(user["username"],
-                user["password"], int(user["iduser"]))
+            self.userF.UserDict[iduser] = userFactory.user.User(user["username"],
+                user["password"], user["iduser"])
 
         for idrover in data["vehicles"]["roverList"]:
             rover = data["vehicles"]["roverList"][idrover]
@@ -43,6 +46,17 @@ class Server:
                 int(heli["pos"][1])), "Helico", int(heli["durability"]), int(heli["battery"]))
         self.seed = data["seed"]
         self.serverTimer = data["serverTimer"]
+
+        denv = data['environment']
+        self.environment.mapSize = (int(denv['mapSize'][0]), int(denv['mapSize'][0]))
+        self.environment.materials = denv['materials']
+        self.environment.lootDict = denv['lootDict']
+        self.environment.looted = denv['looted']
+        self.environment.meteoDict = denv['meteoDict']
+        self.environment.currentMeteos = denv['currentMeteos']
+        self.environment.endedMeteos = denv['endedMeteos']
+        self.environment.meteoMap = denv['meteoMap']
+
 
 
     def save(self):  #TODO: Finir save
@@ -101,90 +115,82 @@ class Server:
         idjoueur = request.get("idjoueur")
         action = request.get("action")
         value = request.get("value")
-        answer = {}
 
-        if action == "login":               #Login
-            username = value["username"]
-            password = value["password"]
-            for userid in self.userF.UserDict:
-                user = self.userF.UserDict[userid]
-                if user.username == username :
-                    if user.password == password :
-                        self.online_users.append(userid)
-                        rover = self.vehicleF.roverList[userid]
-                        answer["result"] = {"userid" : userid,
-                                            "rover" : {"analysisDict" : rover.analysisDict,
-                                                       "durability" : rover.durability,
-                                                       "battery" : rover.battery,
-                                                       "height" : rover.height,
-                                                       "pos" : rover.pos},
-
-                                             }  #TODO: Mettre toutes les infos du user map discovered
-
-                        if userid in self.vehicleF.helicoList :
-                            helico = self.vehicleF.helicoList[userid]
-                            answer["result"]["helico"] = {"durability" : helico.durability,
-                                                       "battery" : helico.battery,
-                                                       "height" : helico.height,
-                                                       "pos" : helico.pos}
-                        else:
-                            answer["result"]["helico"] = "None"
-                        return answer
-
-            else:
-                answer["result"] = "incorrect user or passwd"
-
-
-
+        if action == "login":               
+            answer = self.loginRequest(value)
 
         elif action == "move_rover":
             answer = self.moveRoverRequest(idjoueur, value)
-            #Si pas de rocher ni obstacle hauteur
-
-
-            self.vehicles.roverList[idjoueur].move(value, 1)
-            answer["result"] = "success"
-
 
         return answer
 
-        def serverTick(self, tick):
-            self.serverTimer += tick
+    def loginRequest(self, value):
+        answer = {}
+        username = value["username"]
+        password = value["password"]
+        for userid in self.userF.UserDict:
+            user = self.userF.UserDict[userid]
+            if user.username == username :
+                if user.password == password :
+                    self.online_users.append(userid)
+                    rover = self.vehicleF.roverList[userid]
+                    answer["result"] = {"userid" : userid,
+                                        "rover" : {"analysisDict" : rover.analysisDict,
+                                                    "durability" : rover.durability,
+                                                    "battery" : rover.battery,
+                                                    "height" : rover.height,
+                                                    "pos" : rover.pos},
 
-        def moveRoverRequest(self, Id, value):
-            answer = {}
-            if idjoueur in self.online_users:
-                (x, y) = self.vehicleF.roverList[Id]
-                #en supposant que value soit un vecteur x,y peut modifier pour que ca match
-                dx,dy = x+ value[0], y+value[1]
-                #TODO: check hauteur mieux
-                if (self.environment.topography[x, y] > self.environment.topography[dx, dy] ) or (
-                    self.environment.topography[dx, dy] < self.environment.topography[x, y] +30):
-                    vehicleColision = False
-                    for k in self.vehicleF.vehiclePos.keys():
-                        if (dx,dy) == self.vehicleF.vehiclePos[k]:
-                            vehicleColision = True
-                    if vehicleColision:
-                        #TODO: choisir les dgts sur les vehicles
-                        answer["result"] = "collision vehicle"
+                                            }  #TODO: Mettre toutes les infos du user map discovered
+
+                    if userid in self.vehicleF.helicoList :
+                        helico = self.vehicleF.helicoList[userid]
+                        answer["result"]["helico"] = {"durability" : helico.durability,
+                                                    "battery" : helico.battery,
+                                                    "height" : helico.height,
+                                                    "pos" : helico.pos}
                     else:
-                        if (dx,dy) in self.environment.lootDict.keys():
-                            self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
-                            self.environment.collect((dx,dy))
-                            alert = "recolte de" + self.environment.lootDict[(dx,dy)]
-                            answer["result"]["alert"] = alert
-                        self.vehicles.roverList[Id].move(value, 1)
-                        answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
-                                   "durability" : rover.durability,
-                                   "battery" : rover.battery,
-                                   "height" : rover.height,
-                                   "pos" : rover.pos}
-                else:
+                        answer["result"]["helico"] = "None"
+                    return answer
+
+        else:
+            answer["result"] = "incorrect user or passwd"
+
+    def moveRoverRequest(self, Id, value):
+        answer = {}
+        if Id in self.online_users:
+            (x, y) = self.vehicleF.roverList[Id]
+            #en supposant que value soit un vecteur x,y peut modifier pour que ca match
+            dx,dy = x+ value[0], y+value[1]
+            #TODO: check hauteur mieux
+            if (self.environment.topography[x, y] > self.environment.topography[dx, dy] ) or (
+                self.environment.topography[dx, dy] < self.environment.topography[x, y] +30):
+                vehicleColision = False
+                for k in self.vehicleF.vehiclePos.keys():
+                    if (dx,dy) == self.vehicleF.vehiclePos[k]:
+                        vehicleColision = True
+                if vehicleColision:
                     #TODO: choisir les dgts sur les vehicles
-                    answer["result"] = "collision mur trop haut"
+                    answer["result"] = "collision vehicle"
+                else:
+                    if (dx,dy) in self.environment.lootDict.keys():
+                        self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
+                        self.environment.collect((dx,dy))
+                        alert = "recolte de" + self.environment.lootDict[(dx,dy)]
+                        answer["result"]["alert"] = alert
+                    rover = self.vehicles.roverList[Id]
+                    rover.move(value, 1)
+                    answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
+                                "durability" : rover.durability,
+                                "battery" : rover.battery,
+                                "height" : rover.height,
+                                "pos" : rover.pos}
             else:
-                answer["result"] = "incorrect user or offline"
-            return answer
+                #TODO: choisir les dgts sur les vehicles
+                answer["result"] = "collision mur trop haut"
+        else:
+            answer["result"] = "incorrect user or offline"
+        return answer
 
 
 
