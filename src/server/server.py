@@ -19,8 +19,15 @@ class Server:
         self.seed = random.randint(100000, 999999)
         self.serverTimer = 0
 
+
     def serverTick(self, tick):
        self.serverTimer += tick
+       self.environment.updateMeteo()
+
+    def start(self, serviceDuration):
+        self.environment.generate_topography()
+        self.environment.generate_meteoMap(self.seed, serviceDuration)
+        self.environment.generate_loot(self.seed)
 
     def load(self):  #TODO: chargement map
         try:
@@ -177,8 +184,8 @@ class Server:
             else:
                 raise Exception('Wrong direction')
             #TODO: check hauteur mieux
-            if (self.environment.topography[x, y] > self.environment.topography[dx, dy] ) or (
-                self.environment.topography[dx, dy] < self.environment.topography[x, y] +30):
+            if (self.environment.topography[x][y] > self.environment.topography[dx][dy] ) or (
+                self.environment.topography[dx][dy] < self.environment.topography[x][y] +30):
 
                 for k in self.vehicleF.vehiclePos.keys():           #Collision avec autre rover
                     if (dx,dy) == self.vehicleF.vehiclePos[k][0]:

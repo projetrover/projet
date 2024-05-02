@@ -46,16 +46,22 @@ serv = server.Server()
 #serv.userF = uf
 #serv.vehicleF = v
 serv.load()
+'''
+nombre de tick server, 10 000 000 tick a 144 tick/secondes (fps ?)
+cela genere TOUTES les meteos pour cette duree de service
+-> 69444 secondes -> 19 heures
+'''
+serv.start(10000000)
 #print(serv.vehicleF.roverList[1])
 
 #print(uf.UserDict[1].__dict__)
 #print(v.__dict__)
-seed = 156478
-env = environment.Environment()
-serv.environment = env
-env.generate_topography()
-print(env.topography[601][69])
-print(env.topography[602][69])
+#seed = 156478
+#env = environment.Environment()
+#serv.environment = env
+#env.generate_topography()
+#print(env.topography[601][69])
+#print(env.topography[602][69])
 #env.generate_meteoMap(seed, 5000000)
 #env.placeCurrentMeteos(30)
 #serv.save()

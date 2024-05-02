@@ -12,6 +12,8 @@ import libserver
 import server
 import vehicleFactory
 
+import time
+
 sel = selectors.DefaultSelector()
 
 
@@ -45,6 +47,7 @@ sel.register(lsock, selectors.EVENT_READ, data=None)
 
 try:
     while True:
+        start = time.time()
         serv.serverTick(1)
         #print("Boucle")
         events = sel.select(timeout=None)
@@ -69,6 +72,8 @@ try:
                         f"{traceback.format_exc()}"
                     )
                     message.close()
+        end = time.time()
+        print("duree tick server", end - start)
 except KeyboardInterrupt:
     print("Caught keyboard interrupt, exiting")
 finally:

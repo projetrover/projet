@@ -1,3 +1,4 @@
+import time
 import map as m
 import numpy as np
 import random
@@ -8,13 +9,13 @@ from os.path import exists
 #TODO: Creer une SEED et methodes gerant meteo + carte
 
 def checkimg(image):
-	'''Cherche l"image image et retourne son chemin, None si introuvable'''
+    '''Cherche l"image image et retourne son chemin, None si introuvable'''
 
-	if exists("../../Images/"+image):
-		return "../../Images/"+image
-	elif exists("Images/"+image):
-		return "Images/"+image
-	return None
+    if exists("../../Images/"+image):
+        return "../../Images/"+image
+    elif exists("Images/"+image):
+        return "Images/"+image
+    return None
 
 class Environment:
     def __init__(self):
@@ -37,7 +38,7 @@ class Environment:
         '''
         self.mapSize = (m.MAX_X, m.MAX_Y)
         #size = mapSize[1] * mapSize[0]
-        self.topography  = np.zeros((m.MAX_X, m.MAX_Y), dtype = int)
+        self.topography  = []
         self.materials = {"mirabilite":50, "argile":200, "regolithe":600}
         self.lootDict = {} # repartit les loot sur la carte
         self.looted = [] # supprime les loot sur ces pos
@@ -51,19 +52,26 @@ class Environment:
         '''
         genere les hauteurs, TODO: rendre cela + accurate
         '''
+        start = time.time()
+
+
         FILE = checkimg("map.jpg")
         im = Image.open(FILE, mode="r")
         colormap = list(im.getdata())
         (x, y) = self.mapSize
         for i in range(x):
             temp = i*y
+            self.topography += [[]]
             for j in range(y):
                 (r, g, b) = colormap[temp+j]
                 if b > r:
                     h = -b*20 - g * 8
                 else:
                     h = r * 20 + g * 40
-                self.topography[i, j] = h
+                self.topography[i] += [h]
+
+        end = time.time()
+        print("duree generate_topography:",end - start)
 
 
     def addMeteo(self, spawnDate, pos, IdMeteo, radius, progressionVector, duration):
@@ -71,6 +79,8 @@ class Environment:
             "radius":radius, "progressionVector":progressionVector, "duration":duration}
 
     def generate_meteoMap(self, seed, serviceDuration):
+        start = time.time()
+
         random.seed(seed)
         (max_X, max_Y) = self.mapSize
         minRad, maxRad = round(0.05*max_Y), round(0.4 * max_Y)
@@ -95,8 +105,36 @@ class Environment:
             self.addMeteo(nextMeteo, startPos, IdMeteo, radius, progress, duration )
             nextMeteo += random.randint(5, 20)
 
+        end = time.time()
+        print("duree generate_meteoMap:",end - start)
+
     def generate_loot(self, seed):
+        start = time.time()
+
         random.seed(seed)
+        reseed = random.randint(100000, 999999)
+        random.seed(reseed)
+        (mx,my) = self.mapSize
+        matcount = 0
+        loot_repartition = []
+        for k in self.materials.keys():
+            matcount += self.materials[k]
+            for i in range(self.materials[k]):
+                loot_repartition += [k]
+        if matcount > mx*my:
+            raise Exception("environment->generate_loot-> too many materials for map size.")
+        loot_x = random.sample(range(mx),matcount)
+        loot_y = random.sample(range(my),matcount)
+        random.shuffle(loot_repartition)
+        for j in range(matcount):
+            x,y = loot_x[j],loot_y[j]
+            self.lootDict[(x,y)] = loot_repartition[j]
+        for k in self.looted:
+            del self.lootDict[k]
+
+        end = time.time()
+        print("duree generate_loot:",end - start)
+
 
     def collect(self, pos):
         self.looted.append(pos)
