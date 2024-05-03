@@ -21,6 +21,7 @@ class Authentification:
             result = answer['result']
             dataUser.data.userid = int(result['userid'])
             dataUser.data.rover = result['rover']   #On laisse en dico de str pour l'instant, on verra plus tard pour changer si besoin
+            print(type(dataUser.data.rover['durability']))
             if 'helico' in result:
                 dataUser.data.helico = result['helico']
 

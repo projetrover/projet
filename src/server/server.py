@@ -22,12 +22,13 @@ class Server:
 
     def serverTick(self, tick):
        self.serverTimer += tick
-       self.environment.updateMeteo()
+       self.environment.updateMeteo(self.serverTimer)
 
     def start(self, serviceDuration):
         self.environment.generate_topography()
         self.environment.generate_meteoMap(self.seed, serviceDuration)
         self.environment.generate_loot(self.seed)
+        print('Server is ready')
 
     def load(self):  #TODO: chargement map
         try:

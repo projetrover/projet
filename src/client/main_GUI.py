@@ -8,6 +8,8 @@ import controleHelicoGUI
 import alerteGUI
 import miniCarteGUI
 import carteGUI
+import libclient
+import dataUser
 
 left = 90
 right = -90
@@ -92,8 +94,11 @@ class MainGUI():
 		
 		if self.vehicle_dir != left:
 			self.rotate(left)
-
-		self.Canvas.move(self.bg_id, 12, 0)
+		answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
+		if answer['result']['state'] == 'moved':
+			self.Canvas.move(self.bg_id, 80, 0)
+		# elif answer['result']['state'] == 'not moved':
+		# 	dataUser.data.rover['durability'] = 
 
 	def move_right(self, event=None):
 		'''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers la gauche, donnant l'impression que le rover avance vers la droite'''
