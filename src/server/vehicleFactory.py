@@ -10,25 +10,29 @@ class VehicleFactory:
         '''
         dictionaires au format {Id: Objet}
         L'Id est le meme s'il correspond au meme User
-        vehiclePos sert a faciliter les calculs de colision entre vehicules
-        {Id: [(posRover),(posHelico)]}
+        roverPos sert a faciliter les calculs de colision entre vehicules
+        {Id: posrover}
         '''
         self.roverList = {}
         self.helicoList = {}
-        self.vehiclePos = {}
+        self.roverPos = {}
+        self.helicoPos = {}
 
 
 
     def newVehicles(self, Id, pos):
         self.roverList[Id] = rover.Rover(pos, 0)
         self.helicoList[Id] = helico.Helico(pos, 0)
-        self.vehiclePos[Id] = [self.helicoList[Id].pos, self.roverList[Id].pos]
+        self.roverPos[Id] = self.roverList[Id].pos
+        self.helicoPos[Id]= self.helicoList[Id].pos
 
     def createVehicle(self, Id, pos, dir, type, durability, battery, analysisDict={}):
         if type == 'Helico':
             self.helicoList[Id] = helico.Helico(pos, dir, 0, durability, battery)
+            self.helicoPos[Id]= self.helicoList[Id].pos
         elif type == 'Rover':
             self.roverList[Id] = rover.Rover(pos, dir, 0, durability, battery, analysisDict)
+            self.roverPos[Id] = self.roverList[Id].pos
         else:
             raise TypeError("Server->VehicleFactory->createVehicle : mauvais type.")
 
@@ -36,8 +40,10 @@ class VehicleFactory:
     def delVehicle(self, Id, type):
         if type == 'Rover': #TODO: blabla
             del self.roverList[Id]
+            del self.roverPos[Id]
         elif type == 'Helico':
             del self.helicoList[Id]
+            del self.helicoPos[Id]
 			#TODO: blabla
         else:
             raise TypeError("Server->VehicleFactory->delVehicle : mauvais type.")

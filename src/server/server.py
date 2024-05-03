@@ -181,8 +181,8 @@ class Server:
             if (self.environment.topography[x][y] > self.environment.topography[dx][dy] ) or (
                 self.environment.topography[dx][dy] < self.environment.topography[x][y] +30):
 
-                for k in self.vehicleF.vehiclePos.keys():           #Collision avec autre rover
-                    if (dx,dy) == self.vehicleF.vehiclePos[k][0]:
+                for k in self.vehicleF.roverPos.keys():           #Collision avec autre rover
+                    if (dx,dy) == self.vehicleF.roverPos[k]:
                         vehicleCollision = True
 
                 else:
@@ -237,6 +237,24 @@ class Server:
             answer["result"] = {"state" : "failed"}
 
         return answer
+    
+    def data_update(self):
+        """Traitement des requetes de maj des infos client"""
+        answer = {}
+        answer['result'] = {
+            'roverPos' : {},
+            'helicoPos' : {},
+            'lootDict' : self.environment.lootDict,
+            'currentMeteos' : self.environment.currentMeteos
+        }
+        for k in self.online_users:
+            answer["result"]["roverPos"][k] = self.vehicleF.roverPos[k]
+            if k in self.vehicleF.helicoPos:
+                answer["result"]["helicoPos"][k] = self.vehicleF.helicoPos[k]
+
+        return answer
+
+
 
     def request_treatment(self, request):
             '''Traitement de la requete request (dict), renvoie la reponse a envoyer au client'''
@@ -253,10 +271,13 @@ class Server:
             elif action == "analyse":
                 answer = self.analyserRocherRequest(idjoueur, value)
 
+            elif action =="data_update":
+                answer = self.data_update()
+
             return answer
 
 
-#TODO: data update
+
 
 
 #end of file
