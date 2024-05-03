@@ -11,6 +11,7 @@ TODO:
 
 '''
 class Server:
+    """Classe controleur principale du serveur"""
     def __init__(self):
         self.userF = userFactory.UserFactory()
         self.vehicleF = vehicleFactory.VehicleFactory()
@@ -31,6 +32,7 @@ class Server:
         print('Server is ready')
 
     def load(self):  #TODO: chargement map
+        """Charge les donnees du serveur"""
         try:
             f = open("src/server/data.json")
         except :
@@ -44,13 +46,13 @@ class Server:
 
         for idrover in data["vehicles"]["roverList"]:
             rover = data["vehicles"]["roverList"][idrover]
-            self.vehicleF.createVehicle(int(idrover), [int(rover["pos"][0]), int(rover["pos"][1])], "Rover", int(rover["durability"]),
+            self.vehicleF.createVehicle(int(idrover), [int(rover["pos"][0]), int(rover["pos"][1])], int(rover['dir']),"Rover", int(rover["durability"]),
                                         int(rover["battery"]), rover["analysisDict"])
 
         for idheli in data["vehicles"]["helicoList"]:
             heli = data["vehicles"]["helicoList"][idheli]
             self.vehicleF.createVehicle(int(idheli), [int(heli["pos"][0]),
-                int(heli["pos"][1])], "Helico", int(heli["durability"]), int(heli["battery"]))
+                int(heli["pos"][1])], int(heli['dir']), "Helico", int(heli["durability"]), int(heli["battery"]))
         self.seed = data["seed"]
         self.serverTimer = data["serverTimer"]
 
@@ -117,21 +119,8 @@ class Server:
                 outfile.write(json_object)
 
 
-    def request_treatment(self, request):
-        '''Traitement de la requete request (dict), renvoie la reponse a envoyer au client'''
-        idjoueur = request.get("idjoueur")
-        action = request.get("action")
-        value = request.get("value")
-
-        if action == "login":
-            answer = self.loginRequest(value)
-
-        elif action == "move_rover":
-            answer = self.moveRoverRequest(idjoueur, value)
-
-        return answer
-
     def loginRequest(self, value):
+        """Traitement des requetes de connexion"""
         answer = {}
         username = value["username"]
         password = value["password"]
@@ -143,6 +132,7 @@ class Server:
                     rover = self.vehicleF.roverList[int(userid)]
                     answer["result"] = {"userid" : userid,
                                         "rover" : {"analysisDict" : rover.analysisDict,
+                                                   "dir" : rover.dir,
                                                     "durability" : rover.durability,
                                                     "battery" : rover.battery,
                                                     "height" : rover.height,
@@ -153,6 +143,7 @@ class Server:
                     if userid in self.vehicleF.helicoList :
                         helico = self.vehicleF.helicoList[userid]
                         answer["result"]["helico"] = {"durability" : helico.durability,
+                                                      "dir" : helico.dir,
                                                     "battery" : helico.battery,
                                                     "height" : helico.height,
                                                     "pos" : helico.pos}
@@ -164,6 +155,7 @@ class Server:
             answer["result"] = "incorrect user or passwd"
 
     def moveRoverRequest(self, Id, value):
+        """Traitement des requtes de mouvement des rover"""
         #TODO: gerer les chutes
         value = int(value)
         answer = {}
@@ -211,20 +203,48 @@ class Server:
             answer["result"] = "incorrect user or offline"
         return answer
 
+
     def analyserRocherRequest(self, Id, value): #TODO:Toute la methode cote server + client
+        """Traitement des requetes d'analyse de rocher"""
+        answer = {}
+        if Id in self.online_users:
+            rover = self.vehicleF.roverList[Id]
+            (x, y) = rover.pos
+            if value == 0 :       #up
+                dx, dy = 0, 1
+            elif value == 1:      #right
+                dx, dy = 1, 0
+            elif value == 2:      #down
+                dx, dy = 0, -1
+            elif value == 3:      #left
+                dx, dy = -1, 0
+            else:
+                raise Exception('Wrong direction')
+            self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
+            self.environment.collect((dx,dy))
+            alert = "recolte de" + self.environment.lootDict[(dx,dy)]
+            answer["result"]["alert"] = alert
+            answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
+                        "durability" : rover.durability,
+                        "battery" : rover.battery,
+                        "height" : rover.height,
+                        "pos" : rover.pos}
 
-    # self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
-    # self.environment.collect((dx,dy))
-    # alert = "recolte de" + self.environment.lootDict[(dx,dy)]
-    # answer["result"]["alert"] = alert
-    # answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
-    #             "durability" : rover.durability,
-    #             "battery" : rover.battery,
-    #             "height" : rover.height,
-    #             "pos" : rover.pos}
+        return answer
 
-        pass
+def request_treatment(self, request):
+        '''Traitement de la requete request (dict), renvoie la reponse a envoyer au client'''
+        idjoueur = request.get("idjoueur")
+        action = request.get("action")
+        value = request.get("value")
 
+        if action == "login":
+            answer = self.loginRequest(value)
+
+        elif action == "move_rover":
+            answer = self.moveRoverRequest(idjoueur, value)
+
+        return answer
 
 
 

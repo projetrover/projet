@@ -10,7 +10,8 @@ DOWN=2
 LEFT=3
 
 class Vehicle:
-    def __init__(self, pos, Height, durability = 100, battery = 100):
+    def __init__(self, pos, dir, Height, durability = 100, battery = 100):
+        self.dir = dir
         self.durability = durability
         self.battery = battery
         self.height = Height

@@ -64,7 +64,7 @@ class MainGUI():
 		self.drone = ImageTk.PhotoImage(Image.open(imgdrone).resize((80, 80), Image.LANCZOS))
 		self.wind = ImageTk.PhotoImage(Image.open(imgwind).resize((80, 80), Image.LANCZOS))
 		self.sand = ImageTk.PhotoImage(Image.open(imgsand).resize((80, 80), Image.LANCZOS))
-		self.bg_id = self.Canvas.create_image(540, 960, image=self.bg)
+		self.bg_id = self.Canvas.create_image(-10000000, 0, image=self.bg, anchor = tk.NW)
 		#self.Canvas.create_image(100, 100, image=self.rock)
 		#self.Canvas.create_image(180, 100, image=self.drone)
 		#self.Canvas.create_image(260, 100, image=self.wind)

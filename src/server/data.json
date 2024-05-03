@@ -15,6 +15,7 @@
         "roverList": {
             "1": {
                 "analysisDict": {},
+                "dir": 0,
                 "durability": 100,
                 "battery": 100,
                 "height": -5128,
@@ -25,6 +26,7 @@
             },
             "2": {
                 "analysisDict": {},
+                "dir": 0,
                 "durability": 100,
                 "battery": 100,
                 "height": 0,
@@ -36,6 +38,7 @@
         },
         "helicoList": {
             "1": {
+                "dir": 0,
                 "durability": 100,
                 "battery": 100,
                 "height": 0,
@@ -45,6 +48,7 @@
                 ]
             },
             "2": {
+                "dir": 0,
                 "durability": 100,
                 "battery": 100,
                 "height": 0,

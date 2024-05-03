@@ -1,9 +1,9 @@
 import vehicle
 
 class Rover(vehicle.Vehicle):
-    def __init__(self, pos, Height, durability, battery, analysisDict):
+    def __init__(self, pos, dir, Height, durability, battery, analysisDict):
         self.analysisDict = analysisDict
-        vehicle.Vehicle.__init__(self, pos, Height, durability, battery)
+        vehicle.Vehicle.__init__(self, pos, dir, Height, durability, battery)
 
     def analyze(self, material):
         if material in self.analysisDict.keys():
