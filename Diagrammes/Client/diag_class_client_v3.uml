@@ -1,0 +1,38 @@
+@startuml
+class AppliUser{}
+class DataUser{}
+class MiniCarteGUI{}
+class CarteGUI{}
+class ControlesRover{}
+class ControleHelico{}
+class ControlesRoverGUI{}
+class ControleHelicoGUI{}
+class AlerteGUI{}
+class Authentification{}
+class MainGUI{}
+
+
+DataUser --o Alerte
+DataUser --o MiniCarte
+DataUser --o Carte
+DataUser --o ControleHelico
+DataUser --o ControlesRover
+DataUser --o MainGUI
+DataUser --* Authentification
+Authentification <|-- AuthentificationGUI
+ControlesRover <|-- ControlesRoverGUI
+ControleHelico <|-- ControleHelicoGUI
+Carte <|-- CarteGUI
+MiniCarte <|-- MiniCarteGUI
+Alerte <|-- AlerteGUI
+
+
+
+MainGUI *-- Alerte
+MainGUI *-- MiniCarte
+MainGUI *-- Carte
+MainGUI *-- ControleHelico
+MainGUI *-- ControlesRover
+AppliUser *-- Authentification
+AppliUser *-- MainGUI
+@enduml

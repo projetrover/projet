@@ -16,14 +16,13 @@ class AppliUser:
         self.auth = None
         self.data = dataUser.data
         self.window = window
+        self.gui = None
 
     def main(self):
         self.auth = authentificationGUI.AuthentificationGUI(self.window)
         self.window.wait_variable(self.auth.state)
-        gui = main_GUI.MainGUI(self.window)
-        gui.kbind()
-        rov = controleRoverGUI.ControleRoverGUI()
-        rov.move(1)
+        self.gui = main_GUI.MainGUI(self.window)
+        self.gui.kbind()
 
 
     

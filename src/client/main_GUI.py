@@ -2,6 +2,12 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 from os.path import exists
+import appliUser
+import controleRoverGUI
+import controleHelicoGUI
+import alerteGUI
+import miniCarteGUI
+import carteGUI
 
 left = 90
 right = -90
@@ -17,13 +23,19 @@ def checkimg(image):
 		return "Images/"+image
 	return None
 
-class MainGUI:
+class MainGUI():
 	'''Classe de l'interface principale'''
 
 	def __init__(self, window):
 		'''Initialise les attributs de l'interface: la fenêtre principale, le canvas, l'image de fond (carte), le rover et les autres sprites, la barre de progression et les jauges de "points de vie" et d'énergie.
 		vehicle_dir est le sens vers lequel le rover est tourné, utilisé pour les rotations. Le rover est positionné au milieu de l'écran'''
 		
+
+		self.rov_ctrl = controleRoverGUI.ControleRoverGUI()
+		self.heli_ctrl = controleHelicoGUI.ControleHelicoGUI()
+		self.alertes = alerteGUI.AlerteGUI()
+		self.minimap = miniCarteGUI.MiniCarteGUI()
+		self.map = carteGUI.CarteGUI()
 
 		imgmap = checkimg("map.jpg")
 		imgrover = checkimg("rover.png")
@@ -80,6 +92,7 @@ class MainGUI:
 		
 		if self.vehicle_dir != left:
 			self.rotate(left)
+
 		self.Canvas.move(self.bg_id, 12, 0)
 
 	def move_right(self, event=None):
