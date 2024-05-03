@@ -97,22 +97,39 @@ class MainGUI():
 		answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
 		if answer['result']['state'] == 'moved':
 			self.Canvas.move(self.bg_id, 80, 0)
-		# elif answer['result']['state'] == 'not moved':
-		# 	dataUser.data.rover['durability'] = 
+		elif answer['result']['state'] == 'not moved':
+			dataUser.data.rover['durability'] -= answer['result']['damage']
+			self.decrease_HP(answer['result']['damage'])
+		dataUser.data.rover['battery'] -= answer['result']['battery_lost']
+		self.decrease_energy(answer['result']['battery_lost'])
 
 	def move_right(self, event=None):
 		'''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers la gauche, donnant l'impression que le rover avance vers la droite'''
 		
 		if self.vehicle_dir != right:
 			self.rotate(right)
-		self.Canvas.move(self.bg_id, -12, 0)
+		answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
+		if answer['result']['state'] == 'moved':
+			self.Canvas.move(self.bg_id, -80, 0)
+		elif answer['result']['state'] == 'not moved':
+			dataUser.data.rover['durability'] -= answer['result']['damage']
+			self.decrease_HP(answer['result']['damage'])
+		dataUser.data.rover['battery'] -= answer['result']['battery_lost']
+		self.decrease_energy(answer['result']['battery_lost'])
 
 	def move_up(self, event=None):
 		'''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers le bas, donnant l'impression que le rover avance vers le haut'''
 		
 		if self.vehicle_dir != up:
 			self.rotate(up)
-		self.Canvas.move(self.bg_id, 0, 12)
+		answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
+		if answer['result']['state'] == 'moved':
+			self.Canvas.move(self.bg_id, 0, 80)
+		elif answer['result']['state'] == 'not moved':
+			dataUser.data.rover['durability'] -= answer['result']['damage']
+			self.decrease_HP(answer['result']['damage'])
+		dataUser.data.rover['battery'] -= answer['result']['battery_lost']
+		self.decrease_energy(answer['result']['battery_lost'])
 		
 
 	def move_down(self, event=None):
@@ -120,7 +137,14 @@ class MainGUI():
 	
 		if self.vehicle_dir != down:
 			self.rotate(down)
-		self.Canvas.move(self.bg_id, 0, -12)
+		answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
+		if answer['result']['state'] == 'moved':
+			self.Canvas.move(self.bg_id, 0, -80)
+		elif answer['result']['state'] == 'not moved':
+			dataUser.data.rover['durability'] -= answer['result']['damage']
+			self.decrease_HP(answer['result']['damage'])
+		dataUser.data.rover['battery'] -= answer['result']['battery_lost']
+		self.decrease_energy(answer['result']['battery_lost'])
 		
 		
 
