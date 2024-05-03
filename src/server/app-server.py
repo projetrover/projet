@@ -34,7 +34,11 @@ if len(sys.argv) != 3:
 
 serv = server.Server()
 serv.load()
-serv.environment.generate_topography()  #Pour des tests, a changer plus tard
+
+#-----------TESTS----------
+#serv.environment.generate_topography()  #Pour des tests, a changer plus tard
+#serv.environment.lootDict[(60, 5)] = 'argile'
+#------------------------
 
 host, port = sys.argv[1], int(sys.argv[2])
 lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

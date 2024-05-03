@@ -160,20 +160,21 @@ class Server:
         value = int(value)
         answer = {}
         dmg = 5     #degats infliges en cas de Collision
-        eng = 2     #energie perdue
+        eng = 1     #energie perdue
         vehicleCollision = False
         if Id in self.online_users:
             rover = self.vehicleF.roverList[Id]
+            rover.dir = value           #On change la direction dans laquelle regarde le rover
             (x, y) = rover.pos
             #en supposant que value soit un vecteur x,y peut modifier pour que ca match
             if value == 0 :       #up
-                dx, dy = 0, 1
+                dx, dy = x, y - 1
             elif value == 1:      #right
-                dx, dy = 1, 0
+                dx, dy = x + 1, y 
             elif value == 2:      #down
-                dx, dy = 0, -1
+                dx, dy = x, y + 1
             elif value == 3:      #left
-                dx, dy = -1, 0
+                dx, dy = x - 1, y
             else:
                 raise Exception('Wrong direction')
             #TODO: check hauteur mieux
@@ -185,7 +186,7 @@ class Server:
                         vehicleCollision = True
 
                 else:
-                    if (dx,dy) in self.environment.lootDict.keys():
+                    if (dx,dy) in self.environment.lootDict.keys():     #Collision avec rocher
                         vehicleCollision = True
 
             else:
@@ -193,11 +194,11 @@ class Server:
 
             if vehicleCollision:
                     rover.ChangeHealth(-dmg)     #5 de dégâts
-                    answer["result"] = {'state' : 'not moved', 'damage' : dmg, 'battery_lost' : eng}
+                    answer["result"] = {'state' : 'not moved', 'damage' : dmg, 'battery_lost' : eng, 'dir' : value}
             else :
                 rover.move(value, 1)
                 rover.height = self.environment.topography[dx][dy]      #Pas vraiment utile d'envoyer la hauteur au client je pense
-                answer["result"] = {'state' : 'moved', 'battery_lost' : eng}
+                answer["result"] = {'state' : 'moved', 'battery_lost' : eng, 'dir' : value}
             rover.ChangeBattery(-eng)
         else:
             answer["result"] = "incorrect user or offline"
@@ -211,53 +212,51 @@ class Server:
             rover = self.vehicleF.roverList[Id]
             (x, y) = rover.pos
             if value == 0 :       #up
-                dx, dy = 0, 1
+                dx, dy = x, y - 1
             elif value == 1:      #right
-                dx, dy = 1, 0
+                dx, dy = x + 1, y 
             elif value == 2:      #down
-                dx, dy = 0, -1
+                dx, dy = x, y + 1
             elif value == 3:      #left
-                dx, dy = -1, 0
+                dx, dy = x - 1, y
             else:
                 raise Exception('Wrong direction')
-            self.vehicles.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
-            self.environment.collect((dx,dy))
-            alert = "recolte de" + self.environment.lootDict[(dx,dy)]
-            answer["result"]["alert"] = alert
-            answer["result"]["rover"] =  {"analysisDict" : rover.analysisDict,
-                        "durability" : rover.durability,
-                        "battery" : rover.battery,
-                        "height" : rover.height,
-                        "pos" : rover.pos}
+            # print(self.environment.lootDict[(60, 8)])
+            # print(dx, dy)
+            # print(self.environment.lootDict)
+            if (dx, dy) in self.environment.lootDict:
+                self.vehicleF.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
+                alert = "recolte de" + self.environment.lootDict[(dx,dy)]           #TODO: eventuellement rajouter la perte d'energie
+                self.environment.collect((dx,dy))
+                answer["result"] = {"state" : "successful",     
+                                    "analysisDict" : rover.analysisDict,
+                                    "alert" : alert}
+            else : 
+                answer["result"] = {"state" : "failed"}
+        else:
+            answer["result"] = {"state" : "failed"}
 
         return answer
 
-def request_treatment(self, request):
-        '''Traitement de la requete request (dict), renvoie la reponse a envoyer au client'''
-        idjoueur = request.get("idjoueur")
-        action = request.get("action")
-        value = request.get("value")
+    def request_treatment(self, request):
+            '''Traitement de la requete request (dict), renvoie la reponse a envoyer au client'''
+            idjoueur = request.get("idjoueur")
+            action = request.get("action")
+            value = request.get("value")
 
-        if action == "login":
-            answer = self.loginRequest(value)
+            if action == "login":
+                answer = self.loginRequest(value)
 
-        elif action == "move_rover":
-            answer = self.moveRoverRequest(idjoueur, value)
+            elif action == "move_rover":
+                answer = self.moveRoverRequest(idjoueur, value)
+            
+            elif action == "analyse":
+                answer = self.analyserRocherRequest(idjoueur, value)
 
-        return answer
-
-
-
-
-
+            return answer
 
 
-
-
-
-
-
-
+#TODO: data update
 
 
 #end of file
