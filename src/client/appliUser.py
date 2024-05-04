@@ -31,7 +31,6 @@ class AppliUser:
         self.auth = authentificationGUI.AuthentificationGUI(self.window)
         self.window.wait_variable(self.auth.state)
         self.gui = main_GUI.MainGUI(self.window)
-        self.gui.kbind()
 
         #Penser a appeler update dans Main_GUI avec un after periodiquement voir https://kaushikghose.wordpress.com/2013/06/22/calling-a-function-periodically-in-tkinter-polling/
 
