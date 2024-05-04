@@ -24,14 +24,13 @@ def checkimg(image):
 
 class ControleRoverGUI(controleRover.ControleRover):
     """Classe contenant tous les elements graphiques concernant le rover ainsi que les methodes qui vont avec"""
-    def __init__(self, window,  Canvas, bg_id):
+    def __init__(self, window,  Canvas, bg_id, imgrover):
         controleRover.ControleRover.__init__(self)
+        self.imgrover = imgrover
         self.Canvas = Canvas
         self.window = window
         self.bg_id = bg_id
 
-        imgrover = checkimg("rover.png")
-        self.imgrover = Image.open(imgrover).resize((80, 80), Image.LANCZOS)
         self.rover = ImageTk.PhotoImage(self.imgrover)
         self.rover_id = self.Canvas.create_image(960, 540, image=self.rover)
 
@@ -50,6 +49,8 @@ class ControleRoverGUI(controleRover.ControleRover):
         self.energy = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "orange.Horizontal.TProgressbar")
         self.Canvas.create_window(1750,200,window = self.energy)
         self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
+
+    
         
     def teleport_rover(self, pos):
         """Teleporte le rover a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)"""
@@ -103,21 +104,21 @@ class ControleRoverGUI(controleRover.ControleRover):
             opos_y = dataUser.data.rover['pos'][1]
 
             if (npos == (opos_x - 1, opos_y)):          #LEFT
-                for i in range(4):
+                for i in range(4):                      #Tentative d'animation echouee
                     self.Canvas.move(self.bg_id, 20, 0)
-                    self.window.after(250)
+                    self.Canvas.update()
             elif (npos == (opos_x + 1, opos_y)):        #RIGHT
                 for i in range(4):
                     self.Canvas.move(self.bg_id, -20, 0)
-                    self.window.after(250)
+                    self.Canvas.update()
             elif (npos == (opos_x, opos_y - 1)):        #UP
                 for i in range(4):
                     self.Canvas.move(self.bg_id, 0, 20)
-                    self.window.after(250)
+                    self.Canvas.update()
             elif (npos == (opos_x, opos_y + 1)):        #DOWN
                 for i in range(4):
                     self.Canvas.move(self.bg_id, 0, -20)
-                    self.window.after(250)
+                    self.Canvas.update()
             else :
                 self.teleport_rover(npos)
 

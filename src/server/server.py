@@ -247,15 +247,23 @@ class Server:
         """Traitement des requetes de maj des infos client"""
         answer = {}
         answer['result'] = {
-            'roverPos' : {},
-            'helicoPos' : {},
-            'lootDict' : self.environment.lootDict,
-            'currentMeteos' : self.environment.currentMeteos
+            'currentMeteos' : []
         }
+        # for k in environment.currentMeteo.keys():
+        #     answer['result']['currentMeteos']self.environment.currentMeteo[k]["pos"]
+
+        lootDict=[]
+        for k in self.environment.lootDict:
+            lootDict.append(k)
+        roverpos = []
+        helicopos = []
         for k in self.online_users:
-            answer["result"]["roverPos"][k] = self.vehicleF.roverPos[k]
+            roverpos.append(self.vehicleF.roverPos[k])
             if k in self.vehicleF.helicoPos:
-                answer["result"]["helicoPos"][k] = self.vehicleF.helicoPos[k]
+               helicopos.append(self.vehicleF.helicoPos[k])
+        answer["result"]["lootDict"] = lootDict
+        answer["result"]["roverPos"] = roverpos
+        answer["result"]["helicoPos"] = helicopos
 
         return answer
 

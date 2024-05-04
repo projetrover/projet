@@ -34,21 +34,24 @@ class MainGUI():
         imgdrone = checkimg("drone.png")
         imgwind = checkimg("Wind_Storm.png")
         imgsand = checkimg("Sandstorm.png")
-        
-        
+        imgrover = checkimg("rover.png")
+
+        self.obj_list = []
+        self.rock = ImageTk.PhotoImage(Image.open(imgrocher).resize((80, 80), Image.LANCZOS))
+        self.drone = ImageTk.PhotoImage(Image.open(imgdrone).resize((80, 80), Image.LANCZOS))
+        self.wind = ImageTk.PhotoImage(Image.open(imgwind).resize((80, 80), Image.LANCZOS))
+        self.sand = ImageTk.PhotoImage(Image.open(imgsand).resize((80, 80), Image.LANCZOS))
+        self.imgrover = Image.open(imgrover).resize((80, 80), Image.LANCZOS)
 
         
         self.window = window
         self.Canvas = tk.Canvas(self.window, width=1920, height=1080, bg="black")
         
         
-        
+        self.rover = ImageTk.PhotoImage(self.imgrover)
         self.bg = ImageTk.PhotoImage(Image.open(imgmap))
-        self.rock = ImageTk.PhotoImage(Image.open(imgrocher).resize((80, 80), Image.LANCZOS))
-        self.drone = ImageTk.PhotoImage(Image.open(imgdrone).resize((80, 80), Image.LANCZOS))
-        self.wind = ImageTk.PhotoImage(Image.open(imgwind).resize((80, 80), Image.LANCZOS))
-        self.sand = ImageTk.PhotoImage(Image.open(imgsand).resize((80, 80), Image.LANCZOS))
-        print(920 - (dataUser.data.rover['pos'][0] * 80), 500 - (dataUser.data.rover['pos'][1] * 80))
+        
+        
         self.bg_id = self.Canvas.create_image(920 - (dataUser.data.rover['pos'][0] * 80), 500 - (dataUser.data.rover['pos'][1] * 80), image=self.bg, anchor = tk.NW)
         #self.Canvas.create_image(100, 100, image=self.rock)
         #self.Canvas.create_image(180, 100, image=self.drone)
@@ -58,7 +61,7 @@ class MainGUI():
         self.progressbar = None
         self.Canvas.pack()
 
-        self.rov_ctrl = controleRoverGUI.ControleRoverGUI(self.window ,self.Canvas, self.bg_id)         #Sous classes
+        self.rov_ctrl = controleRoverGUI.ControleRoverGUI(self.window ,self.Canvas, self.bg_id, self.imgrover)         #Sous classes
         self.rov_ctrl.kbind()
         self.heli_ctrl = controleHelicoGUI.ControleHelicoGUI()
         self.alertes = alerteGUI.AlerteGUI()
@@ -74,9 +77,47 @@ class MainGUI():
         self.progressbar.start(50)
         self.progressbar.after(5000,self.progressbar.destroy)
     
-    
-    
-    
+    def placer_objet(self, type_obj, pos_serv):
+        """Place un objet de type type_obj (1:rover, 2:helico, 3: rocher, 4: vent, 5: poussiere)"""
+        x_rov = dataUser.data.rover['pos'][0]
+        y_rov = dataUser.data.rover['pos'][1]
+        delta_x = x_rov - pos_serv[0]
+        delta_y = y_rov - pos_serv[1]
+        if (abs(delta_x) <= 30) and (abs(delta_y) <= 20) :  #On affiche que les objets qui devraient etre sur l'ecran, on ne s'embete pas a les afficher si ils n'y sont pas
+            if type_obj == 1:
+                img = self.imgrover
+            elif type_obj == 2:
+                img = self.drone
+            elif type_obj == 3:
+                img = self.rock
+            elif type_obj == 4:
+                img = self.wind
+            elif type_obj == 5:
+                img = self.sand
+            else:
+                raise Exception ("Wrong obj type")
+            self.Canvas.create_image(960 + (80 * delta_x), 540 + (80 * delta_y), image=img, tags= "obj")
+
+    def maj_objet(self):
+        """Met a jour les objets a l'ecran"""
+        self.Canvas.delete("obj")
+        for o in dataUser.data.roverPos:
+            if o != dataUser.data.rover['pos']:
+                self.placer_objet(1, o)
+        
+        for o in dataUser.data.helicoPos:
+
+            if (dataUser.data.helico != "None"):
+                if (o != dataUser.data.helico['pos']):
+                    self.placer_objet(2, o)
+
+        for o in dataUser.data.lootDict:
+            self.placer_objet(3, o)
+
+        #TODO: Meteo
+        
+        
+
 
 if __name__ == "__main__":
     w = tk.Tk()

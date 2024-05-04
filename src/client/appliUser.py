@@ -26,6 +26,7 @@ class AppliUser:
         dataUser.data.helicoPos = res['helicoPos']
         dataUser.data.lootDict = res['lootDict']
         dataUser.data.currentMeteos = res['currentMeteos']
+        self.gui.maj_objet()
         self.window.after(1000, self.data_update)
 
 
