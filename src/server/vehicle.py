@@ -5,9 +5,9 @@ MAX_Y = map.MAX_Y
 MAX_X = map.MAX_X
 DIRECTIONS={'up':0, 'right':1, 'down':2, 'left':3}
 UP=0
-RIGHT=1
+RIGHT=3
 DOWN=2
-LEFT=3
+LEFT=1
 
 class Vehicle:
     def __init__(self, pos, dir, Height, durability = 100, battery = 100):
@@ -52,3 +52,8 @@ class Vehicle:
         out = 'Durability: ' + str(self.durability) + ' Battery : ' + str(self.battery)
         out += ' Height:' + str(self.height) + ' Pos: ' + str(self.pos)
         return out
+
+if __name__ == "__main__":
+    test = Vehicle((50,50), 0, 0, 100, 100)
+    test.move(3, 1)
+    print(test.pos)

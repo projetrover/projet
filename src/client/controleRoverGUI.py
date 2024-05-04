@@ -51,6 +51,11 @@ class ControleRoverGUI(controleRover.ControleRover):
         self.Canvas.create_window(1750,200,window = self.energy)
         self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
         
+    def teleport_rover(self, pos):
+        """Teleporte le rover a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)"""
+        x = 920 - (pos[0] * 80)
+        y = 500 - (pos[1] * 80)
+        self.Canvas.moveto(self.bg_id, x, y)
 
     def decrease_HP(self,amount):
         '''Diminue la jauge de points de vie du rover'''
@@ -88,28 +93,35 @@ class ControleRoverGUI(controleRover.ControleRover):
         self.Canvas.itemconfig(self.rover_id, image=self.rover)
         self.vehicle_dir = direction
     
-    def move_left(self, event=None):
+    def move(self, dir, event=None):
         '''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers la droite, donnant l'impression que le rover avance vers la gauche'''
-        
-        if self.vehicle_dir != left:
-            self.rotate(left)
-        answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
-        if answer['result']['state'] == 'moved':
-            self.Canvas.move(self.bg_id, 80, 0)
-        elif answer['result']['state'] == 'not moved':
-            dataUser.data.rover['durability'] -= answer['result']['damage']
-            self.decrease_HP(answer['result']['damage'])
-        dataUser.data.rover['battery'] -= answer['result']['battery_lost']
-        self.decrease_energy(answer['result']['battery_lost'])
 
-    def move_right(self, event=None):
-        '''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers la gauche, donnant l'impression que le rover avance vers la droite'''
-        
-        if self.vehicle_dir != right:
-            self.rotate(right)
-        answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
+        answer = libclient.create_request(dataUser.data.userid, 'move_rover', dir)  #A remplacer par controle_Rover.move()
         if answer['result']['state'] == 'moved':
-            self.Canvas.move(self.bg_id, -80, 0)
+            npos = answer['result']['pos']
+            opos_x = dataUser.data.rover['pos'][0]
+            opos_y = dataUser.data.rover['pos'][1]
+
+            if (npos == (opos_x - 1, opos_y)):          #LEFT
+                for i in range(4):
+                    self.Canvas.move(self.bg_id, 20, 0)
+                    self.window.after(250)
+            elif (npos == (opos_x + 1, opos_y)):        #RIGHT
+                for i in range(4):
+                    self.Canvas.move(self.bg_id, -20, 0)
+                    self.window.after(250)
+            elif (npos == (opos_x, opos_y - 1)):        #UP
+                for i in range(4):
+                    self.Canvas.move(self.bg_id, 0, 20)
+                    self.window.after(250)
+            elif (npos == (opos_x, opos_y + 1)):        #DOWN
+                for i in range(4):
+                    self.Canvas.move(self.bg_id, 0, -20)
+                    self.window.after(250)
+            else :
+                self.teleport_rover(npos)
+
+            dataUser.data.rover['pos'] = npos
         elif answer['result']['state'] == 'not moved':
             dataUser.data.rover['durability'] -= answer['result']['damage']
             self.decrease_HP(answer['result']['damage'])
@@ -117,35 +129,24 @@ class ControleRoverGUI(controleRover.ControleRover):
         self.decrease_energy(answer['result']['battery_lost'])
 
     def move_up(self, event=None):
-        '''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers le bas, donnant l'impression que le rover avance vers le haut'''
-        
         if self.vehicle_dir != up:
             self.rotate(up)
-        answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
-        if answer['result']['state'] == 'moved':
-            self.Canvas.move(self.bg_id, 0, 80)
-        elif answer['result']['state'] == 'not moved':
-            dataUser.data.rover['durability'] -= answer['result']['damage']
-            self.decrease_HP(answer['result']['damage'])
-        dataUser.data.rover['battery'] -= answer['result']['battery_lost']
-        self.decrease_energy(answer['result']['battery_lost'])
+        self.move(0)
 
-        
+    def move_right(self, event=None):
+        if self.vehicle_dir != right:
+            self.rotate(right)
+        self.move(3)
 
     def move_down(self, event=None):
-        '''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers le haut, donnant l'impression que le rover avance vers le bas'''
-    
         if self.vehicle_dir != down:
             self.rotate(down)
-        answer = libclient.create_request(dataUser.data.userid, 'move_rover', 3)  #A remplacer par controle_Rover.move()
-        if answer['result']['state'] == 'moved':
-            self.Canvas.move(self.bg_id, 0, -80)
-        elif answer['result']['state'] == 'not moved':
-            dataUser.data.rover['durability'] -= answer['result']['damage']
-            self.decrease_HP(answer['result']['damage'])
-        dataUser.data.rover['battery'] -= answer['result']['battery_lost']
-        self.decrease_energy(answer['result']['battery_lost'])
+        self.move(2)
 
+    def move_left(self, event=None):
+        if self.vehicle_dir != left:
+            self.rotate(left)
+        self.move(1)
         
 
     def kbind(self):

@@ -27,6 +27,7 @@ class Server:
 
     def start(self, serviceDuration):
         self.environment.generate_topography()
+        print(self.environment.topography[0][0], self.environment.topography[1][0], self.environment.topography[2][0], self.environment.topography[3][0])
         #self.environment.generate_meteoMap(self.seed, serviceDuration)
         #self.environment.generate_loot(self.seed)
         print('Server is ready')
@@ -165,32 +166,34 @@ class Server:
         if Id in self.online_users:
             rover = self.vehicleF.roverList[Id]
             rover.dir = value           #On change la direction dans laquelle regarde le rover
-            (x, y) = rover.pos
+            (x, y) = int(rover.pos[0]), int(rover.pos[1])
+            print(x, y)
             #en supposant que value soit un vecteur x,y peut modifier pour que ca match
             if value == 0 :       #up
                 dx, dy = x, y - 1
-            elif value == 1:      #right
+            elif value == 3:      #right
                 dx, dy = x + 1, y 
             elif value == 2:      #down
                 dx, dy = x, y + 1
-            elif value == 3:      #left
+            elif value == 1:      #left
+                print("left")
                 dx, dy = x - 1, y
             else:
                 raise Exception('Wrong direction')
             #TODO: check hauteur mieux
-            if (self.environment.topography[x][y] > self.environment.topography[dx][dy] ) or (
-                self.environment.topography[dx][dy] < self.environment.topography[x][y] +800):
+                                                                                                          #Si on est > ca passe, si on est <, on se donne une fourchette de 2500, 
+            #if (self.environment.topography[x][y] + 2500 >= self.environment.topography[dx % 122][dy % 86]):       #Si on devient > ca passe, sinon ca passe pas
 
-                for k in self.vehicleF.roverPos.keys():           #Collision avec autre rover
-                    if (dx,dy) == self.vehicleF.roverPos[k]:
-                        vehicleCollision = True
-
-                else:
-                    if (dx,dy) in self.environment.lootDict.keys():     #Collision avec rocher
-                        vehicleCollision = True
+            for k in self.vehicleF.roverPos.keys():           #Collision avec autre rover
+                if (dx,dy) == self.vehicleF.roverPos[k]:
+                    vehicleCollision = True
 
             else:
-                vehicleCollision = True
+                if (dx,dy) in self.environment.lootDict.keys():     #Collision avec rocher
+                    vehicleCollision = True
+
+            #else:
+            #   vehicleCollision = True
 
             if vehicleCollision:
                     rover.ChangeHealth(-dmg)     #5 de dégâts
@@ -198,7 +201,7 @@ class Server:
             else :
                 rover.move(value, 1)
                 rover.height = self.environment.topography[dx][dy]      #Pas vraiment utile d'envoyer la hauteur au client je pense
-                answer["result"] = {'state' : 'moved', 'battery_lost' : eng, 'dir' : value}
+                answer["result"] = {'state' : 'moved', 'pos' : rover.pos ,'battery_lost' : eng, 'dir'  : value}
             rover.ChangeBattery(-eng)
         else:
             answer["result"] = "incorrect user or offline"
