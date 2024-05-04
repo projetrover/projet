@@ -25,7 +25,11 @@ def checkimg(image):
 class ControleRoverGUI(controleRover.ControleRover):
     """Classe contenant tous les elements graphiques concernant le rover ainsi que les methodes qui vont avec"""
     def __init__(self, window,  Canvas, bg_id):
+    
+   
         controleRover.ControleRover.__init__(self)
+        
+        self.name = "rover"
         self.Canvas = Canvas
         self.window = window
         self.bg_id = bg_id
@@ -51,6 +55,14 @@ class ControleRoverGUI(controleRover.ControleRover):
         self.Canvas.create_window(1750,200,window = self.energy)
         self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
         
+    
+    
+    def spawn(self):
+    	self.rover_id = self.Canvas.create_image(960, 540, image=self.rover)
+    	self.kbind()
+    	
+    	
+    	
     def teleport_rover(self, pos):
         """Teleporte le rover a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)"""
         x = 920 - (pos[0] * 80)
@@ -150,9 +162,17 @@ class ControleRoverGUI(controleRover.ControleRover):
         
 
     def kbind(self):
-        '''Associe chaque touche directionnelle du clavier à la méthode "move" correspondante'''
+        '''Associe chaque fleche directionnelle du clavier à la méthode "move" correspondante'''
     
         self.window.bind("<Left>", self.move_left)
         self.window.bind("<Right>", self.move_right)
         self.window.bind("<Up>", self.move_up)
         self.window.bind("<Down>", self.move_down)
+        
+     def kubind(self):
+        '''Dissocie chaque fleche directionnelle du clavier de la méthode "move" correspondante'''
+    
+        self.window.unbind("<Left>")
+        self.window.unbind("<Right>")
+        self.window.unbind("<Up>")
+        self.window.unbind("<Down>")
