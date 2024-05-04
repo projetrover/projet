@@ -28,8 +28,8 @@ class Server:
     def start(self, serviceDuration):
         self.environment.generate_topography()
         print(self.environment.topography[0][0], self.environment.topography[1][0], self.environment.topography[2][0], self.environment.topography[3][0])
-        #self.environment.generate_meteoMap(self.seed, serviceDuration)
-        #self.environment.generate_loot(self.seed)
+        self.environment.generate_meteoMap(self.seed, serviceDuration)
+        self.environment.generate_loot(self.seed)
         print('Server is ready')
 
     def load(self):  #TODO: chargement map
@@ -158,6 +158,7 @@ class Server:
     def moveRoverRequest(self, Id, value):
         """Traitement des requtes de mouvement des rover"""
         #TODO: gerer les chutes
+        MAX_X,MAX_Y = self.environment.mapSize
         value = int(value)
         answer = {}
         dmg = 5     #degats infliges en cas de Collision
@@ -167,21 +168,21 @@ class Server:
             rover = self.vehicleF.roverList[Id]
             rover.dir = value           #On change la direction dans laquelle regarde le rover
             (x, y) = int(rover.pos[0]), int(rover.pos[1])
-            print(x, y)
+            #print(x, y)
             #en supposant que value soit un vecteur x,y peut modifier pour que ca match
-            if value == 0 :       #up
-                dx, dy = x, y - 1
-            elif value == 3:      #right
-                dx, dy = x + 1, y 
-            elif value == 2:      #down
-                dx, dy = x, y + 1
-            elif value == 1:      #left
-                print("left")
-                dx, dy = x - 1, y
+            if value >= 0 and value < 4: # 0:up 1:right 2:down 3:left
+                if (value % 2) == 0:
+                    dx, dy = x, y +(value-1)
+                    if(y < 0 or y > MAX_Y):
+                        #TODO: alerte tour du monde en Y
+                        dx, dy = (x + (MAX_X/2) ) % MAX_X, (-y) % MAX_Y
+                else:
+                    #TODO: ne gere pas le tour du monde en X
+                    dx, dy = x-(value-2), y
             else:
                 raise Exception('Wrong direction')
             #TODO: check hauteur mieux
-                                                                                                          #Si on est > ca passe, si on est <, on se donne une fourchette de 2500, 
+                                                                                                          #Si on est > ca passe, si on est <, on se donne une fourchette de 2500,
             #if (self.environment.topography[x][y] + 2500 >= self.environment.topography[dx % 122][dy % 86]):       #Si on devient > ca passe, sinon ca passe pas
 
             for k in self.vehicleF.roverPos.keys():           #Collision avec autre rover
@@ -210,18 +211,18 @@ class Server:
 
     def analyserRocherRequest(self, Id, value): #TODO:Toute la methode cote server + client
         """Traitement des requetes d'analyse de rocher"""
+        MAX_X,MAX_Y = self.environment.mapSize
         answer = {}
         if Id in self.online_users:
             rover = self.vehicleF.roverList[Id]
             (x, y) = rover.pos
-            if value == 0 :       #up
-                dx, dy = x, y - 1
-            elif value == 1:      #right
-                dx, dy = x + 1, y 
-            elif value == 2:      #down
-                dx, dy = x, y + 1
-            elif value == 3:      #left
-                dx, dy = x - 1, y
+            if value >= 0 and value < 4: # 0:up 1:right 2:down 3:left
+                if (value % 2) == 0:
+                    dx, dy = x, y +(value-1)
+                    if(y < 0):
+                        dx, dy = (x + (MAX_X/2) ) % MAX_X, (-y) % MAX_Y
+                else:
+                    dx, dy = x-(value-2), y
             else:
                 raise Exception('Wrong direction')
             # print(self.environment.lootDict[(60, 8)])
@@ -231,16 +232,16 @@ class Server:
                 self.vehicleF.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
                 alert = "recolte de" + self.environment.lootDict[(dx,dy)]           #TODO: eventuellement rajouter la perte d'energie
                 self.environment.collect((dx,dy))
-                answer["result"] = {"state" : "successful",     
+                answer["result"] = {"state" : "successful",
                                     "analysisDict" : rover.analysisDict,
                                     "alert" : alert}
-            else : 
+            else :
                 answer["result"] = {"state" : "failed"}
         else:
             answer["result"] = {"state" : "failed"}
 
         return answer
-    
+
     def data_update(self):
         """Traitement des requetes de maj des infos client"""
         answer = {}
@@ -270,7 +271,7 @@ class Server:
 
             elif action == "move_rover":
                 answer = self.moveRoverRequest(idjoueur, value)
-            
+
             elif action == "analyse":
                 answer = self.analyserRocherRequest(idjoueur, value)
 

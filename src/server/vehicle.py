@@ -22,9 +22,10 @@ class Vehicle:
 
     def move(self, direction, distance):
         dir = -1
+        '''
         if direction in DIRECTIONS.keys():
-            dir = DIRECTIONS[direction]
-        elif direction in range(0, 4):
+            dir = DIRECTIONS[direction]'''
+        if direction in range(0, 4):
             dir = direction
         else:
              raise TypeError("Server->Vehicle->move : invalid direction.")
@@ -37,15 +38,15 @@ class Vehicle:
                 y = (-y) % MAX_Y
         else:
             distance = distance * (dir-2)
-            x = ( x + distance ) % MAX_X
+            x = ( x - distance ) % MAX_X
         self.pos = (x,y)
-    
+
 
     def ChangeHealth(self, ammount):
         self.durability += ammount
 
     def ChangeBattery(self, ammount):
-        self.durability += ammount
+        self.battery += ammount
 
 
     def __str__(self):

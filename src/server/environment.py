@@ -2,6 +2,7 @@ import time
 import map as m
 import numpy as np
 import random
+import itertools
 from PIL import Image
 from os.path import exists
 
@@ -123,9 +124,11 @@ class Environment:
                 loot_repartition += [k]
         if matcount > mx*my:
             raise Exception("environment->generate_loot-> too many materials for map size.")
-        loot_x = random.sample(range(mx),matcount)
-        loot_y = random.sample(range(my),matcount)
+        loot_x = mx*random.sample(range(mx),matcount//(mx-1))
+        loot_y = my*random.sample(range(my),matcount//(my-1))
         random.shuffle(loot_repartition)
+        random.shuffle(loot_x)
+        random.shuffle(loot_y)
         for j in range(matcount):
             x,y = loot_x[j],loot_y[j]
             self.lootDict[(x,y)] = loot_repartition[j]

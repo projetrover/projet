@@ -51,7 +51,20 @@ nombre de tick server, 10 000 000 tick a 144 tick/secondes (fps ?)
 cela genere TOUTES les meteos pour cette duree de service
 -> 69444 secondes -> 19 heures
 '''
-serv.start(10000000)
+serv.start(100000)
+serv.loginRequest({"username":"bob","password":"1234"})
+print(serv.vehicleF.roverList[1])
+serv.moveRoverRequest(1,0)
+print("up  (y-1)",serv.vehicleF.roverList[1])
+
+serv.moveRoverRequest(1,1)
+print("right(x+1)",serv.vehicleF.roverList[1])
+serv.moveRoverRequest(1,2)
+print("down (y+1)",serv.vehicleF.roverList[1])
+serv.moveRoverRequest(1,2)
+print("down (y+1)",serv.vehicleF.roverList[1])
+serv.moveRoverRequest(1,3)
+print("left (x-1)",serv.vehicleF.roverList[1])
 #print(serv.vehicleF.roverList[1])
 
 #print(uf.UserDict[1].__dict__)
