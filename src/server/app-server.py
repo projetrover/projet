@@ -34,7 +34,7 @@ if len(sys.argv) != 3:
 
 serv = server.Server()      #Cree l'objet serveur
 serv.load()                 #Charge les donnes des utilisateurs
-serv.start(9999999999999999999)     #Genere la topographie, la meteo et les rochers
+serv.start(1000)     #Genere la topographie, la meteo et les rochers
 
 #-----------TESTS----------
 #serv.environment.generate_topography()  #Pour des tests, a changer plus tard
