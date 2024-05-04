@@ -23,6 +23,7 @@ class Server:
 
     def serverTick(self, tick):
        self.serverTimer += tick
+       self.meteoCheck()
        self.environment.updateMeteo(self.serverTimer)
 
     def start(self, serviceDuration):
@@ -280,7 +281,17 @@ class Server:
 
             return answer
 
-
+    def meteoCheck(self):
+        for k in self.online_users:
+            rovPos = self.vehicleF.roverList[k].pos
+            helPos = self.vehicleF.helicoList[k].pos
+            for m in self.environment.currentMeteos.keys():
+                # IdMeteo 1 == tempete sable
+                if self.environment.currentMeteos[m]["IdMeteo"] == 1:
+                    if self.environment.checkDistance(m,helPos):
+                        self.vehicleF.helicoList[k].ChangeHealth(-1)
+                    if self.environment.checkDistance(m,rovPos):
+                        self.vehicleF.roverList[k].ChangeHealth(-1)
 
 
 

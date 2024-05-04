@@ -171,6 +171,12 @@ class Environment:
                 "radius":self.meteoMap[serverTimer]["radius"],
                 "IdMeteo":self.meteoMap[serverTimer]["IdMeteo"]
             }
+    def checkDistance(self,meteoKey, pos):
+        x, y = pos
+        mx, my = self.currentMeteos[meteoKey]["pos"]
+        distance = ((mx-x)**2+(my-y)**2)**0.5
+        return (distance < self.currentMeteos[meteoKey]["radius"])
+
     def __str__(self):
         return "c'est pas encore fait"
 

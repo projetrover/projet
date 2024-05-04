@@ -57,6 +57,8 @@ print(serv.vehicleF.roverList[1])
 serv.moveRoverRequest(1,0)
 print("up  (y-1)",serv.vehicleF.roverList[1])
 
+print("meteo actives:",serv.environment.currentMeteos)
+
 serv.moveRoverRequest(1,1)
 print("right(x+1)",serv.vehicleF.roverList[1])
 serv.moveRoverRequest(1,2)
@@ -65,6 +67,15 @@ serv.moveRoverRequest(1,2)
 print("down (y+1)",serv.vehicleF.roverList[1])
 serv.moveRoverRequest(1,3)
 print("left (x-1)",serv.vehicleF.roverList[1])
+
+serv.environment.addMeteo(1,(40,20),1,20,(1,1),30)
+serv.serverTick(1)
+
+print("meteo actives:",serv.environment.currentMeteos)
+serv.serverTick(1)
+
+print("rover dans meteo",serv.vehicleF.roverList[1])
+print("meteo actives:",serv.environment.currentMeteos)
 #print(serv.vehicleF.roverList[1])
 
 #print(uf.UserDict[1].__dict__)
