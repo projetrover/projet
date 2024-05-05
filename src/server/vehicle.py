@@ -15,7 +15,7 @@ class Vehicle:
         self.durability = durability
         self.battery = battery
         self.height = Height
-        self.pos = pos
+        self.pos = list(pos)
         #self.storedImgList = []
         #self.storedVidList = []
         #self.cam = camera.Camera()

@@ -143,8 +143,9 @@ class MainGUI():
 
         for o in dataUser.data.lootDict:
             self.placer_objet(3, o)
-        
-        self.window.after(50, self.maj_objet)
+
+        self.window.after(1000, self.maj_objet)         #1000 pour des tests, mettre 50 en utilisation normale
+        #self.window.after(50, self.maj_objet)
 
         #TODO: Meteo
     
