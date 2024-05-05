@@ -95,16 +95,24 @@ class MainGUI():
         
         if self.vehicle.name == "rover":
             self.rov_ctrl.kubind()
-            self.rov_ctrl.rover_id.destroy()
+            self.Canvas.itemconfigure(rov_ctrl.HP,"hidden")
+            self.Canvas.itemconfigure(rov_ctrl.energy,"hidden")
+            self.Canvas.delete(rov_ctrl.rover_id)
             self.heli_ctrl.deploy()
             self.vechicle = self.heli_ctrl
         
         else:
             
-            self.heli_ctrl.kubind()
-            self.heli_ctrl.helico_id.destroy()
-            self.rov_ctrl.spawn()
-            self.vechicle = self.rov_ctrl
+            if dataUser.data.helico["pos"] == dataUser.data.rover["pos"]:
+                self.heli_ctrl.kubind()
+                self.Canvas.itemconfigure(heli_ctrl.HP,"hidden")
+                self.Canvas.itemconfigure(heli_ctrl.energy,"hidden")
+                self.Canvas.delete(heli_ctrl.helico_id)
+                self.rov_ctrl.spawn()
+                self.vechicle = self.rov_ctrl
+                
+            else:
+            	self.heli_ctrl.erreur()
 
     def placer_objet(self, type_obj, pos_serv):
         """Place un objet de type type_obj (1:rover, 2:helico, 3: rocher, 4: vent, 5: poussiere)"""
