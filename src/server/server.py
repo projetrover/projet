@@ -187,7 +187,7 @@ class Server:
             #if (self.environment.topography[x][y] + 2500 >= self.environment.topography[dx % 122][dy % 86]):       #Si on devient > ca passe, sinon ca passe pas
 
             for k in self.vehicleF.roverList:           #Collision avec autre rover
-                if (dx,dy) == self.vehicleF.roverList[k].pos:
+                if (dx == self.vehicleF.roverList[k].pos[0]) and (dy == self.vehicleF.roverList[k].pos[1]):
                     vehicleCollision = True
 
             else:
@@ -205,6 +205,78 @@ class Server:
                 rover.height = self.environment.topography[dx][dy]      #Pas vraiment utile d'envoyer la hauteur au client je pense
                 answer["result"] = {'state' : 'moved', 'pos' : rover.pos ,'battery_lost' : eng, 'dir'  : value}
             rover.ChangeBattery(-eng)
+        else:
+            answer["result"] = "incorrect user or offline"
+        return answer
+    
+    def deployHelicoRequest(self, Id):
+        """Traitement des requetes de deploiment des helicos"""
+        if Id not in self.online_users:
+            return {"result" : "incorrect user or offline"}
+        self.vehicleF.createVehicle(Id, [self.vehicleF.roverList[Id].pos[0], self.vehicleF.roverList[Id].pos[1]], 0, "Helico", 100, 100)
+        answer = {}
+        helico = self.vehicleF.helicoList[Id]
+        answer['result'] = {'state' : "helico deployed", "pos" : helico.pos, "battery" : helico.battery, "durability" : 100, "height": helico.height, "dir" : helico.dir}
+        return answer
+    
+    def removeHelicoRequest(self, Id):
+        """Traitement des requetes de rangement des helicos"""
+        if Id not in self.online_users:
+            return {"result" : "incorrect user or offline"}
+        answer = {}
+        print("------------",self.vehicleF.roverList[Id].pos, self.vehicleF.helicoList[Id].pos)
+        if (self.vehicleF.roverList[Id].pos[0] != self.vehicleF.helicoList[Id].pos[0]) or (self.vehicleF.roverList[Id].pos[1] != self.vehicleF.helicoList[Id].pos[1]):
+            answer['result'] = "Heli not on rover"
+        else:
+            del self.vehicleF.helicoList[Id]
+            answer["result"] = "Heli removed"
+        return answer
+
+    def moveHelicoRequest(self, Id, value):
+        """Traitement des requetes de mouvement des helico"""
+        #TODO: gerer les chutes
+        MAX_X,MAX_Y = self.environment.mapSize
+        value = int(value)
+        answer = {}
+        dmg = 10     #degats infliges en cas de Collision
+        eng = 2     #energie perdue
+        vehicleCollision = False
+        if Id in self.online_users:
+            helico = self.vehicleF.helicoList[Id]
+            helico.dir = value           #On change la direction dans laquelle regarde le rover
+            (x, y) = int(helico.pos[0]), int(helico.pos[1])
+            #print(x, y)
+            #en supposant que value soit un vecteur x,y peut modifier pour que ca match
+            if value >= 0 and value < 4: # 0:up 1:right 2:down 3:left
+                if (value % 2) == 0:
+                    dx, dy = x, y +(value-1)
+                    if(y < 0 or y > MAX_Y):
+                        #TODO: alerte tour du monde en Y
+                        dx, dy = (x + (MAX_X/2) ) % MAX_X, (-y) % MAX_Y
+                else:
+                    #TODO: ne gere pas le tour du monde en X
+                    dx, dy = x-(value-2), y
+            else:
+                raise Exception('Wrong direction')
+            #TODO: check hauteur mieux
+                                                                                                          #Si on est > ca passe, si on est <, on se donne une fourchette de 2500,
+            #if (self.environment.topography[x][y] + 2500 >= self.environment.topography[dx % 122][dy % 86]):       #Si on devient > ca passe, sinon ca passe pas
+
+            for k in self.vehicleF.helicoList:           #Collision avec autre rover
+                if (dx,dy) == self.vehicleF.helicoList[k].pos:
+                    vehicleCollision = True
+
+            #else:
+            #   vehicleCollision = True
+
+            if vehicleCollision:
+                    helico.ChangeHealth(-dmg)     #5 de dégâts
+                    answer["result"] = {'state' : 'not moved', 'damage' : dmg, 'battery_lost' : eng, 'dir' : value}
+            else :
+                helico.move(value, 1)
+                helico.height = self.environment.topography[dx][dy]      #Pas vraiment utile d'envoyer la hauteur au client je pense
+                answer["result"] = {'state' : 'moved', 'pos' : helico.pos ,'battery_lost' : eng, 'dir'  : value}
+            helico.ChangeBattery(-eng)
         else:
             answer["result"] = "incorrect user or offline"
         return answer
@@ -275,7 +347,10 @@ class Server:
             action = request.get("action")
             value = request.get("value")
 
-            if action == "login":
+            if action == "data_update":
+                answer = self.data_update()
+
+            elif action == "login":
                 answer = self.loginRequest(value)
 
             elif action == "move_rover":
@@ -283,9 +358,15 @@ class Server:
 
             elif action == "analyse":
                 answer = self.analyserRocherRequest(idjoueur, value)
-
-            elif action =="data_update":
-                answer = self.data_update()
+            
+            elif action == "move_helico":
+                answer = self.moveHelicoRequest(idjoueur, value)
+            
+            elif action == "deploy_helico":
+                answer = self.deployHelicoRequest(idjoueur)
+            
+            elif action == "remove_helico":
+                answer = self.removeHelicoRequest(idjoueur)
 
             return answer
 
