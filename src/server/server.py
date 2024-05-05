@@ -187,7 +187,7 @@ class Server:
             #if (self.environment.topography[x][y] + 2500 >= self.environment.topography[dx % 122][dy % 86]):       #Si on devient > ca passe, sinon ca passe pas
 
             for k in self.vehicleF.roverList:           #Collision avec autre rover
-                if (dx,dy) == self.vehicleF.roverList[k].pos:
+                if (dx == self.vehicleF.roverList[k].pos[0]) and (dy == self.vehicleF.roverList[k].pos[1]):
                     vehicleCollision = True
 
             else:
