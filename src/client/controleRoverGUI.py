@@ -58,11 +58,11 @@ class ControleRoverGUI(controleRover.ControleRover):
     
     
     def spawn(self):
-    	self.rover_id = self.Canvas.create_image(960, 540, image=self.rover)
-    	self.kbind()
-    	
-    	
-    	
+        self.rover_id = self.Canvas.create_image(960, 540, image=self.rover)
+        self.kbind()
+        
+        
+        
     def teleport_rover(self, pos):
         """Teleporte le rover a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)"""
         x = 920 - (pos[0] * 80)
@@ -148,7 +148,7 @@ class ControleRoverGUI(controleRover.ControleRover):
     def move_right(self, event=None):
         if self.vehicle_dir != right:
             self.rotate(right)
-        self.move(3)
+        self.move(1)
 
     def move_down(self, event=None):
         if self.vehicle_dir != down:
@@ -158,7 +158,7 @@ class ControleRoverGUI(controleRover.ControleRover):
     def move_left(self, event=None):
         if self.vehicle_dir != left:
             self.rotate(left)
-        self.move(1)
+        self.move(3)
         
 
     def kbind(self):
@@ -169,7 +169,7 @@ class ControleRoverGUI(controleRover.ControleRover):
         self.window.bind("<Up>", self.move_up)
         self.window.bind("<Down>", self.move_down)
         
-     def kubind(self):
+    def kubind(self):
         '''Dissocie chaque fleche directionnelle du clavier de la méthode "move" correspondante'''
     
         self.window.unbind("<Left>")

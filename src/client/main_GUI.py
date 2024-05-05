@@ -32,6 +32,7 @@ class MainGUI():
         imgmap = checkimg("map.jpg")
         imgrocher = checkimg("rock.png")
         imgdrone = checkimg("drone.png")
+        imgrover = checkimg("rover.png")
         imgwind = checkimg("Wind_Storm.png")
         imgsand = checkimg("Sandstorm.png")
         
@@ -48,6 +49,7 @@ class MainGUI():
         self.drone = ImageTk.PhotoImage(Image.open(imgdrone).resize((80, 80), Image.LANCZOS))
         self.wind = ImageTk.PhotoImage(Image.open(imgwind).resize((80, 80), Image.LANCZOS))
         self.sand = ImageTk.PhotoImage(Image.open(imgsand).resize((80, 80), Image.LANCZOS))
+        self.rover = ImageTk.PhotoImage(Image.open(imgrover).resize((80, 80), Image.LANCZOS))
        # print(920 - (dataUser.data.rover['pos'][0] * 80), 500 - (dataUser.data.rover['pos'][1] * 80))
         self.bg_id = self.Canvas.create_image(920 - (dataUser.data.rover['pos'][0] * 80), 500 - (dataUser.data.rover['pos'][1] * 80), image=self.bg, anchor = tk.NW)
         #self.Canvas.create_image(100, 100, image=self.rock)
@@ -66,11 +68,18 @@ class MainGUI():
         self.rov_ctrl = controleRoverGUI.ControleRoverGUI(self.window ,self.Canvas, self.bg_id)         #Sous classes
         self.rov_ctrl.spawn()
         self.vehicle = self.rov_ctrl
-        self.heli_ctrl = controleHelicoGUI.ControleHelicoGUI()
+        self.heli_ctrl = controleHelicoGUI.ControleHelicoGUI(self.window, self.Canvas, self.bg_id)
         self.alertes = alerteGUI.AlerteGUI()
         self.minimap = miniCarteGUI.MiniCarteGUI()
         self.carte = carteGUI.CarteGUI()
 
+    def data_update(self):
+        answer = libclient.create_request(dataUser.data.userid, "data_update", 0)
+        res = answer['result']
+        dataUser.data.roverPos = res['roverPos']
+        dataUser.data.helicoPos = res['helicoPos']
+        dataUser.data.lootDict = res['lootDict']
+        dataUser.data.currentMeteos = res['currentMeteos']
         
     def progress_bar(self):
         '''Créé une barre de progression au-dessus du rover et la supprime une fois remplie'''
@@ -101,11 +110,11 @@ class MainGUI():
         """Place un objet de type type_obj (1:rover, 2:helico, 3: rocher, 4: vent, 5: poussiere)"""
         x_rov = dataUser.data.rover['pos'][0]
         y_rov = dataUser.data.rover['pos'][1]
-        delta_x = x_rov - pos_serv[0]
-        delta_y = y_rov - pos_serv[1]
+        delta_x = pos_serv[0] - x_rov
+        delta_y = pos_serv[1] - y_rov
         if (abs(delta_x) <= 30) and (abs(delta_y) <= 20) :  #On affiche que les objets qui devraient etre sur l'ecran, on ne s'embete pas a les afficher si ils n'y sont pas
             if type_obj == 1:
-                img = self.imgrover
+                img = self.rover
             elif type_obj == 2:
                 img = self.drone
             elif type_obj == 3:
@@ -120,6 +129,7 @@ class MainGUI():
 
     def maj_objet(self):
         """Met a jour les objets a l'ecran"""
+        self.data_update()
         self.Canvas.delete("obj")
         for o in dataUser.data.roverPos:
             if o != dataUser.data.rover['pos']:
@@ -133,8 +143,28 @@ class MainGUI():
 
         for o in dataUser.data.lootDict:
             self.placer_objet(3, o)
+        
+        self.window.after(50, self.maj_objet)
 
         #TODO: Meteo
+    
+    def maj_objet_dep(self):
+        """Met a jour les objets a l'ecran, appele apres un deplacement"""
+        self.data_update()
+        self.Canvas.delete("obj")
+        for o in dataUser.data.roverPos:
+            if o != dataUser.data.rover['pos']:
+                self.placer_objet(1, o)
+        
+        for o in dataUser.data.helicoPos:
+
+            if (dataUser.data.helico != "None"):
+                if (o != dataUser.data.helico['pos']):
+                    self.placer_objet(2, o)
+
+        for o in dataUser.data.lootDict:
+            self.placer_objet(3, o)
+        
         
     
 

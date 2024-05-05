@@ -29,7 +29,7 @@ class Server:
     def start(self, serviceDuration):
         self.environment.generate_topography()
         print(self.environment.topography[0][0], self.environment.topography[1][0], self.environment.topography[2][0], self.environment.topography[3][0])
-        self.environment.generate_meteoMap(self.seed, serviceDuration)
+        #self.environment.generate_meteoMap(self.seed, serviceDuration)
         self.environment.generate_loot(self.seed)
         print('Server is ready')
 
@@ -186,8 +186,8 @@ class Server:
                                                                                                           #Si on est > ca passe, si on est <, on se donne une fourchette de 2500,
             #if (self.environment.topography[x][y] + 2500 >= self.environment.topography[dx % 122][dy % 86]):       #Si on devient > ca passe, sinon ca passe pas
 
-            for k in self.vehicleF.roverPos.keys():           #Collision avec autre rover
-                if (dx,dy) == self.vehicleF.roverPos[k]:
+            for k in self.vehicleF.roverList:           #Collision avec autre rover
+                if (dx,dy) == self.vehicleF.roverList[k].pos:
                     vehicleCollision = True
 
             else:
@@ -258,9 +258,9 @@ class Server:
         roverpos = []
         helicopos = []
         for k in self.online_users:
-            roverpos.append(self.vehicleF.roverPos[k])
-            if k in self.vehicleF.helicoPos:
-               helicopos.append(self.vehicleF.helicoPos[k])
+            roverpos.append(self.vehicleF.roverList[k].pos)
+            if k in self.vehicleF.helicoList:
+               helicopos.append(self.vehicleF.helicoList[k].pos)
         answer["result"]["lootDict"] = lootDict
         answer["result"]["roverPos"] = roverpos
         answer["result"]["helicoPos"] = helicopos
