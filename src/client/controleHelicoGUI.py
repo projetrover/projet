@@ -2,6 +2,8 @@ import controleHelico
 from tkinter import ttk
 from PIL import Image, ImageTk
 from os.path import exists
+import dataUser
+import libclient
 
 
 left = 90
@@ -21,7 +23,7 @@ def checkimg(image):
    
 class ControleHelicoGUI(controleHelico.ControleHelico):
     
-     def __init__(self, window,  Canvas, bg_id):
+    def __init__(self, window,  Canvas, bg_id):
      
         controleHelico.ControleHelico.__init__(self)
         
@@ -30,8 +32,8 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
         self.window = window
         self.bg_id = bg_id
 
-        imgrdrone = checkimg("drone.png")
-        self.imghelico = Image.open(imghelico).resize((80, 80), Image.LANCZOS)
+        imgdrone = checkimg("drone.png")
+        self.imghelico = Image.open(imgdrone).resize((80, 80), Image.LANCZOS)
         self.helico = ImageTk.PhotoImage(self.imghelico)
         self.helico_id = None
 
@@ -53,15 +55,15 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
     
     
     def deploy(self):
-    	'''Fait apparaitre l'helicoptere'''
+        '''Fait apparaitre l'helicoptere'''
     
-    	self.helico_id = self.Canvas.create_image(960, 540, image=self.helico)
-    	self.kbind()
+        self.helico_id = self.Canvas.create_image(960, 540, image=self.helico)
+        self.kbind()
     
     
     def ranger(self):
-    	'''
-    	
+        pass
+        
     def teleport_helico(self, pos):
         '''Teleporte l'helicoptere a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)'''
         x = 920 - (pos[0] * 80)
