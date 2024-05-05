@@ -46,12 +46,10 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
         styleEnergy.theme_use("alt")
         styleEnergy.configure("orange.Horizontal.TProgressbar",background = "gold", troughcolor = "black",thickness = 40)
 
-        self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
-        self.Canvas.create_window(1750,100,window = self.HP)
-        self.Canvas.create_text(1750, 60, text="État du véhicule", font="bold 20", fill="black")
-        self.energy = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "orange.Horizontal.TProgressbar")
-        self.Canvas.create_window(1750,200,window = self.energy)
-        self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
+        self.HP = None
+        
+        self.energy = None
+        
     
     
     def deploy(self):
@@ -59,11 +57,18 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
     
         self.helico_id = self.Canvas.create_image(960, 540, image=self.helico)
         self.kbind()
-    
-    
-    def ranger(self):
-        pass
         
+        if self.HP == None:
+            self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
+            self.Canvas.create_window(1750,100,window = self.HP)
+            self.Canvas.create_text(1750, 60, text="État du véhicule", font="bold 20", fill="black")
+            self.energy = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "orange.Horizontal.TProgressbar")
+            self.Canvas.create_window(1750,200,window = self.energy)
+            self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
+        else:
+            self.Canvas.itemconfigure(self.HP,"normal")
+            self.Canvas.itemconfigure(self.energy,"normal")
+    
     def teleport_helico(self, pos):
         '''Teleporte l'helicoptere a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)'''
         x = 920 - (pos[0] * 80)
@@ -177,3 +182,12 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
         self.window.unbind("<Right>")
         self.window.unbind("<Up>")
         self.window.unbind("<Down>")
+        
+        
+        
+    def erreur(self):
+        '''Affiche un message d'erreur indiquant que l'helicoptère ne peut pas être range si il n'a pas les memes coordonees que le rover'''
+    	
+        erreur = self.Canvas.create_text(960,100,text = "L'hélicoptère doit être au-dessus du rover pour être rangé",fill = "red")
+        erreur.after(1000,self.Canvas.delete,erreur)
+    	

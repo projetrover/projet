@@ -58,13 +58,16 @@ class ControleRoverGUI(controleRover.ControleRover):
     
     
     def spawn(self):
+        '''Fait reapparaitre le rover'''
+        
         self.rover_id = self.Canvas.create_image(960, 540, image=self.rover)
         self.kbind()
-        
+        self.Canvas.itemconfigure(self.HP,"normal")
+        self.Canvas.itemconfigure(self.energy,"normal")
         
         
     def teleport_rover(self, pos):
-        """Teleporte le rover a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)"""
+        '''Teleporte le rover a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)'''
         x = 920 - (pos[0] * 80)
         y = 500 - (pos[1] * 80)
         self.Canvas.moveto(self.bg_id, x, y)
@@ -176,3 +179,6 @@ class ControleRoverGUI(controleRover.ControleRover):
         self.window.unbind("<Right>")
         self.window.unbind("<Up>")
         self.window.unbind("<Down>")
+        
+
+    
