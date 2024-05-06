@@ -26,7 +26,7 @@ class MainGUI():
     '''Classe de l'interface principale'''
 
     def __init__(self, window):
-        '''Initialise les attributs de l'interface: la fenêtre principale, le canvas, l'image de fond (carte), le rover et les autres sprites, la barre de progression et les jauges de "points de vie" et d'énergie.
+        '''Initialise les attributs de l'interface: la fenêtre principale, le canvas, l'image de fond (carte), le rover et les autres sprites et les jauges de "points de vie" et d'énergie.
         vehicle_dir est le sens vers lequel le rover est tourné, utilisé pour les rotations. Le rover est positionné au milieu de l'écran'''
     
         imgmap = checkimg("map.jpg")
@@ -59,19 +59,23 @@ class MainGUI():
          
          
         self.switch_btn = tk.Button(text="Switch",command=self.vehicle_switch)
-        self.Canvas.create_window(960,900,window = self.switch_btn)
-        self.progressbar = None
+        self.Canvas.create_window(900, 900,window = self.switch_btn)
+        
+        
         
         
         self.Canvas.pack()
     
         self.rov_ctrl = controleRoverGUI.ControleRoverGUI(self.window ,self.Canvas, self.bg_id)         #Sous classes
         self.rov_ctrl.spawn()
-        self.vehicle = self.rov_ctrl
+        self.vehicle = 0        #0: rover, 1: helico
         self.heli_ctrl = controleHelicoGUI.ControleHelicoGUI(self.window, self.Canvas, self.bg_id)
         self.alertes = alerteGUI.AlerteGUI()
         self.minimap = miniCarteGUI.MiniCarteGUI()
         self.carte = carteGUI.CarteGUI()
+
+        self.ana_btn = tk.Button(text="Analyser",command=self.rov_ctrl.analyse)
+        self.Canvas.create_window(970, 900,window = self.ana_btn)
 
     def data_update(self):
         answer = libclient.create_request(dataUser.data.userid, "data_update", 0)
@@ -81,43 +85,45 @@ class MainGUI():
         dataUser.data.lootDict = res['lootDict']
         dataUser.data.currentMeteos = res['currentMeteos']
         
-    def progress_bar(self):
-        '''Créé une barre de progression au-dessus du rover et la supprime une fois remplie'''
-        
-        self.progressbar = ttk.Progressbar(self.window,orient = "horizontal",length = 70,mode = "determinate")
-        self.Canvas.create_window(960,480,window = self.progressbar)
-        self.progressbar.start(50)
-        self.progressbar.after(5000,self.progressbar.destroy)
     
     
     def vehicle_switch(self):
         '''Change le vehicule courant'''
-        
-        if self.vehicle.name == "rover":
+        print("self.vehicle = ", self.vehicle)
+        if not self.vehicle:
             self.rov_ctrl.kubind()
-            self.Canvas.itemconfigure(rov_ctrl.HP,"hidden")
-            self.Canvas.itemconfigure(rov_ctrl.energy,"hidden")
-            self.Canvas.delete(rov_ctrl.rover_id)
+            self.Canvas.itemconfigure(self.rov_ctrl.wHP, state = "hidden")
+            self.Canvas.itemconfigure(self.rov_ctrl.wenergy, state = "hidden")
+            self.Canvas.itemconfigure(self.rov_ctrl.rover_id, state = "hidden")
+            self.ana_btn.configure(state = "disabled")
             self.heli_ctrl.deploy()
-            self.vechicle = self.heli_ctrl
+            self.vehicle = 1 
         
-        else:
-            
-            if dataUser.data.helico["pos"] == dataUser.data.rover["pos"]:
+        elif self.vehicle:
+            answer = libclient.create_request(dataUser.data.userid, "remove_helico", 0)
+            if answer["result"] == "Heli removed":
+                dataUser.data.helico = None
                 self.heli_ctrl.kubind()
-                self.Canvas.itemconfigure(heli_ctrl.HP,"hidden")
-                self.Canvas.itemconfigure(heli_ctrl.energy,"hidden")
-                self.Canvas.delete(heli_ctrl.helico_id)
+                self.Canvas.itemconfigure(self.heli_ctrl.wHP, state = "hidden")
+                self.Canvas.itemconfigure(self.heli_ctrl.wenergy, state = "hidden")
+                self.Canvas.itemconfigure(self.heli_ctrl.helico_id, state = "hidden")
+                self.ana_btn.configure(state = "normal")
                 self.rov_ctrl.spawn()
-                self.vechicle = self.rov_ctrl
+                self.vehicle = 0
                 
             else:
-            	self.heli_ctrl.erreur()
+                self.heli_ctrl.error()
+        else:
+            print("error")
 
     def placer_objet(self, type_obj, pos_serv):
         """Place un objet de type type_obj (1:rover, 2:helico, 3: rocher, 4: vent, 5: poussiere)"""
-        x_rov = dataUser.data.rover['pos'][0]
-        y_rov = dataUser.data.rover['pos'][1]
+        if not self.vehicle:
+            x_rov = dataUser.data.rover['pos'][0]
+            y_rov = dataUser.data.rover['pos'][1]
+        else:
+            x_rov = dataUser.data.helico['pos'][0]
+            y_rov = dataUser.data.helico['pos'][1]
         delta_x = pos_serv[0] - x_rov
         delta_y = pos_serv[1] - y_rov
         if (abs(delta_x) <= 30) and (abs(delta_y) <= 20) :  #On affiche que les objets qui devraient etre sur l'ecran, on ne s'embete pas a les afficher si ils n'y sont pas
@@ -140,7 +146,7 @@ class MainGUI():
         self.data_update()
         self.Canvas.delete("obj")
         for o in dataUser.data.roverPos:
-            if o != dataUser.data.rover['pos']:
+            if o != dataUser.data.rover['pos'] or ((o == dataUser.data.rover['pos']) and (self.vehicle)):
                 self.placer_objet(1, o)
         
         for o in dataUser.data.helicoPos:
@@ -156,25 +162,7 @@ class MainGUI():
         self.window.after(50, self.maj_objet)
 
         #TODO: Meteo
-    
-    def maj_objet_dep(self):
-        """Met a jour les objets a l'ecran, appele apres un deplacement"""
-        self.data_update()
-        self.Canvas.delete("obj")
-        for o in dataUser.data.roverPos:
-            if o != dataUser.data.rover['pos']:
-                self.placer_objet(1, o)
-        
-        for o in dataUser.data.helicoPos:
 
-            if (dataUser.data.helico != "None"):
-                if (o != dataUser.data.helico['pos']):
-                    self.placer_objet(2, o)
-
-        for o in dataUser.data.lootDict:
-            self.placer_objet(3, o)
-        
-        
     
 
 if __name__ == "__main__":

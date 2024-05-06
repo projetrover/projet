@@ -289,6 +289,7 @@ class Server:
         if Id in self.online_users:
             rover = self.vehicleF.roverList[Id]
             (x, y) = rover.pos
+            value = rover.dir
             if value >= 0 and value < 4: # 0:up 1:right 2:down 3:left
                 if (value % 2) == 0:
                     dx, dy = x, y +(value-1)
@@ -303,11 +304,11 @@ class Server:
             # print(self.environment.lootDict)
             if (dx, dy) in self.environment.lootDict:
                 self.vehicleF.roverList[Id].analyze(self.environment.lootDict[(dx,dy)])
-                alert = "recolte de" + self.environment.lootDict[(dx,dy)]           #TODO: eventuellement rajouter la perte d'energie
+                material = self.environment.lootDict[(dx,dy)]           #TODO: eventuellement rajouter la perte d'energie
                 self.environment.collect((dx,dy))
                 answer["result"] = {"state" : "successful",
                                     "analysisDict" : rover.analysisDict,
-                                    "alert" : alert}
+                                    "material" : material}
             else :
                 answer["result"] = {"state" : "failed"}
         else:
@@ -373,12 +374,15 @@ class Server:
     def meteoCheck(self):
         for k in self.online_users:
             rovPos = self.vehicleF.roverList[k].pos
-            helPos = self.vehicleF.helicoList[k].pos
+            if k in self.vehicleF.helicoList:
+                H = True
+                helPos = self.vehicleF.helicoList[k].pos
             for m in self.environment.currentMeteos.keys():
                 # IdMeteo 1 == tempete sable
                 if self.environment.currentMeteos[m]["IdMeteo"] == 1:
-                    if self.environment.checkDistance(m,helPos):
-                        self.vehicleF.helicoList[k].ChangeHealth(-1)
+                    if H:
+                        if self.environment.checkDistance(m,helPos):
+                            self.vehicleF.helicoList[k].ChangeHealth(-1)
                     if self.environment.checkDistance(m,rovPos):
                         self.vehicleF.roverList[k].ChangeHealth(-1)
 

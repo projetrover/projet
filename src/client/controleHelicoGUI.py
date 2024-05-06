@@ -35,7 +35,8 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
         imgdrone = checkimg("drone.png")
         self.imghelico = Image.open(imgdrone).resize((80, 80), Image.LANCZOS)
         self.helico = ImageTk.PhotoImage(self.imghelico)
-        self.helico_id = None
+        self.helico_id = self.Canvas.create_image(960, 540, image=self.helico)
+        self.Canvas.itemconfigure(self.helico_id, state = "hidden")
 
         self.vehicle_dir = up
 
@@ -46,28 +47,34 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
         styleEnergy.theme_use("alt")
         styleEnergy.configure("orange.Horizontal.TProgressbar",background = "gold", troughcolor = "black",thickness = 40)
 
-        self.HP = None
-        
         self.energy = None
+        self.HP = None
+        self.wHP = None
+        self.wenergy = None
+        self.msg_err = None
         
     
     
     def deploy(self):
         '''Fait apparaitre l'helicoptere'''
-    
-        self.helico_id = self.Canvas.create_image(960, 540, image=self.helico)
-        self.kbind()
-        
-        if self.HP == None:
-            self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
-            self.Canvas.create_window(1750,100,window = self.HP)
-            self.Canvas.create_text(1750, 60, text="État du véhicule", font="bold 20", fill="black")
-            self.energy = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "orange.Horizontal.TProgressbar")
-            self.Canvas.create_window(1750,200,window = self.energy)
-            self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
+        answer = self.deployreq()['result']
+        if answer['state'] == 'helico deployed':
+            dataUser.data.helico = answer
+            self.Canvas.itemconfigure(self.helico_id, state= "normal")
+            self.kbind()
+            
+            if self.HP == None:
+                self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
+                self.wHP = self.Canvas.create_window(1750,100,window = self.HP)
+                self.Canvas.create_text(1750, 60, text="État du véhicule", font="bold 20", fill="black")
+                self.energy = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "orange.Horizontal.TProgressbar")
+                self.wenergy = self.Canvas.create_window(1750,200,window = self.energy)
+                self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
+            else:
+                self.Canvas.itemconfigure(self.wHP, state = "normal")
+                self.Canvas.itemconfigure(self.wenergy, state = "normal")
         else:
-            self.Canvas.itemconfigure(self.HP,"normal")
-            self.Canvas.itemconfigure(self.energy,"normal")
+            raise Exception("Error helico deployment")
     
     def teleport_helico(self, pos):
         '''Teleporte l'helicoptere a ses coordonnees serveur (utile quand on fait le tour de la map vu qu'elle est ronde)'''
@@ -88,7 +95,7 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
         
         self.HP.destroy()
         self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
-        self.Canvas.create_window(1750,100,window = self.HP)
+        self.wHP = self.Canvas.create_window(1750,100,window = self.HP)
             
     def decrease_energy(self,amount):
         '''Diminue la jauge d'energie de l'helicoptere'''
@@ -114,7 +121,7 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
     def move(self, dir, event=None):
         '''Fait pivoter l'helicoptere si necessaire et deplace la carte de 12 pixels vers la droite, donnant l'impression que l'helicoptere avance vers la gauche'''
 
-        answer = libclient.create_request(dataUser.data.userid, 'move_helico', dir)  #A remplacer par controle_Helico.move()
+        answer = self.movereq(dir)  #A remplacer par controle_Helico.move()
         if answer['result']['state'] == 'moved':
             npos = answer['result']['pos']
             opos_x = dataUser.data.helico['pos'][0]
@@ -152,9 +159,10 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
         self.move(0)
 
     def move_right(self, event=None):
+        print("helico right")
         if self.vehicle_dir != right:
             self.rotate(right)
-        self.move(3)
+        self.move(1)
 
     def move_down(self, event=None):
         if self.vehicle_dir != down:
@@ -164,7 +172,7 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
     def move_left(self, event=None):
         if self.vehicle_dir != left:
             self.rotate(left)
-        self.move(1)
+        self.move(3)
         
 
     def kbind(self):
@@ -185,9 +193,12 @@ class ControleHelicoGUI(controleHelico.ControleHelico):
         
         
         
-    def erreur(self):
+    def error(self):
         '''Affiche un message d'erreur indiquant que l'helicoptère ne peut pas être range si il n'a pas les memes coordonees que le rover'''
     	
-        erreur = self.Canvas.create_text(960,100,text = "L'hélicoptère doit être au-dessus du rover pour être rangé",fill = "red")
-        erreur.after(1000,self.Canvas.delete,erreur)
+        self.msg_err = self.Canvas.create_text(960,800,text = "L'hélicoptère doit être au-dessus du rover pour être rangé",fill = "red")
+        self.window.after(1000, self.rm_error)
     	
+    def rm_error(self):
+        """Retire le message d'erreur"""
+        self.Canvas.delete(self.msg_err)

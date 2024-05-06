@@ -49,21 +49,45 @@ class ControleRoverGUI(controleRover.ControleRover):
         styleEnergy.configure("orange.Horizontal.TProgressbar",background = "gold", troughcolor = "black",thickness = 40)
 
         self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
-        self.Canvas.create_window(1750,100,window = self.HP)
+        self.wHP = self.Canvas.create_window(1750,100,window = self.HP)
         self.Canvas.create_text(1750, 60, text="État du véhicule", font="bold 20", fill="black")
         self.energy = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "orange.Horizontal.TProgressbar")
-        self.Canvas.create_window(1750,200,window = self.energy)
+        self.wenergy = self.Canvas.create_window(1750,200,window = self.energy)
         self.Canvas.create_text(1750, 160, text="Énergie", font="bold 20", fill="black")
         
+        self.err_msg = None
+        self.progressbar = None
+        self.wprogressbar = None
+        self.ana_msg = None
+        self.anacheck = tk.BooleanVar()
     
     
+    def rm_progressbar(self):
+        """Enleve la barre de progression"""
+        self.Canvas.delete(self.wprogressbar)
+        self.progressbar.destroy()
+        self.anacheck.set(not self.anacheck.get())
+
+
+    def progress_bar(self):
+        '''Créé une barre de progression au-dessus du rover et la supprime une fois remplie'''
+        
+        self.progressbar = ttk.Progressbar(self.window,orient = "horizontal",length = 70,mode = "determinate")
+        self.wprogressbar = self.Canvas.create_window(960,480,window = self.progressbar)
+        self.progressbar.start(50)
+        self.progressbar.after(5000, self.rm_progressbar)
+        
+
+        
+    
+
     def spawn(self):
         '''Fait reapparaitre le rover'''
         
-        self.rover_id = self.Canvas.create_image(960, 540, image=self.rover)
+        self.Canvas.itemconfigure(self.rover_id, state = "normal")
         self.kbind()
-        self.Canvas.itemconfigure(self.HP,"normal")
-        self.Canvas.itemconfigure(self.energy,"normal")
+        self.Canvas.itemconfigure(self.wHP, state = "normal")
+        self.Canvas.itemconfigure(self.wenergy, state = "normal")
         
         
     def teleport_rover(self, pos):
@@ -85,7 +109,7 @@ class ControleRoverGUI(controleRover.ControleRover):
         
         self.HP.destroy()
         self.HP = ttk.Progressbar(self.window, orient = "horizontal", length = 300, mode = "determinate", value = 100,style = "green.Horizontal.TProgressbar")
-        self.Canvas.create_window(1750,100,window = self.HP)
+        self.wHP = self.Canvas.create_window(1750,100,window = self.HP)
             
     def decrease_energy(self,amount):
         '''Diminue la jauge d'énergie du rover'''
@@ -111,7 +135,7 @@ class ControleRoverGUI(controleRover.ControleRover):
     def move(self, dir, event=None):
         '''Fait pivoter le rover si nécessaire et déplace la carte de 12 pixels vers la droite, donnant l'impression que le rover avance vers la gauche'''
 
-        answer = libclient.create_request(dataUser.data.userid, 'move_rover', dir)  #A remplacer par controle_Rover.move()
+        answer = self.movereq(dir)  
         if answer['result']['state'] == 'moved':
             npos = answer['result']['pos']
             opos_x = dataUser.data.rover['pos'][0]
@@ -144,25 +168,51 @@ class ControleRoverGUI(controleRover.ControleRover):
         self.decrease_energy(answer['result']['battery_lost'])
 
     def move_up(self, event=None):
+        """Methode appelee avec le bind pour se deplacer vers le haut"""
         if self.vehicle_dir != up:
             self.rotate(up)
         self.move(0)
 
     def move_right(self, event=None):
+        """Methode appelee avec le bind pour se deplacer vers le bas"""
+        print("rover right")
         if self.vehicle_dir != right:
             self.rotate(right)
         self.move(1)
 
     def move_down(self, event=None):
+        """Methode appelee avec le bind pour se deplacer vers la gauche"""
         if self.vehicle_dir != down:
             self.rotate(down)
         self.move(2)
 
     def move_left(self, event=None):
+        """Methode appelee avec le bind pour se deplacer vers la droite"""
         if self.vehicle_dir != left:
             self.rotate(left)
         self.move(3)
+    
+    def rm_error(self):
+        """Retire le message d'erreur"""
+        self.Canvas.delete(self.msg_err)
         
+    def rm_ana(self):
+        """Enleve le message d'analyse"""
+        self.Canvas.delete(self.ana_msg)
+    
+    def analyse(self):
+        """Methode appelee avec le bouton pour analyser un rocher"""
+        answer = self.analysereq()["result"]
+        if answer["state"] == "failed":
+            self.msg_err = self.Canvas.create_text(960, 800,text = "Le rover doit etre devant un rocher et bien oriente pour detruire le rocher\n et analyser les composants", font = "10", fill = "red")
+            self.window.after(3000, self.rm_error)
+        else:
+            self.progress_bar()
+            self.window.wait_variable(self.anacheck)
+            self.ana_msg = self.Canvas.create_text(960, 800, text = ("Vous venez d'analyser : " + answer['material']), font = "25", fill = "black")
+            self.window.after(2000, self.rm_ana)
+
+            
 
     def kbind(self):
         '''Associe chaque fleche directionnelle du clavier à la méthode "move" correspondante'''
