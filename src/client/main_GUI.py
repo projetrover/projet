@@ -28,22 +28,22 @@ class MainGUI():
     def __init__(self, window):
         '''Initialise les attributs de l'interface: la fenêtre principale, le canvas, l'image de fond (carte), le rover et les autres sprites et les jauges de "points de vie" et d'énergie.
         vehicle_dir est le sens vers lequel le rover est tourné, utilisé pour les rotations. Le rover est positionné au milieu de l'écran'''
-    
+
         imgmap = checkimg("map.jpg")
         imgrocher = checkimg("rock.png")
         imgdrone = checkimg("drone.png")
         imgrover = checkimg("rover.png")
         imgwind = checkimg("Wind_Storm.png")
         imgsand = checkimg("Sandstorm.png")
-        
-        
 
-        
+
+
+
         self.window = window
         self.Canvas = tk.Canvas(self.window, width=1920, height=1080, bg="black")
-        
-        
-        
+
+
+
         self.bg = ImageTk.PhotoImage(Image.open(imgmap))
         self.rock = ImageTk.PhotoImage(Image.open(imgrocher).resize((80, 80), Image.LANCZOS))
         self.drone = ImageTk.PhotoImage(Image.open(imgdrone).resize((80, 80), Image.LANCZOS))
@@ -56,16 +56,16 @@ class MainGUI():
         #self.Canvas.create_image(180, 100, image=self.drone)
         #self.Canvas.create_image(260, 100, image=self.wind)
         #self.Canvas.create_image(340, 100, image=self.sand)
-         
-         
+
+
         self.switch_btn = tk.Button(text="Switch",command=self.vehicle_switch)
         self.Canvas.create_window(900, 900,window = self.switch_btn)
-        
-        
-        
-        
+
+
+
+
         self.Canvas.pack()
-    
+
         self.rov_ctrl = controleRoverGUI.ControleRoverGUI(self.window ,self.Canvas, self.bg_id)         #Sous classes
         self.rov_ctrl.spawn()
         self.vehicle = 0        #0: rover, 1: helico
@@ -84,9 +84,9 @@ class MainGUI():
         dataUser.data.helicoPos = res['helicoPos']
         dataUser.data.lootDict = res['lootDict']
         dataUser.data.currentMeteos = res['currentMeteos']
-        
-    
-    
+
+
+
     def vehicle_switch(self):
         '''Change le vehicule courant'''
         print("self.vehicle = ", self.vehicle)
@@ -97,8 +97,8 @@ class MainGUI():
             self.Canvas.itemconfigure(self.rov_ctrl.rover_id, state = "hidden")
             self.ana_btn.configure(state = "disabled")
             self.heli_ctrl.deploy()
-            self.vehicle = 1 
-        
+            self.vehicle = 1
+
         elif self.vehicle:
             answer = libclient.create_request(dataUser.data.userid, "remove_helico", 0)
             if answer["result"] == "Heli removed":
@@ -110,7 +110,7 @@ class MainGUI():
                 self.ana_btn.configure(state = "normal")
                 self.rov_ctrl.spawn()
                 self.vehicle = 0
-                
+
             else:
                 self.heli_ctrl.error()
         else:
@@ -148,7 +148,7 @@ class MainGUI():
         for o in dataUser.data.roverPos:
             if o != dataUser.data.rover['pos'] or ((o == dataUser.data.rover['pos']) and (self.vehicle)):
                 self.placer_objet(1, o)
-        
+
         for o in dataUser.data.helicoPos:
 
             if (dataUser.data.helico != "None" and dataUser.data.helico != None):
@@ -158,12 +158,16 @@ class MainGUI():
         for o in dataUser.data.lootDict:
             self.placer_objet(3, o)
 
+        for k in dataUser.data.currentMeteos:
+            o = dataUser.data.currentMeteos[k]["pos"]
+            self.placer_objet(5, o)
+
         #self.window.after(1000, self.maj_objet)         #1000 pour des tests, mettre 50 en utilisation normale
         self.window.after(50, self.maj_objet)
 
         #TODO: Meteo
 
-    
+
 
 if __name__ == "__main__":
     w = tk.Tk()

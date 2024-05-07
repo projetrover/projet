@@ -33,8 +33,8 @@ class Environment:
          { spawnDate:{IdMeteo:, startPos:, radius:, progressionVector:, duration:} }
             spawnDate -> 1 seul meteo peut etre cree par serverTimer -> clef unique
             radius            -> entre 5% - 40% mapSize[1] (hauteur de la carte)
-            duration          -> entre 10-40, 1 update de server = 1 duration
-            progressionVector -> (x, y) entre -5% - 5% mapSize[]
+            duration          -> entre 50-100, 1 update de server = 1 duration
+            progressionVector -> (x, y) entre -0.2% - 0.2% mapSize[]
 
         '''
         self.mapSize = (m.MAX_X, m.MAX_Y)
@@ -85,7 +85,7 @@ class Environment:
         random.seed(seed)
         (max_X, max_Y) = self.mapSize
         minRad, maxRad = round(0.05*max_Y), round(0.4 * max_Y)
-        progMinX, progMaxX = -round(0.05*max_X), round(0.05*max_X)
+        progMinX, progMaxX = -round(0.002*max_X), round(0.002*max_X)
         progMinY, progMaxY = -minRad, minRad
         lastLoad = serviceDuration - 9 # pas besoin de charger les meteos apres
         nextMeteo = 0
@@ -95,16 +95,16 @@ class Environment:
             dump = random.randint(0,2)
             dump = random.randint( minRad, maxRad)
             dump = ( random.randint(progMinX, progMaxX), random.randint(progMinY, progMaxY))
-            dump = random.randint(10, 40)
+            dump = random.randint(50, 100)
             nextMeteo += random.randint(5, 20)
         while nextMeteo < lastLoad:
             startPos = ( random.randint(0, max_X), random.randint(0, max_X) )
             IdMeteo = random.randint(0,2)
             radius = random.randint( minRad, maxRad)
             progress = ( random.randint(progMinX, progMaxX), random.randint(progMinY, progMaxY))
-            duration = random.randint(10, 40)
+            duration = random.randint(50, 100)
             self.addMeteo(nextMeteo, startPos, IdMeteo, radius, progress, duration )
-            nextMeteo += random.randint(5, 20)
+            nextMeteo += random.randint(25, 50)
 
         end = time.time()
         print("duree generate_meteoMap:",end - start)
@@ -157,7 +157,7 @@ class Environment:
                         "IdMeteo":self.meteoMap[i]["IdMeteo"]}
 
     def updateMeteo(self, serverTimer):
-        meteos = self.currentMeteos.keys()
+        meteos = list(self.currentMeteos.keys())
         for k in meteos:
             if k+self.meteoMap[k]["duration"] < serverTimer:
                 del self.currentMeteos[k]

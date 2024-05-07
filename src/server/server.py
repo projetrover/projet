@@ -29,7 +29,7 @@ class Server:
     def start(self, serviceDuration):
         self.environment.generate_topography()
         print(self.environment.topography[0][0], self.environment.topography[1][0], self.environment.topography[2][0], self.environment.topography[3][0])
-        #self.environment.generate_meteoMap(self.seed, serviceDuration)
+        self.environment.generate_meteoMap(self.seed, serviceDuration)
         self.environment.generate_loot(self.seed)
         print('Server is ready')
 
@@ -202,13 +202,13 @@ class Server:
                     answer["result"] = {'state' : 'not moved', 'damage' : dmg, 'battery_lost' : eng, 'dir' : value}
             else :
                 rover.move(value, 1)
-                rover.height = self.environment.topography[dx][dy]      #Pas vraiment utile d'envoyer la hauteur au client je pense
+                rover.height =  5 #self.environment.topography[dx%MAX_X][dy%MAX_Y]      #Pas vraiment utile d'envoyer la hauteur au client je pense
                 answer["result"] = {'state' : 'moved', 'pos' : rover.pos ,'battery_lost' : eng, 'dir'  : value}
             rover.ChangeBattery(-eng)
         else:
             answer["result"] = "incorrect user or offline"
         return answer
-    
+
     def deployHelicoRequest(self, Id):
         """Traitement des requetes de deploiment des helicos"""
         if Id not in self.online_users:
@@ -218,7 +218,7 @@ class Server:
         helico = self.vehicleF.helicoList[Id]
         answer['result'] = {'state' : "helico deployed", "pos" : helico.pos, "battery" : helico.battery, "durability" : 100, "height": helico.height, "dir" : helico.dir}
         return answer
-    
+
     def removeHelicoRequest(self, Id):
         """Traitement des requetes de rangement des helicos"""
         if Id not in self.online_users:
@@ -250,9 +250,6 @@ class Server:
             if value >= 0 and value < 4: # 0:up 1:right 2:down 3:left
                 if (value % 2) == 0:
                     dx, dy = x, y +(value-1)
-                    if(y < 0 or y > MAX_Y):
-                        #TODO: alerte tour du monde en Y
-                        dx, dy = (x + (MAX_X/2) ) % MAX_X, (-y) % MAX_Y
                 else:
                     #TODO: ne gere pas le tour du monde en X
                     dx, dy = x-(value-2), y
@@ -274,7 +271,7 @@ class Server:
                     answer["result"] = {'state' : 'not moved', 'damage' : dmg, 'battery_lost' : eng, 'dir' : value}
             else :
                 helico.move(value, 1)
-                helico.height = self.environment.topography[dx][dy]      #Pas vraiment utile d'envoyer la hauteur au client je pense
+                helico.height =  15#self.environment.topography[dx%MAX_X][dy%MAX_Y]      #Pas vraiment utile d'envoyer la hauteur au client je pense
                 answer["result"] = {'state' : 'moved', 'pos' : helico.pos ,'battery_lost' : eng, 'dir'  : value}
             helico.ChangeBattery(-eng)
         else:
@@ -322,14 +319,22 @@ class Server:
         answer['result'] = {
             'currentMeteos' : []
         }
-        # for k in environment.currentMeteo.keys():
-        #     answer['result']['currentMeteos']self.environment.currentMeteo[k]["pos"]
+
 
         lootDict=[]
         for k in self.environment.lootDict:
             lootDict.append(k)
         roverpos = []
         helicopos = []
+        currentMeteos = {}
+
+        for k in self.environment.currentMeteos.keys():
+            currentMeteos[k]={
+                "pos":self.environment.currentMeteos[k]["pos"],
+                "radius":self.environment.currentMeteos[k]["radius"],
+                "IdMeteo":self.environment.currentMeteos[k]["IdMeteo"]}
+
+
         for k in self.online_users:
             roverpos.append(self.vehicleF.roverList[k].pos)
             if k in self.vehicleF.helicoList:
@@ -337,6 +342,7 @@ class Server:
         answer["result"]["lootDict"] = lootDict
         answer["result"]["roverPos"] = roverpos
         answer["result"]["helicoPos"] = helicopos
+        answer["result"]["currentMeteos"] = currentMeteos
 
         return answer
 
@@ -359,13 +365,13 @@ class Server:
 
             elif action == "analyse":
                 answer = self.analyserRocherRequest(idjoueur, value)
-            
+
             elif action == "move_helico":
                 answer = self.moveHelicoRequest(idjoueur, value)
-            
+
             elif action == "deploy_helico":
                 answer = self.deployHelicoRequest(idjoueur)
-            
+
             elif action == "remove_helico":
                 answer = self.removeHelicoRequest(idjoueur)
 

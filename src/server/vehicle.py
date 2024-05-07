@@ -33,7 +33,7 @@ class Vehicle:
         if dir % 2 == 0 :
             distance = distance * (dir-1)
             y = y + distance
-            if(y < 0):
+            if(y < 0 or y > MAX_Y):
                 x = (x + (MAX_X/2) ) % MAX_X
                 y = (-y) % MAX_Y
         else:
