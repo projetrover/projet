@@ -1,9 +1,0 @@
-@startuml
-Actor Admin
-Participant si as "SI Serveur"
-
-Admin --> si : Clique sur "Liste Utilisateurs Connectés"
-Admin <-- si : Affiche la liste des utilisateurs connectés
-Admin --> si : Clique sur un utilisateur
-Admin <-- si : Affiche les données de l'utilisateur (position, durabilité, énergie)
-@enduml
