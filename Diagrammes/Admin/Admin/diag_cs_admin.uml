@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor admin
+rectangle "SI Serveur" as s
+rectangle "SI Client" as c
+rectangle "SI BD" as b
+
+
+admin"1"--"1"s
+s"1"--"*"c
+s"1"--"1"b
+@enduml

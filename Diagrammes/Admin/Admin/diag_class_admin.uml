@@ -1,0 +1,25 @@
+@startuml
+class Vehicle{}
+class Camera{}
+class Rover{}
+class Helico{}
+class Server{}
+class VehicleFactory{}
+class Map{}
+class User{}
+class AppliAdmin{}
+class Environment{}
+class UserFactory{}
+
+Vehicle *-- Camera
+Vehicle <|-- Rover
+Vehicle <|-- Helico
+Server *-- UserFactory
+Server *-- VehicleFactory
+VehicleFactory *-- Vehicle
+Environment *-- Map
+UserFactory *-- User
+Server *-- Environment
+AppliAdminCTRL *-- Server
+AppliAdmin <|-- AppliAdminCTRL
+@endum
