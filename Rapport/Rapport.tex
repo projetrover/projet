@@ -52,9 +52,40 @@ Côté client vous arrivez sur la page de connexion, deux comptes sont disponibl
 \end{enumerate}
 
 \section{Informations générales}
-Ce projet est donc un simulateur de rover marsien écrit en Python et qui a été sépré en deux grandes phases : 
-une première phase de conception en séance deTP où l'on a rélféchi à la conception du projet en réalisant
-les différents diagrammes UML vu en cours.
+Ce projet est donc un simulateur de rover sur Mars écrit en Python et qui a été séparé en deux grandes phases : 
+une première phase de conception en séance de TP où l'on a rélféchi à la conception du projet en réalisant
+les différents diagrammes UML vu en cours (voir \ref{diagrammes}). C'est durant cette phase que nous nous sommes mis d'accord
+sur la structuration du projet ainsi que les différentes fonctionnalités proposées.\\
+Le logiciel est dans l'idée destiné à une entreprise pour un usage privé, il n'est donc pas disponible
+au public, c'est pourquoi nous avons décidé de ne pas implémenter de fonction pour créer un compte directement depuis
+l'écran de connexion. L'application administrateur n'a pas pu être développée par manque de temps, mais elle est prévue
+dans la conception, elle est très fortement liée au serveur, c'est à dire qu'elle se lance sur la même machine que le serveur
+en même temps et elle est unique, il n'y a donc qu'un seul administrateur. C'est lui qui doit créer un nouveau compte si une nouvelle
+personne veut avoir accès au simulateur.\\
+Parmi les différentes fonctionnalités imaginées mais que nous n'avons pas pu mettre en place, nous pouvons citer
+la prise de photos et vidéo, que nous n'avons pas jugés pertinents d'implémenter dans notre programme en 2D, mais si 
+le simulateur avait été fait en 3D cette fonctionnalité aurait eu sa place. Nous avons aussi imaginé un système d'exploration
+en équipe avec d'autres utilisateurs : chaque utilisateur aurait une représentation minimaliste de la planète dans un coin de l'écran
+donnant des informations sur l'emplacement actuel de chaque utilisateur ainsi que les zones qu'ils ont explorées. Les zones
+pas encore découvertes seraient cachées et lorsque qu'un utilisateur découvrirait une nouvelle zone les informations sur cette dernière
+seraient retransmises à tous les autres utilisateurs.\\
+Nous avons aussi imaginé et essayé d'implanter un système de topographie. La carte de Mars que nous avons est colorée de façon
+à représenter la topographie de Mars (voir \ref{sources}). Nous avons essayé de déterminer un niveau de hauteur en fonction de la couleur de chaque pixel
+afin de simuler la présence de montagnes et cratères. le rover serait gêné dans sa progression par ces derniers, d'où l'interêt de déployer
+le drone afin de faciliter l'exploration sur des terrains escarpés. Mais l'implémentation de ce système a posé trop de problèmes, il est cependant 
+toujours présent dans le code source mais non utilisé.\\
+Nous avons aussi mis en place un système permettant de simuler la météo sur Mars. (DETAILLER LA METEO ICI)
+\\
+Concernant la mise en place du serveur, nous nous sommes basés sur un modèle de serveur déjà existant (voir \ref{sources})
+que nous avons modifiés afin de répondre à nos attentes. Il utilise la librairie socket de Python ainsi que selectors, qui est 
+une manière de faire un serveur asynchrone non bloquant en évitant d'avoir à gérer plusieurs threads.
+Nous utilisons une unique classe Message transitant sur le réseau et contenant les diférentes requêtes et réponses, mais nous
+ne l'avons pas mentionné dans les diagrammes car nous le considérons comme une API, un peu commme Tkinter, nous avons donc pas jugés
+nécessaire de faire apparaitre cette classe dans les diagrammes.
+
+Nous avons aussi pensés au fait que le serveur communiquerait avec une base de données. Toutes les données concernant les utilisateurs seraient stockées dans une base de donnée SQL
+mais par manque de temps nous avons dans notre programme simulés cette base de données avec un fichier json dans lequel nous lisons les données à l'allumage du serveur et écrivons les nouvelles
+données à stocker (en théorie) périodiquement ainsi qu'à l'extinction du serveur.
 
 \section{Exigences}
 Voici les exigences mises en place pour ce projet, à noter qu'elles n'ont pas toutes pu être implémentées
@@ -582,81 +613,8 @@ Cas d’exception: Echec de la mission\\
 
 
 
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.5\textwidth]{DiagCS_Admin.png}
-    \caption{Diagramme de Contexte Statique Serveur}\label{cs_serv}
-\end{figure}
 
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.7\textwidth]{Diag_UC_Admin.png}
-    \caption{Diagramme de Cas D'utilisation Serveur}\label{uc_serv}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.7\textwidth]{Diag_Class_Admin.png}
-    \caption{Diagramme de Classes Serveur}\label{seq_serv}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=1\textwidth]{Diag_Obj_Admin.png}
-    \caption{Diagramme d'Objet Serveur}\label{obj_serv}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.7\textwidth]{diag_seq_admin_consulter.png}
-    \caption{Diagramme de séquence Serveur UC Consulter Données Utilisateurs }\label{seq1_serv}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.7\textwidth]{diag_seq_admin_modif.png}
-    \caption{Diagramme de séquence Serveur UC Modifier l'Environnement }\label{seq2_serv}
-\end{figure}
-
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.5\textwidth]{Diag_CS_User.png}
-    \caption{Diagramme de Contexte Statique Client }\label{cs_client}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.7\textwidth]{diag_uc_client.png}
-    \caption{Diagramme de Cas d'Utilisations Client }\label{uc_client}
-\end{figure}
-
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=1\textwidth]{Diag_Classe_User_v3.png}
-    \caption{Diagramme de Classes Client }\label{class_client}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=1.2\textwidth]{Diag_obj_Client_v3.png}
-    \caption{Diagramme d'Objets Client }\label{obj_client}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.4\textwidth]{diag_seq_piloter_hélico.png}
-    \caption{Diagramme de Séquence Client UC "Piloter hélicoptère" }\label{seq1_client}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \includegraphics[width=0.4\textwidth]{diag_seq_piloter_rover.png}
-    \caption{Diagramme de Séquence Client UC "Piloter rover" }\label{seq2_client}
-\end{figure}
-
-\section{Sources}
+\section{Sources} \label{sources}
 Base du modèle client / serveur (app-server.py, libserver.py, app-client.py, libclient.py) : \url{https://realpython.com/python-sockets/}\\
 Rover: \url{https://www.researchgate.net/figure/D-Top-view-of-the-rover-with-dimensions_fig1_356749945}\\
 Rochers: \url{https://www.pngwing.com/en/free-png-zrzud}\\
@@ -665,5 +623,81 @@ Mars (arrière-plan authentifiation): \url{https://www.frostscience.org/volcanic
 Carte: \url{https://attic.gsfc.nasa.gov/mola/images.html}\\
 Tempête : \url{https://pngtree.com/freepng/strong-wind-vector_9038035.html}\\
 Tempête de poussière : \url{https://www.vecteezy.com/png/21913770-brown-watercolor-modern-brush-style-with-colorful-texture-for-your-template}\\
+
+\section{Diagrammes} \label{diagrammes}
+Voici les différents diagrammes UML de la conception du projet.
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=0.5\textwidth]{DiagCS_Admin.png}
+    \caption{Diagramme de Contexte Statique Serveur}\label{cs_serv}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{Diag_UC_Admin.png}
+    \caption{Diagramme de Cas D'utilisation Serveur}\label{uc_serv}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{Diag_Class_Admin.png}
+    \caption{Diagramme de Classes Serveur}\label{seq_serv}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{Diag_Obj_Admin.png}
+    \caption{Diagramme d'Objet Serveur}\label{obj_serv}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{diag_seq_admin_consulter.png}
+    \caption{Diagramme de séquence Serveur UC Consulter Données Utilisateurs }\label{seq1_serv}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{diag_seq_admin_modif.png}
+    \caption{Diagramme de séquence Serveur UC Modifier l'Environnement }\label{seq2_serv}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Diag_CS_User.png}
+    \caption{Diagramme de Contexte Statique Client }\label{cs_client}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{diag_uc_client.png}
+    \caption{Diagramme de Cas d'Utilisations Client }\label{uc_client}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{Diag_Classe_User_v3.png}
+    \caption{Diagramme de Classes Client }\label{class_client}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.2\textwidth]{Diag_obj_Client_v3.png}
+    \caption{Diagramme d'Objets Client }\label{obj_client}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\textwidth]{diag_seq_piloter_hélico.png}
+    \caption{Diagramme de Séquence Client UC "Piloter hélicoptère" }\label{seq1_client}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\textwidth]{diag_seq_piloter_rover.png}
+    \caption{Diagramme de Séquence Client UC "Piloter rover" }\label{seq2_client}
+\end{figure}
 
 \end{document}

@@ -237,6 +237,10 @@ INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\tex\latex\lm\ts1lmr.fd
 INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ts1-lmr12.tfm
 INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmbx12.tfm
 INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\lm\lm-ts1.enc
+INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmtt.fd
+INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmtt.fd
+INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmtt.fd
+INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmtt12.tfm
 INPUT .\DiagCS_Admin.png
 INPUT .\DiagCS_Admin.png
 INPUT .\DiagCS_Admin.png
@@ -322,10 +326,6 @@ INPUT .\diag_seq_piloter_rover.png
 INPUT .\diag_seq_piloter_rover.png
 INPUT .\diag_seq_piloter_rover.png
 INPUT .\diag_seq_piloter_rover.png
-INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmtt.fd
-INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmtt.fd
-INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\tex\latex\lm\t1lmtt.fd
-INPUT C:\Users\tomba\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmtt12.tfm
 INPUT Rapport.aux
 INPUT .\Rapport.out
 INPUT .\Rapport.out

@@ -5,7 +5,7 @@ actor "admin" as a
 actor "SI BD" as b
 actor "SI Client" as c
 
-usecase "Consulter Données Utilisateurs" as UC0
+usecase "Gérer les informations des Utilisateurs" as UC0
 usecase "Déconnecter Utilisateurs" as UC1
 usecase "Observer l'ensemble de la carte" as UC2
 usecase "Allumer Serveur" as UC3
