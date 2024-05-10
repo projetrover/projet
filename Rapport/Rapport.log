@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.9)  10 MAY 2024 12:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.9)  10 MAY 2024 16:29
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -576,112 +576,112 @@ Underfull \hbox (badness 10000) in paragraph at lines 42--47
  []
 
 [2{C:/Users/tomba/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}] [3] [4] [5] [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 470--477
+Underfull \hbox (badness 10000) in paragraph at lines 480--487
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 470--477
+Underfull \hbox (badness 10000) in paragraph at lines 480--487
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 478--483
+Underfull \hbox (badness 10000) in paragraph at lines 488--493
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 478--483
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 484--487
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 489--534
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 489--534
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 489--534
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 489--534
+Underfull \hbox (badness 10000) in paragraph at lines 488--493
 
  []
 
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 535--548
+Underfull \hbox (badness 10000) in paragraph at lines 494--497
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 535--548
+Underfull \hbox (badness 10000) in paragraph at lines 499--544
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 535--548
+Underfull \hbox (badness 10000) in paragraph at lines 499--544
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 499--544
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 499--544
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 545--558
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 545--558
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 545--558
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 550--613
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
 
  []
 
-[10]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 618.
+
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 560--623
+
+ []
+
+[10] [11]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 628.
  (C:\Users\tomba\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -690,96 +690,95 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-Overfull \hbox (61.72435pt too wide) in paragraph at lines 618--626
+Overfull \hbox (61.72435pt too wide) in paragraph at lines 628--636
 \T1/lmr/m/n/12 (-20) Rover : [][]$\T1/lmtt/m/n/12 https : / / www . researchgate . net / figure / D-[]Top-[]view-[]of-[]the-[]rover-[]with-[]dimensions _
  []
 
 
-Overfull \hbox (404.29393pt too wide) in paragraph at lines 618--626
+Overfull \hbox (404.29393pt too wide) in paragraph at lines 628--636
 \T1/lmr/m/n/12 (-20) Mars (arri�re-plan au-then-ti-fia-tion) : [][]$\T1/lmtt/m/n/12 https : / / www . frostscience . org / volcanic-[]activity-[]on-[]mars-[]upends-[]our-[]understanding-[]of-[]the-[]red-[]planets-[]interior/$[][] 
  []
 
 
-Overfull \hbox (369.23444pt too wide) in paragraph at lines 618--626
+Overfull \hbox (369.23444pt too wide) in paragraph at lines 628--636
 \T1/lmr/m/n/12 (-20) Temp�te de pous-si�re : [][]$\T1/lmtt/m/n/12 https : / / www . vecteezy . com / png / 21913770-[]brown-[]watercolor-[]modern-[]brush-[]style-[]with-[]colorful-[]texture-[]for-[]your-[]template$[][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 618--626
+Underfull \hbox (badness 10000) in paragraph at lines 628--636
 
  []
 
-[11]
-<DiagCS_Admin.png, id=102, 338.26375pt x 119.44624pt>
+<DiagCS_Admin.png, id=100, 338.26375pt x 119.44624pt>
 File: DiagCS_Admin.png Graphic file (type png)
 <use DiagCS_Admin.png>
-Package pdftex.def Info: DiagCS_Admin.png  used on input line 631.
+Package pdftex.def Info: DiagCS_Admin.png  used on input line 641.
 (pdftex.def)             Requested size: 224.06548pt x 79.12273pt.
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/12'.
 (microtype)             Ignoring protrusion settings for this character.
-<Diag_UC_Admin.png, id=103, 521.95pt x 487.8225pt>
+<Diag_UC_Admin.png, id=101, 521.95pt x 487.8225pt>
 File: Diag_UC_Admin.png Graphic file (type png)
 <use Diag_UC_Admin.png>
-Package pdftex.def Info: Diag_UC_Admin.png  used on input line 637.
+Package pdftex.def Info: Diag_UC_Admin.png  used on input line 647.
 (pdftex.def)             Requested size: 313.69029pt x 293.17958pt.
-<Diag_Class_Admin.png, id=104, 539.01375pt x 603.25375pt>
+<Diag_Class_Admin.png, id=102, 539.01375pt x 603.25375pt>
 File: Diag_Class_Admin.png Graphic file (type png)
 <use Diag_Class_Admin.png>
-Package pdftex.def Info: Diag_Class_Admin.png  used on input line 643.
+Package pdftex.def Info: Diag_Class_Admin.png  used on input line 653.
 (pdftex.def)             Requested size: 313.69029pt x 351.08405pt.
-<Diag_Obj_Admin.png, id=105, 1045.9075pt x 703.62875pt>
+<Diag_Obj_Admin.png, id=103, 1045.9075pt x 703.62875pt>
 File: Diag_Obj_Admin.png Graphic file (type png)
 <use Diag_Obj_Admin.png>
-Package pdftex.def Info: Diag_Obj_Admin.png  used on input line 649.
+Package pdftex.def Info: Diag_Obj_Admin.png  used on input line 659.
 (pdftex.def)             Requested size: 448.13095pt x 301.4808pt.
-<diag_seq_admin_consulter.png, id=106, 505.89pt x 298.11375pt>
+<diag_seq_admin_consulter.png, id=104, 505.89pt x 298.11375pt>
 File: diag_seq_admin_consulter.png Graphic file (type png)
 <use diag_seq_admin_consulter.png>
-Package pdftex.def Info: diag_seq_admin_consulter.png  used on input line 655.
+Package pdftex.def Info: diag_seq_admin_consulter.png  used on input line 665.
 (pdftex.def)             Requested size: 313.69029pt x 184.8559pt.
-<diag_seq_admin_modif.png, id=107, 409.53pt x 534.99875pt>
+<diag_seq_admin_modif.png, id=105, 409.53pt x 534.99875pt>
 File: diag_seq_admin_modif.png Graphic file (type png)
 <use diag_seq_admin_modif.png>
-Package pdftex.def Info: diag_seq_admin_modif.png  used on input line 661.
+Package pdftex.def Info: diag_seq_admin_modif.png  used on input line 671.
 (pdftex.def)             Requested size: 313.69029pt x 409.81966pt.
-<Diag_CS_User.png, id=108, 333.245pt x 85.31876pt>
+<Diag_CS_User.png, id=106, 333.245pt x 85.31876pt>
 File: Diag_CS_User.png Graphic file (type png)
 <use Diag_CS_User.png>
-Package pdftex.def Info: Diag_CS_User.png  used on input line 668.
+Package pdftex.def Info: Diag_CS_User.png  used on input line 678.
 (pdftex.def)             Requested size: 224.06548pt x 57.36765pt.
-<diag_uc_client.png, id=109, 705.63625pt x 591.20876pt>
+<diag_uc_client.png, id=107, 705.63625pt x 591.20876pt>
 File: diag_uc_client.png Graphic file (type png)
 <use diag_uc_client.png>
-Package pdftex.def Info: diag_uc_client.png  used on input line 674.
+Package pdftex.def Info: diag_uc_client.png  used on input line 684.
 (pdftex.def)             Requested size: 313.69029pt x 262.82094pt.
-<Diag_Classe_User_v3.png, id=110, 1003.75pt x 278.03876pt>
+<Diag_Classe_User_v3.png, id=108, 1003.75pt x 278.03876pt>
 File: Diag_Classe_User_v3.png Graphic file (type png)
 <use Diag_Classe_User_v3.png>
-Package pdftex.def Info: Diag_Classe_User_v3.png  used on input line 681.
+Package pdftex.def Info: Diag_Classe_User_v3.png  used on input line 691.
 (pdftex.def)             Requested size: 448.13095pt x 124.132pt.
-<Diag_obj_Client_v3.png, id=111, 1574.88374pt x 552.0625pt>
+<Diag_obj_Client_v3.png, id=109, 1574.88374pt x 552.0625pt>
 File: Diag_obj_Client_v3.png Graphic file (type png)
 <use Diag_obj_Client_v3.png>
-Package pdftex.def Info: Diag_obj_Client_v3.png  used on input line 687.
+Package pdftex.def Info: Diag_obj_Client_v3.png  used on input line 697.
 (pdftex.def)             Requested size: 537.75577pt x 188.49902pt.
 
-Overfull \hbox (89.62482pt too wide) in paragraph at lines 687--688
+Overfull \hbox (89.62482pt too wide) in paragraph at lines 697--698
  [][] 
  []
 
-<diag_seq_piloter_hélico.png, id=112, 437.635pt x 1429.34pt>
+<diag_seq_piloter_hélico.png, id=110, 437.635pt x 1429.34pt>
 File: diag_seq_piloter_hélico.png Graphic file (type png)
 <use diag_seq_piloter_hélico.png>
-Package pdftex.def Info: diag_seq_piloter_hélico.png  used on input line 693.
+Package pdftex.def Info: diag_seq_piloter_hélico.png  used on input line 703.
 (pdftex.def)             Requested size: 179.24963pt x 585.44434pt.
-<diag_seq_piloter_rover.png, id=113, 467.7475pt x 1665.22125pt>
+<diag_seq_piloter_rover.png, id=111, 467.7475pt x 1665.22125pt>
 File: diag_seq_piloter_rover.png Graphic file (type png)
 <use diag_seq_piloter_rover.png>
-Package pdftex.def Info: diag_seq_piloter_rover.png  used on input line 699.
+Package pdftex.def Info: diag_seq_piloter_rover.png  used on input line 709.
 (pdftex.def)             Requested size: 179.24963pt x 638.152pt.
 
-LaTeX Warning: Float too large for page by 31.50203pt on input line 701.
+LaTeX Warning: Float too large for page by 31.50203pt on input line 711.
 
 [12 <./DiagCS_Admin.png (PNG copy)>] [13 <./Diag_UC_Admin.png (PNG copy)>] [14 <./Diag_Class_Admin.png (PNG copy)>] [15 <./Diag_Obj_Admin.png (PNG copy)> <./diag_seq_admin_consulter.png (PNG copy)>] [16 <./diag_seq_admin_modif.png (PNG copy)> <./Diag_CS_User.png (PNG copy)>] [17 <./diag_uc_client.png (PNG copy)> <./Diag_Classe_User_v3.png (PNG copy)>] [18 <./Diag_obj_Client_v3.png (PNG copy)>] [19 <./diag_seq_piloter_hélico.png (PNG copy)>] [20 <./diag_seq_piloter_rover.png (PNG copy)>] (Rapport.aux)
  ***********
@@ -790,15 +789,15 @@ Package rerunfilecheck Info: File `Rapport.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 18444 strings out of 474370
- 321433 string characters out of 5740536
- 1938754 words of memory out of 5000000
+ 18454 strings out of 474370
+ 321537 string characters out of 5740536
+ 1939754 words of memory out of 5000000
  40472 multiletter control sequences out of 15000+600000
- 608569 words of font info for 117 fonts, out of 8000000 for 9000
+ 609024 words of font info for 122 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,11n,107p,10969b,1247s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/tomba/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/tomba/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.pfb><C:/Users/tomba/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/tomba/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr17.pfb><C:/Users/tomba/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmssbx10.pfb><C:/Users/tomba/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb>
-Output written on Rapport.pdf (20 pages, 595727 bytes).
+Output written on Rapport.pdf (20 pages, 596916 bytes).
 PDF statistics:
  257 PDF objects out of 1000 (max. 8388607)
  52 named destinations out of 1000 (max. 500000)

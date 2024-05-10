@@ -51,6 +51,12 @@ Côté client vous arrivez sur la page de connexion, deux comptes sont disponibl
     \item Utilisateur : alice   Mot de Passe : 5678
 \end{enumerate}
 
+Si la connexion ne fonctionne pas c'est que vous avez entré la mauvaise IP / Port, ou que le serveur n'était pas allumé lorsque vous avez lancé le client.\\
+Vous devez arriver sur l'écran principal, utilisez les flèches directionnelles pour vous déplacer et cliquez sur les boutons à l'écran pour 
+changer entre le rover et l'hélicoptère, ou pour casser et analyser un rocher. À noter que pour ranger l'hélicoptère vous devez vous placer sur le rover, et pour 
+analyser un rocher vous devez être devant orienté dans la bonne direction. Il n'y a pas encore de manière propre de quitter le client et le serveur, fermez juste la fenêtre
+du client et le terminal du serveur.
+
 \section{Informations générales}
 Ce projet est donc un simulateur de rover sur Mars écrit en Python et qui a été séparé en deux grandes phases : 
 une première phase de conception en séance de TP où l'on a rélféchi à la conception du projet en réalisant
@@ -85,7 +91,11 @@ nécessaire de faire apparaitre cette classe dans les diagrammes.
 
 Nous avons aussi pensés au fait que le serveur communiquerait avec une base de données. Toutes les données concernant les utilisateurs seraient stockées dans une base de donnée SQL
 mais par manque de temps nous avons dans notre programme simulés cette base de données avec un fichier json dans lequel nous lisons les données à l'allumage du serveur et écrivons les nouvelles
-données à stocker (en théorie) périodiquement ainsi qu'à l'extinction du serveur.
+données à stocker (en théorie) périodiquement ainsi qu'à l'extinction du serveur.\\
+Concernant la répartition des tâches, Nino Cantera s'est occupé d'une grande partie de l'IHM, Ivano Balbony s'est occupé de la génération de la topographie, de la météo et de quelques 
+classes serveur et Tom BARTIER s'est chargé de la communication entre le client et le serveur, le traitement des requêtes des deux côtés, quelques classes serveur et quelques éléments de l'IHM.
+La quasi totalité du code a été écrit en dehors des séances de TP.
+
 
 \section{Exigences}
 Voici les exigences mises en place pour ce projet, à noter qu'elles n'ont pas toutes pu être implémentées
