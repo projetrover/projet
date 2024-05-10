@@ -1,0 +1,82 @@
+@startuml
+object Authentification {
+UserID : 1
+Valide : True
+Password : "1234"
+Username : "Bob"
+}
+object AuthentificationGUI{
+Password : "1234"
+Username : "Bob"
+MessageAuthentification : "Connexion en cours..."
+}
+
+object DataUser{
+name: Bob
+password: 1234
+rover: RoverB
+helico: HelicoB
+DiscoveredMap: []
+DisplayedMap: []
+}
+object AppliUser{
+authentification()
+main()
+}
+object MainGUI{
+
+}
+object Alerte{
+AlertListe : [Energie Faible, Tempete en approche]
+}
+object AlerteGUI{
+}
+object MiniCarte{
+Zoom: 1
+Position: (0;0)
+}
+object MiniCarteGUI{
+Zoom: 1
+Position: (0;0)
+}
+object Carte{
+UsersPos : (1:(0, 0), 2:(70, 80))
+}
+object CarteGUI{
+}
+
+object ControleHelicoGUI{
+Position: (0;0)
+}
+object ControleRoverGUI{
+Position: (0;0)
+}
+object ControleRover{
+}
+object ControleHelico{
+}
+
+
+
+Authentification *-- DataUser
+
+DataUser --o Alerte
+DataUser --o MiniCarte
+DataUser --o Carte
+DataUser --o ControleHelico
+DataUser --o ControleRover
+Authentification <|-- AuthentificationGUI
+Carte <|-- CarteGUI
+Alerte <|-- AlerteGUI
+MiniCarte <|-- MiniCarteGUI
+ControleRover <|-- ControleRoverGUI
+ControleHelico <|-- ControleHelicoGUI
+
+MainGUI*-- AlerteGUI
+MainGUI*-- MiniCarteGUI
+MainGUI*-- CarteGUI
+MainGUI*-- ControleHelicoGUI
+MainGUI*-- ControleRoverGUI
+AppliUser*-- AuthentificationGUI
+AppliUser*-- MainGUI
+@enduml

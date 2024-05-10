@@ -28,11 +28,11 @@ Alerte <|-- AlerteGUI
 
 
 
-MainGUI *-- Alerte
-MainGUI *-- MiniCarte
-MainGUI *-- Carte
-MainGUI *-- ControleHelico
-MainGUI *-- ControlesRover
-AppliUser *-- Authentification
+MainGUI *-- AlerteGUI
+MainGUI *-- MiniCarteGUI
+MainGUI *-- CarteGUI
+MainGUI *-- ControleHelicoGUI
+MainGUI *-- ControlesRoverGUI
+AppliUser *-- AuthentificationGUI
 AppliUser *-- MainGUI
 @enduml

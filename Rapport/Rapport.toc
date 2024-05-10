@@ -1,12 +1,17 @@
 \babel@toc {french}{}\relax 
 \contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Infos Pratiques}{2}{subsection.1.1}%
-\contentsline {section}{\numberline {2}Exigences}{2}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Interactions client/serveur}{2}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}GUI}{2}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Caméra}{3}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Rover}{4}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Hélicoptère}{5}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Environnement}{6}{subsection.2.6}%
-\contentsline {section}{\numberline {3}Diagrammes}{6}{section.3}%
+\contentsline {section}{\numberline {2}Informations générales}{2}{section.2}%
+\contentsline {section}{\numberline {3}Exigences}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Interactions client/serveur}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}GUI}{3}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Caméra}{4}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Rover}{4}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Hélicoptère}{5}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Environnement}{6}{subsection.3.6}%
+\contentsline {section}{\numberline {4}Scénarios}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Admin Modifier Environnement}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Scénario Client Piloter Hélico}{7}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Scénario Piloter Rover}{9}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Sources}{10}{section.5}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

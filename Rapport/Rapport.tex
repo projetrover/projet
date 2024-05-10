@@ -51,9 +51,14 @@ Côté client vous arrivez sur la page de connexion, deux comptes sont disponibl
     \item Utilisateur : alice   Mot de Passe : 5678
 \end{enumerate}
 
+\section{Informations générales}
+Ce projet est donc un simulateur de rover marsien écrit en Python et qui a été sépré en deux grandes phases : 
+une première phase de conception en séance deTP où l'on a rélféchi à la conception du projet en réalisant
+les différents diagrammes UML vu en cours.
+
 \section{Exigences}
 Voici les exigences mises en place pour ce projet, à noter qu'elles n'ont pas toutes pu être implémentées
-mais qu'elles pourraient l'être si le projet venait à être continué après ce rendu.
+mais qu'elles pourraient l'être si le projet venait à être poursuivi après ce rendu.
 
 \subsection{Interactions client/serveur}
 
@@ -428,58 +433,237 @@ mais qu'elles pourraient l'être si le projet venait à être continué après c
 
 \end{itemize}
 
-\section {Diagrammes}
-Voici les différents diagrammes UML réalisés pour le projet, séparés en deux catégories, d'abord les diagrammes 
-du serveur puis ceux du client.
+\section {Scénarios}
 
-\begin{figure}[h]
+\subsection{Admin Modifier Environnement}
+Scénario nominal :\\
+1. L'administrateur clique sur le bouton "Modifier Environement"\\
+2. Le système affiche l'interface de modification de l'environement\\
+3. L'administrateur clique sur l'icône du rocher\\
+4. Le système demande les coordonnées et le type du rocher à ajouter\\
+5. L'administrateur renseigne les coordonnées auxquelles le rocher sera ajouté ainsi que le type\\
+6. Le système confirme l'ajout du rocher sur la carte\\\\
+
+Scénario alternatif : \\
+3. L'administrateur clique sur l'icône tempête de poussière\\
+4. Le système demande dans quelle zone sera la tempête de poussière ainsi que sa date et sa durée\\
+5. L'administrateur renseigne les informations\\
+6. Le système confirme l'ajout de la tempête de poussière\\\\
+
+Scénario exception :\\
+5. L'administrateur renseigne les coordonnées auxquelles le rocher sera ajouté ainsi que le type\\
+6. Le système indique qu'un rocher est déjà présent à ces coordonnées, echec de l'ajout\\
+
+\subsection{Scénario Client Piloter Hélico}
+Scénario nominal:\\
+\\
+	1. L’utilisateur appuie sur la touche permettant de déployer l’hélicoptère\\
+	2. L’hélicoptère virtuel se détache du rover et remplace temporairement le rover en tant que véhicule piloté par l’utilisateur\\
+	3. Le système affiche la jauge d’énergie de l’hélicoptère\\
+	4. L’utilisateur appuie sur la touche permettant d’avancer\\
+	5. L’hélicoptère avance tant que la touche est enfoncée\\
+	6. L’utilisateur relâche la touche avant que l’hélicoptère rencontre un obstacle\\
+	7. L’hélicoptère arrête d’avancer\\
+	8. L’utilisateur appuie sur la touche permettant de monter\\
+	9. L’altitude de l’hélicoptère augmente\\
+	10. L’utilisateur rappuie sur la touche pour avancer\\
+	11. L’hélicoptère avance et passe au-dessus de l’obstacle\\
+	12. L’utilisateur remarque que la jauge d’énergie de l’hélicoptère est basse\\
+	13. L’utilisateur relâche la touche\\
+	14. L’hélicoptère arrête d’avancer\\
+	15. L’utilisateur appuie sur la touche permettant d’atterir\\
+	16. L’hélicoptère atterrit et commence à recharger sa batterie\\
+	17. L’utilisateur attend que la jauge d’énergie se remplisse\\
+	18. Une fois la jauge remplie l’utilisateur appuie sur la touche permettant de décoller\\
+	19. L’hélioptère se remet en route\\
+	20. L’utilisateur appuie sur la touche permettant de pivoter\\
+	21. L’hélicoptère pivote sur lui-même tant que la touche est enfoncée\\
+	22. L’utilisateur relâche la touche\\
+	23. L’hélicoptère arrête de pivoter\\
+	25.  L’utilisateur appuie sur la touche permettant de ranger l’hélicoptère\\
+	26. L’hélicoptère vient se poser sur le rover\\
+	27. L’utilisateur reprend le contrôle du rover\\
+\\
+Cas alternatif: Contournement de l’obstacle\\
+\\
+	7. L’utilisateur appuie sur la touche permettant de pivoter\\
+	8. L’hélicoptère pivote sur lui-même tant que la touche est enfoncée\\
+	9. L’utilisateur relâche la touche après avoir fait pivoter l’hélicoptère à 45°\\
+	10. L’utilisateur appuie sur la touche permettant d’avancer\\
+	11. L’hélicoptère avance tant que la touche est enfoncée\\
+	12. L’utilisateur relâche la touche après avoir fait parcourir une courte distance à l’hélicoptère\\
+	13. L’hélicoptère arrête d’avancer\\
+	12. L’utilisateur appuie sur la touche permettant de pivoter\\
+	13. L’hélicoptère pivote sur lui-même tant que la touche est enfoncée\\
+	14. L’utilisateur relâche la touche après avoir fait pivoter l’hélicoptère à 45°\\
+	15. L’utilisateur appuie sur la touche permettant d’avancer\\
+	16. L’hélicoptère avance tant que la touche est enfoncée\\
+	17. L’utilisateur relâche la touche\\
+	18. L’hélicoptère arrête d’avancer\\
+
+	Le scénario reprend à l’étape 11. \\
+\\
+Cas d’exception: Batterie vide\\
+\\
+	11. L’utilisateur reste appuyé sur la touche pendant plusieurs minutes\\
+	12. La jauge d’énergie de l’hélicoptère diminue et se vide\\
+	13. L’hélicoptère tombe au sol\\
+	14. L’hélicoptère perd des points de vie\\
+	15. L’hélicoptère tombe à court de points de vie\\
+	16. Le système indique que l’hélicoptère est trop endommagé pour décoller\\
+	17. L’utilisateur reprend le contrôle du rover\\
+	18. L’utilisateur appuie sur la touche permettant de contrôler l’hélicoptère\\
+	19. Le système indique que l’hélicoptère est hors-service\\
+
+\subsection{Scénario Piloter Rover}
+Scénario nominal: Piloter le rover\\
+\\
+Scénario principal\\
+\\
+	1. L’utilisateur lance une partie en appuyant sur un bouton\\
+	2. Le programme principal se lance et affiche l’interface\\
+	3. L’utilisateur appuie sur la touche permettant d’avancer\\
+	4. Le rover virtuel avance tant que la touche est enfoncée\\
+	5. L’utilisateur relâche la touche\\
+	6. Le rover s’arrête\\
+	7. L’utilisateur appuie sur la touche permettant de reculer\\
+	8. Le rover recule tant que la touche est enfoncée\\
+	9. L’utilisateur relâche la touche\\
+	10. Le rover s’arrête \\
+	11. L’utilisateur appuie sur la touche permettant de pivoter\\
+	12. Le rover pivote sur lui-même tant que la touche est enfoncée\\
+	13. L’utilisateur relâche la touche\\
+	14. Le rover s’arrête\\
+	15. L’utilisateur appuie sur la touche permettant d’avancer\\
+	16. Le rover avance tant que la touche est enfoncée\\
+	17. L’utilisateur relâche la touche avant de percuter un rocher\\
+	18. Le rover s’arrête\\
+	19. L’utilisateur appuie sur la touche permettant de creuser\\
+	20. Le rover utilise sa foreuse pour détruire le rocher et en collecter un échantillon\\
+	21. L’utilisateur appuie sur la touche permettant de lancer une analyse\\
+	22. Le résultat de l’analyse est affiché à l’écran\\
+	23. L’utilisateur appuie sur la touche permettant de régler la vitesse\\
+	24. L’utilisateur appuie sur la touche permettant d’augmenter la vitesse\\
+	25. La jauge de vitesse augmente tant que la touche est enfoncée\\
+	26. L’utilisateur relâche la touche\\
+	27. La jauge de vitesse arrête d’augmenter\\
+	28. L’utilisateur appuie sur la touche permettant de confirmer la vitesse choisie\\
+	29. La vitesse choisie est appliquée\\
+	30. L’utilisateur appuie sur la touche permettant d’avancer\\
+	31. Le rover avance tant que la touche est enfoncée\\
+	32. L’utilisateur relâche la touche\\
+	33. Le rover s’arrête\\
+	34. L’utilisateur clique sur le bouton permettant d’afficher le menu\\
+	35. Le simulateur se met en pause et le menu s’affiche \\
+	36. L’utilisateur clique sur le bouton «revenir à l’écran-titre»\\
+	37. Le programme retourne à l’écran d’accueil\\
+	38. L’utilisateur clique sur le bouton «déconnexion»\\
+	39. L’utilisateur est déconnecté de son compte\\
+	40. L’utilisateur ferme le programme\\
+\\
+Cas alternatif: Collision avec un obstacle\\
+\\
+	11. L’utilisateur reste appuyé sur la touche\\
+	12. Le rover ne s’arrête pas et percute un rocher\\
+	13. Le système indique que le rover est bloqué par un rocher\\
+	14. Le rover est endommagé et perd des points de vie\\
+\\
+	Le scénario reprend à l’étape 19\\
+\\
+Cas d’exception: Echec de la mission\\
+\\
+	11. L’utilisateur reste appuyé sur la touche\\
+	12. Le rover ne s’arrête pas et continue d’avancer jusqu’à tomber du haut d’une montagne\\
+	13. Le rover tombe à court de points de vie\\
+	14. Le système indique que le rover est trop endommagé pour continuer sa mission\\
+	15. Le système indique que la partie est terminée\\
+\\
+	Le scénario reprend à l’étape 37\\
+
+
+
+\begin{figure}[p]
     \centering
     \includegraphics[width=0.5\textwidth]{DiagCS_Admin.png}
     \caption{Diagramme de Contexte Statique Serveur}\label{cs_serv}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
     \centering
     \includegraphics[width=0.7\textwidth]{Diag_UC_Admin.png}
     \caption{Diagramme de Cas D'utilisation Serveur}\label{uc_serv}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
     \centering
     \includegraphics[width=0.7\textwidth]{Diag_Class_Admin.png}
     \caption{Diagramme de Classes Serveur}\label{seq_serv}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
     \centering
     \includegraphics[width=1\textwidth]{Diag_Obj_Admin.png}
     \caption{Diagramme d'Objet Serveur}\label{obj_serv}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
     \centering
     \includegraphics[width=0.7\textwidth]{diag_seq_admin_consulter.png}
     \caption{Diagramme de séquence Serveur UC Consulter Données Utilisateurs }\label{seq1_serv}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
     \centering
     \includegraphics[width=0.7\textwidth]{diag_seq_admin_modif.png}
     \caption{Diagramme de séquence Serveur UC Modifier l'Environnement }\label{seq2_serv}
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[p]
     \centering
     \includegraphics[width=0.5\textwidth]{Diag_CS_User.png}
     \caption{Diagramme de Contexte Statique Client }\label{cs_client}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[p]
     \centering
     \includegraphics[width=0.7\textwidth]{diag_uc_client.png}
-    \caption{Diagramme de Contexte Statique Client }\label{uc_client}
+    \caption{Diagramme de Cas d'Utilisations Client }\label{uc_client}
 \end{figure}
 
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=1\textwidth]{Diag_Classe_User_v3.png}
+    \caption{Diagramme de Classes Client }\label{class_client}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=1.2\textwidth]{Diag_obj_Client_v3.png}
+    \caption{Diagramme d'Objets Client }\label{obj_client}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.4\textwidth]{diag_seq_piloter_hélico.png}
+    \caption{Diagramme de Séquence Client UC "Piloter hélicoptère" }\label{seq1_client}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.4\textwidth]{diag_seq_piloter_rover.png}
+    \caption{Diagramme de Séquence Client UC "Piloter rover" }\label{seq2_client}
+\end{figure}
+
+\section{Sources}
+Base du modèle client / serveur (app-server.py, libserver.py, app-client.py, libclient.py) : \url{https://realpython.com/python-sockets/}\\
+Rover: \url{https://www.researchgate.net/figure/D-Top-view-of-the-rover-with-dimensions_fig1_356749945}\\
+Rochers: \url{https://www.pngwing.com/en/free-png-zrzud}\\
+Hélicoptère: \url{https://www.creativefabrica.com/fr/png/drone-png-ORYOxgTGA/}\\
+Mars (arrière-plan authentifiation): \url{https://www.frostscience.org/volcanic-activity-on-mars-upends-our-understanding-of-the-red-planets-interior/}\\
+Carte: \url{https://attic.gsfc.nasa.gov/mola/images.html}\\
+Tempête : \url{https://pngtree.com/freepng/strong-wind-vector_9038035.html}\\
+Tempête de poussière : \url{https://www.vecteezy.com/png/21913770-brown-watercolor-modern-brush-style-with-colorful-texture-for-your-template}\\
 
 \end{document}
