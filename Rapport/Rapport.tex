@@ -10,9 +10,9 @@
 \usepackage{listings}
 \usepackage{hyperref} \hypersetup{colorlinks=true,linkcolor=Brown,urlcolor=Navy,
 breaklinks=true,pdfstartview=XYZ}
-\usepackage{fancyhdr} 
+\usepackage{fancyhdr}
 \title{Rapport projet I62}
-\author{Tom Bartier, Nino Cantera, Balbony Ivano}
+\author{Tom Bartier, Nino Cantera, Balboni Ivano}
 
 \begin{document}
 \pagestyle{fancy}
@@ -25,7 +25,7 @@ breaklinks=true,pdfstartview=XYZ}
 \begin{abstract}
 Ce rapport concerne le projet du module I62 Génie Logiciel de la L3 Informatique
 de l'université de Toulon. Le but de ce projet était de nous faire découvrir
-les différents concepts théoriques du génie logiciel et de les appliquer sur un projet 
+les différents concepts théoriques du génie logiciel et de les appliquer sur un projet
 pratique travaillé pendant les séances de TP ainsi qu'en dehors des heures de cours.
 \end{abstract}
 
@@ -39,7 +39,7 @@ et d'explorer la planète Mars avec d'autres utilisateurs, d'analyser différent
 ou encore de déployer un drone afin de faciliter l'exploration.
 
 \subsection{Infos Pratiques}
-L'application ne peut se lancer que si le serveur est allumé. 
+L'application ne peut se lancer que si le serveur est allumé.
 Pour lancer le serveur, executez la commande \lstinline!python ./src/server/app-server.py <ip> <port>!
 où <ip> correspond à l'adresse ip de votre machine et <port> désigne le port sur lequel le
 serveur attendra les connexions. Exemple : \lstinline!python ./src/server/app-server.py 127.0.0.1 25025! \\\\
@@ -52,13 +52,13 @@ Côté client vous arrivez sur la page de connexion, deux comptes sont disponibl
 \end{enumerate}
 
 Si la connexion ne fonctionne pas c'est que vous avez entré la mauvaise IP / Port, ou que le serveur n'était pas allumé lorsque vous avez lancé le client.\\
-Vous devez arriver sur l'écran principal, utilisez les flèches directionnelles pour vous déplacer et cliquez sur les boutons à l'écran pour 
-changer entre le rover et l'hélicoptère, ou pour casser et analyser un rocher. À noter que pour ranger l'hélicoptère vous devez vous placer sur le rover, et pour 
+Vous devez arriver sur l'écran principal, utilisez les flèches directionnelles pour vous déplacer et cliquez sur les boutons à l'écran pour
+changer entre le rover et l'hélicoptère, ou pour casser et analyser un rocher. À noter que pour ranger l'hélicoptère vous devez vous placer sur le rover, et pour
 analyser un rocher vous devez être devant orienté dans la bonne direction. Il n'y a pas encore de manière propre de quitter le client et le serveur, fermez juste la fenêtre
 du client et le terminal du serveur.
 
 \section{Informations générales}
-Ce projet est donc un simulateur de rover sur Mars écrit en Python et qui a été séparé en deux grandes phases : 
+Ce projet est donc un simulateur de rover sur Mars écrit en Python et qui a été séparé en deux grandes phases :
 une première phase de conception en séance de TP où l'on a rélféchi à la conception du projet en réalisant
 les différents diagrammes UML vu en cours (voir \ref{diagrammes}). C'est durant cette phase que nous nous sommes mis d'accord
 sur la structuration du projet ainsi que les différentes fonctionnalités proposées.\\
@@ -69,7 +69,7 @@ dans la conception, elle est très fortement liée au serveur, c'est à dire qu'
 en même temps et elle est unique, il n'y a donc qu'un seul administrateur. C'est lui qui doit créer un nouveau compte si une nouvelle
 personne veut avoir accès au simulateur.\\
 Parmi les différentes fonctionnalités imaginées mais que nous n'avons pas pu mettre en place, nous pouvons citer
-la prise de photos et vidéo, que nous n'avons pas jugés pertinents d'implémenter dans notre programme en 2D, mais si 
+la prise de photos et vidéo, que nous n'avons pas jugés pertinents d'implémenter dans notre programme en 2D, mais si
 le simulateur avait été fait en 3D cette fonctionnalité aurait eu sa place. Nous avons aussi imaginé un système d'exploration
 en équipe avec d'autres utilisateurs : chaque utilisateur aurait une représentation minimaliste de la planète dans un coin de l'écran
 donnant des informations sur l'emplacement actuel de chaque utilisateur ainsi que les zones qu'ils ont explorées. Les zones
@@ -78,12 +78,17 @@ seraient retransmises à tous les autres utilisateurs.\\
 Nous avons aussi imaginé et essayé d'implanter un système de topographie. La carte de Mars que nous avons est colorée de façon
 à représenter la topographie de Mars (voir \ref{sources}). Nous avons essayé de déterminer un niveau de hauteur en fonction de la couleur de chaque pixel
 afin de simuler la présence de montagnes et cratères. le rover serait gêné dans sa progression par ces derniers, d'où l'interêt de déployer
-le drone afin de faciliter l'exploration sur des terrains escarpés. Mais l'implémentation de ce système a posé trop de problèmes, il est cependant 
+le drone afin de faciliter l'exploration sur des terrains escarpés. Mais l'implémentation de ce système a posé trop de problèmes, il est cependant
 toujours présent dans le code source mais non utilisé.\\
-Nous avons aussi mis en place un système permettant de simuler la météo sur Mars. (DETAILLER LA METEO ICI)
+Nous avons aussi mis en place un système permettant de simuler la météo sur Mars. La météo est générée de manière pseudo-aléatoire à l'aide de la bibliothèque Random de python.
+Cela se base sur une série de chiffres qui garantit qu'on obtiendra les memes meteos en fonction de la graine.
+Chaque météo est créée avec comme Id unique sa date de création, il ne peut donc pas avoir 2 météos crées exactement en même temps.
+Ensuite, chacun de ses paramètres est généré dans une fourchette de valeurs ce qui inclut la position de départ, le sens et vitesse de déplacement, la durée et le type de météo.
+Ces météos sont stockées dans un dictionnaire ce qui les rend facilement compatibles avec le format json et des BDD SQL.
+Le pseudo-aléatoire permet de générer les météos au fur et à mesure au besoin, il est possible de rajouter/supprimer des types de météos au besoin.
 \\
 Concernant la mise en place du serveur, nous nous sommes basés sur un modèle de serveur déjà existant (voir \ref{sources})
-que nous avons modifiés afin de répondre à nos attentes. Il utilise la librairie socket de Python ainsi que selectors, qui est 
+que nous avons modifiés afin de répondre à nos attentes. Il utilise la librairie socket de Python ainsi que selectors, qui est
 une manière de faire un serveur asynchrone non bloquant en évitant d'avoir à gérer plusieurs threads.
 Nous utilisons une unique classe Message transitant sur le réseau et contenant les diférentes requêtes et réponses, mais nous
 ne l'avons pas mentionné dans les diagrammes car nous le considérons comme une API, un peu commme Tkinter, nous avons donc pas jugés
@@ -92,7 +97,7 @@ nécessaire de faire apparaitre cette classe dans les diagrammes.
 Nous avons aussi pensés au fait que le serveur communiquerait avec une base de données. Toutes les données concernant les utilisateurs seraient stockées dans une base de donnée SQL
 mais par manque de temps nous avons dans notre programme simulés cette base de données avec un fichier json dans lequel nous lisons les données à l'allumage du serveur et écrivons les nouvelles
 données à stocker (en théorie) périodiquement ainsi qu'à l'extinction du serveur.\\
-Concernant la répartition des tâches, Nino Cantera s'est occupé d'une grande partie de l'IHM, Ivano Balbony s'est occupé de la génération de la topographie, de la météo et de quelques 
+Concernant la répartition des tâches, Nino Cantera s'est occupé d'une grande partie de l'IHM, Ivano Balboni s'est occupé de la génération de la topographie, de la météo et de quelques
 classes serveur et Tom BARTIER s'est chargé de la communication entre le client et le serveur, le traitement des requêtes des deux côtés, quelques classes serveur et quelques éléments de l'IHM.
 La quasi totalité du code a été écrit en dehors des séances de TP.
 
@@ -116,14 +121,14 @@ mais qu'elles pourraient l'être si le projet venait à être poursuivi après c
 \item EX\_SERV\_0003
 \begin{itemize}
 \item Voir les autres
-\item Le SI doit permettre à l'utilisateur de voir les autres autres 
+\item Le SI doit permettre à l'utilisateur de voir les autres autres
 	utilisateur dans l'environement
 \end{itemize}
 
 \item EX\_SERV\_0004
 \begin{itemize}
 \item Stockage environement
-\item Le SI héberge sur le serveur l'environement dans lequel évoluent les 
+\item Le SI héberge sur le serveur l'environement dans lequel évoluent les
 	rovers.
 \end{itemize}
 
@@ -175,7 +180,7 @@ mais qu'elles pourraient l'être si le projet venait à être poursuivi après c
 \item EX\_GUI\_0007
 \begin{itemize}
 \item Analyser
-\item Le SI doit permettre à l'utilisateur d'obtenir les informations sur la 
+\item Le SI doit permettre à l'utilisateur d'obtenir les informations sur la
 		matière pulvérisée et analysée par le rover.
 \end{itemize}
 
@@ -189,16 +194,16 @@ mais qu'elles pourraient l'être si le projet venait à être poursuivi après c
 \item EX\_GUI\_0009
 \begin{itemize}
 \item Pilote Automatique
-\item Le SI doit permettre à l'utilisateur de mettre le rover en mode pilote 
+\item Le SI doit permettre à l'utilisateur de mettre le rover en mode pilote
 		automatique.
-\end{itemize}		
+\end{itemize}
 
 \item EX\_GUI\_00010
 \begin{itemize}
 \item Mode Manuel
 \item Le SI doit permettre à l'utilisateur de mettre le rover en mode manuel.
 \end{itemize}
-		
+
 \item EX\_GUI\_0011
 \begin{itemize}
 \item Allumer
@@ -220,7 +225,7 @@ mais qu'elles pourraient l'être si le projet venait à être poursuivi après c
 \item EX\_GUI\_0014
 \begin{itemize}
 \item Affichage température
-\item Le SI doit permettre à l'utilisateur de consulter la température actuelle 
+\item Le SI doit permettre à l'utilisateur de consulter la température actuelle
 		de la zone.
 \end{itemize}
 
@@ -234,21 +239,21 @@ mais qu'elles pourraient l'être si le projet venait à être poursuivi après c
 \item EX\_CAM\_0001
 \begin{itemize}
 \item Affichage Caméra
-\item Le SI doit permettre à l'utilisateur de voir le retour de la caméra en 
+\item Le SI doit permettre à l'utilisateur de voir le retour de la caméra en
 		temps réel.
 \end{itemize}
 
 \item EX\_CAM\_0002
 \begin{itemize}
 \item Pivoter Caméra
-\item Le SI doit permettre à l'utilisateur de faire pivoter la caméra dans 
+\item Le SI doit permettre à l'utilisateur de faire pivoter la caméra dans
 	tous les sens.
 \end{itemize}
 
 \item EX\_CAM\_0003
 \begin{itemize}
 \item Zoom
-\item Le SI doit permettre à l'utilisateur de zoomer et dézoomer la caméra. 
+\item Le SI doit permettre à l'utilisateur de zoomer et dézoomer la caméra.
 \end{itemize}
 
 
@@ -309,7 +314,7 @@ mais qu'elles pourraient l'être si le projet venait à être poursuivi après c
 \item EX\_ROVER\_0004
 \begin{itemize}
 \item Remplacer foreuse
-\item Le SI doit permettre au rover d'abandonner sa foreuse et la remplacer par 
+\item Le SI doit permettre au rover d'abandonner sa foreuse et la remplacer par
 		une autre si la première se retrouve coincée ou endommagée.
 \end{itemize}
 
@@ -462,7 +467,7 @@ mais qu'elles pourraient l'être si le projet venait à être poursuivi après c
 \begin{itemize}
 \item Tempête de poussière
 \item Le SI dispose d'un évènement "tempête de poussière" sur une zone qui
-		réduit la distance de vision et endommage un petit peu l'hélicoptère 
+		réduit la distance de vision et endommage un petit peu l'hélicoptère
 		lorsqu'il est en vol et empêche la recharge d'énergie solaire.
 \end{itemize}
 
